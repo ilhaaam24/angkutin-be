@@ -1,0 +1,383 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  COURIER
+  ADMIN
+}
+
+enum VehicleType {
+  MOTOR
+  PICKUP
+  TRUCK
+}
+
+enum OrderStatus {
+  CREATED
+  MATCHED
+  ON_GOING
+  ARRIVED
+  WEIGHING
+  WAITING_PAYMENT
+  COMPLETED
+  CANCELLED
+  REASSIGNING
+}
+
+enum ScheduleType {
+  INSTANT
+  SCHEDULED
+}
+
+enum WalletTransactionType {
+  CREDIT
+  DEBIT
+}
+
+enum WalletReferenceType {
+  ORDER
+  WITHDRAWAL
+  PAYMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum WithdrawalStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  EXPIRED
+  FAILED
+}
+
+enum CancelledBy {
+  USER
+  COURIER
+  SYSTEM
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String?
+  email        String    @unique
+  password     String
+  role         Role      @default(USER)
+  phone        String?
+  isVerified   Boolean   @default(false) @map("is_verified")
+  refreshToken String?   @map("refresh_token")
+  otpCode      String?   @map("otp_code")
+  otpExpiresAt DateTime? @map("otp_expires_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  addresses          Address[]
+  couriers           Courier[]
+  orders             Order[]
+  wallets            Wallet?
+  withdrawals        Withdrawal[]
+  payments           Payment[]
+  notifications      Notification[]
+  scannedValidations TerminalValidation[]
+
+  @@map("users")
+}
+
+model Address {
+  id            String  @id @default(uuid()) @db.Uuid
+  userId        String  @map("user_id") @db.Uuid
+  label         String?
+  latitude      Decimal @db.Decimal
+  longitude     Decimal @db.Decimal
+  addressDetail String? @map("address_detail")
+  isPrimary     Boolean @default(false) @map("is_primary")
+
+  user   User    @relation(fields: [userId], references: [id])
+  orders Order[]
+
+  @@map("addresses")
+}
+
+model Courier {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String      @map("user_id") @db.Uuid
+  vehicleType VehicleType @map("vehicle_type")
+  isOnline    Boolean     @default(false) @map("is_online")
+  currentLat  Decimal?    @map("current_lat") @db.Decimal
+  currentLng  Decimal?    @map("current_lng") @db.Decimal
+
+  user             User                @relation(fields: [userId], references: [id])
+  orders           Order[]
+  trackingLogs     OrderTrackingLog[]
+  oldReassignments OrderReassignment[] @relation("OldCourier")
+  newReassignments OrderReassignment[] @relation("NewCourier")
+
+  @@map("couriers")
+}
+
+model Order {
+  id            String       @id @default(uuid()) @db.Uuid
+  userId        String       @map("user_id") @db.Uuid
+  courierId     String?      @map("courier_id") @db.Uuid
+  addressId     String       @map("address_id") @db.Uuid
+  status        OrderStatus  @default(CREATED)
+  scheduleType  ScheduleType @map("schedule_type")
+  scheduledAt   DateTime?    @map("scheduled_at")
+  note          String?
+  totalCredit   Float?       @map("total_credit")
+  totalDebit    Float?       @map("total_debit")
+  netTotal      Float?       @map("net_total")
+  paymentStatus String?      @map("payment_status")
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  user    User     @relation(fields: [userId], references: [id])
+  courier Courier? @relation(fields: [courierId], references: [id])
+  address Address  @relation(fields: [addressId], references: [id])
+
+  aiResults     OrderAiResult[]
+  trackingLogs  OrderTrackingLog[]
+  wasteItems    OrderWasteItem[]
+  residuals     OrderResidual[]
+  payments      Payment[]
+  reassignments OrderReassignment[]
+  cancellations OrderCancellation[]
+  validations   TerminalValidation[]
+
+  @@map("orders")
+}
+
+model OrderAiResult {
+  id                 String  @id @default(uuid()) @db.Uuid
+  orderId            String  @map("order_id") @db.Uuid
+  volumeEstimation   Float?  @map("volume_estimation")
+  objectDetected     Json?   @map("object_detected")
+  recommendedVehicle String? @map("recommended_vehicle")
+  confidenceScore    Float?  @map("confidence_score")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("order_ai_results")
+}
+
+model OrderTrackingLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  orderId    String   @map("order_id") @db.Uuid
+  courierId  String   @map("courier_id") @db.Uuid
+  latitude   Decimal  @db.Decimal
+  longitude  Decimal  @db.Decimal
+  recordedAt DateTime @default(now()) @map("recorded_at")
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  courier Courier @relation(fields: [courierId], references: [id])
+
+  @@map("order_tracking_logs")
+}
+
+model WasteType {
+  id         String           @id @default(uuid()) @db.Uuid
+  name       String
+  unitPrice  Float            @map("unit_price")
+  wasteItems OrderWasteItem[]
+  pricing    PricingWaste[]
+
+  @@map("waste_types")
+}
+
+model OrderWasteItem {
+  id          String @id @default(uuid()) @db.Uuid
+  orderId     String @map("order_id") @db.Uuid
+  wasteTypeId String @map("waste_type_id") @db.Uuid
+  weight      Float
+  price       Float
+  subtotal    Float
+
+  order     Order     @relation(fields: [orderId], references: [id])
+  wasteType WasteType @relation(fields: [wasteTypeId], references: [id])
+
+  @@map("order_waste_items")
+}
+
+model OrderResidual {
+  id         String  @id @default(uuid()) @db.Uuid
+  orderId    String  @map("order_id") @db.Uuid
+  weight     Float
+  pricePerKg Float   @map("price_per_kg")
+  subtotal   Float
+  photoUrl   String? @map("photo_url")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("order_residuals")
+}
+
+model Wallet {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @map("user_id") @db.Uuid
+  balance   Float    @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user         User                @relation(fields: [userId], references: [id])
+  transactions WalletTransaction[]
+
+  @@map("wallets")
+}
+
+model WalletTransaction {
+  id            String                @id @default(uuid()) @db.Uuid
+  walletId      String                @map("wallet_id") @db.Uuid
+  type          WalletTransactionType
+  amount        Float
+  referenceType WalletReferenceType   @map("reference_type")
+  referenceId   String?               @map("reference_id") @db.Uuid
+  status        TransactionStatus     @default(PENDING)
+  description   String?
+  createdAt     DateTime              @default(now()) @map("created_at")
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+
+  @@map("wallet_transactions")
+}
+
+model Withdrawal {
+  id            String           @id @default(uuid()) @db.Uuid
+  userId        String           @map("user_id") @db.Uuid
+  amount        Float
+  method        String
+  accountNumber String           @map("account_number")
+  accountName   String           @map("account_name")
+  status        WithdrawalStatus @default(PENDING)
+  externalId    String?          @map("external_id")
+  failureReason String?          @map("failure_reason")
+  processedAt   DateTime?        @map("processed_at")
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("withdrawals")
+}
+
+model Payment {
+  id         String        @id @default(uuid()) @db.Uuid
+  orderId    String        @map("order_id") @db.Uuid
+  userId     String        @map("user_id") @db.Uuid
+  externalId String        @unique @map("external_id")
+  gatewayId  String?       @map("gateway_id")
+  amount     Float
+  method     String
+  status     PaymentStatus @default(PENDING)
+  invoiceUrl String?       @map("invoice_url")
+  expiredAt  DateTime?     @map("expired_at")
+  paidAt     DateTime?     @map("paid_at")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  order Order        @relation(fields: [orderId], references: [id])
+  user  User         @relation(fields: [userId], references: [id])
+  logs  PaymentLog[]
+
+  @@map("payments")
+}
+
+model PaymentLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  paymentId String   @map("payment_id") @db.Uuid
+  eventType String   @map("event_type")
+  payload   Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+
+  @@map("payment_logs")
+}
+
+model OrderReassignment {
+  id           String   @id @default(uuid()) @db.Uuid
+  orderId      String   @map("order_id") @db.Uuid
+  oldCourierId String?  @map("old_courier_id") @db.Uuid
+  newCourierId String?  @map("new_courier_id") @db.Uuid
+  reason       String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  order      Order    @relation(fields: [orderId], references: [id])
+  oldCourier Courier? @relation("OldCourier", fields: [oldCourierId], references: [id])
+  newCourier Courier? @relation("NewCourier", fields: [newCourierId], references: [id])
+
+  @@map("order_reassignments")
+}
+
+model OrderCancellation {
+  id          String      @id @default(uuid()) @db.Uuid
+  orderId     String      @map("order_id") @db.Uuid
+  cancelledBy CancelledBy @map("cancelled_by")
+  reason      String?
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("order_cancellations")
+}
+
+model PricingWaste {
+  id          String   @id @default(uuid()) @db.Uuid
+  wasteTypeId String   @map("waste_type_id") @db.Uuid
+  pricePerKg  Float    @map("price_per_kg")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  wasteType WasteType @relation(fields: [wasteTypeId], references: [id])
+
+  @@map("pricing_waste")
+}
+
+model PricingResidual {
+  id          String      @id @default(uuid()) @db.Uuid
+  vehicleType VehicleType @map("vehicle_type")
+  pricePerKg  Float       @map("price_per_kg")
+
+  @@map("pricing_residual")
+}
+
+model TerminalValidation {
+  id        String   @id @default(uuid()) @db.Uuid
+  orderId   String   @map("order_id") @db.Uuid
+  qrCode    String   @map("qr_code")
+  scannedBy String   @map("scanned_by") @db.Uuid
+  scannedAt DateTime @default(now()) @map("scanned_at")
+  status    String   @default("VALID")
+
+  order   Order @relation(fields: [orderId], references: [id])
+  scanner User  @relation(fields: [scannedBy], references: [id])
+
+  @@map("terminal_validations")
+}
+
+model Notification {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  title     String
+  body      String
+  type      String?
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
