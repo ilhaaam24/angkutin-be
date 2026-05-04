@@ -320,6 +320,16 @@ exports.Prisma.NotificationScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.UserPaymentAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  providerName: 'providerName',
+  accountNumber: 'accountNumber',
+  accountName: 'accountName',
+  isDefault: 'isDefault',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -431,7 +441,8 @@ exports.Prisma.ModelName = {
   PricingWaste: 'PricingWaste',
   PricingResidual: 'PricingResidual',
   TerminalValidation: 'TerminalValidation',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  UserPaymentAccount: 'UserPaymentAccount'
 };
 
 /**

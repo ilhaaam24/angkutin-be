@@ -9,6 +9,7 @@ import { AddressesModule } from './addresses/addresses.module';
 import { CouriersModule } from './couriers/couriers.module';
 import { WasteTypesModule } from './waste-types/waste-types.module';
 import { OrdersModule } from './orders/orders.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { OrdersModule } from './orders/orders.module';
     CouriersModule,
     WasteTypesModule,
     OrdersModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [AppService],

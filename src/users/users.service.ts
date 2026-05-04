@@ -19,8 +19,20 @@ export class UsersService {
   }
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({
-      data,
+    return this.prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data,
+      });
+
+      // Auto-create wallet
+      await tx.wallet.create({
+        data: {
+          userId: user.id,
+          balance: 0,
+        },
+      });
+
+      return user;
     });
   }
 

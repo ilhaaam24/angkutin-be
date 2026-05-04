@@ -113,6 +113,11 @@ export type TerminalValidation = $Result.DefaultSelection<Prisma.$TerminalValida
  * 
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
+/**
+ * Model UserPaymentAccount
+ * 
+ */
+export type UserPaymentAccount = $Result.DefaultSelection<Prisma.$UserPaymentAccountPayload>
 
 /**
  * Enums
@@ -575,6 +580,16 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userPaymentAccount`: Exposes CRUD operations for the **UserPaymentAccount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserPaymentAccounts
+    * const userPaymentAccounts = await prisma.userPaymentAccount.findMany()
+    * ```
+    */
+  get userPaymentAccount(): Prisma.UserPaymentAccountDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1028,7 +1043,8 @@ export namespace Prisma {
     PricingWaste: 'PricingWaste',
     PricingResidual: 'PricingResidual',
     TerminalValidation: 'TerminalValidation',
-    Notification: 'Notification'
+    Notification: 'Notification',
+    UserPaymentAccount: 'UserPaymentAccount'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1044,7 +1060,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "address" | "courier" | "order" | "orderAiResult" | "orderTrackingLog" | "wasteType" | "orderWasteItem" | "orderResidual" | "wallet" | "walletTransaction" | "withdrawal" | "payment" | "paymentLog" | "orderReassignment" | "orderCancellation" | "pricingWaste" | "pricingResidual" | "terminalValidation" | "notification"
+      modelProps: "user" | "address" | "courier" | "order" | "orderAiResult" | "orderTrackingLog" | "wasteType" | "orderWasteItem" | "orderResidual" | "wallet" | "walletTransaction" | "withdrawal" | "payment" | "paymentLog" | "orderReassignment" | "orderCancellation" | "pricingWaste" | "pricingResidual" | "terminalValidation" | "notification" | "userPaymentAccount"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2528,6 +2544,80 @@ export namespace Prisma {
           }
         }
       }
+      UserPaymentAccount: {
+        payload: Prisma.$UserPaymentAccountPayload<ExtArgs>
+        fields: Prisma.UserPaymentAccountFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserPaymentAccountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserPaymentAccountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>
+          }
+          findFirst: {
+            args: Prisma.UserPaymentAccountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserPaymentAccountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>
+          }
+          findMany: {
+            args: Prisma.UserPaymentAccountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>[]
+          }
+          create: {
+            args: Prisma.UserPaymentAccountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>
+          }
+          createMany: {
+            args: Prisma.UserPaymentAccountCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserPaymentAccountCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>[]
+          }
+          delete: {
+            args: Prisma.UserPaymentAccountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>
+          }
+          update: {
+            args: Prisma.UserPaymentAccountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserPaymentAccountDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserPaymentAccountUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserPaymentAccountUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserPaymentAccountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPaymentAccountPayload>
+          }
+          aggregate: {
+            args: Prisma.UserPaymentAccountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserPaymentAccount>
+          }
+          groupBy: {
+            args: Prisma.UserPaymentAccountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserPaymentAccountGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserPaymentAccountCountArgs<ExtArgs>
+            result: $Utils.Optional<UserPaymentAccountCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2656,6 +2746,7 @@ export namespace Prisma {
     pricingResidual?: PricingResidualOmit
     terminalValidation?: TerminalValidationOmit
     notification?: NotificationOmit
+    userPaymentAccount?: UserPaymentAccountOmit
   }
 
   /* Types for Logging */
@@ -2743,6 +2834,7 @@ export namespace Prisma {
     payments: number
     notifications: number
     scannedValidations: number
+    paymentAccounts: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2753,6 +2845,7 @@ export namespace Prisma {
     payments?: boolean | UserCountOutputTypeCountPaymentsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     scannedValidations?: boolean | UserCountOutputTypeCountScannedValidationsArgs
+    paymentAccounts?: boolean | UserCountOutputTypeCountPaymentAccountsArgs
   }
 
   // Custom InputTypes
@@ -2813,6 +2906,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountScannedValidationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TerminalValidationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPaymentAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserPaymentAccountWhereInput
   }
 
 
@@ -3333,6 +3433,7 @@ export namespace Prisma {
     payments?: boolean | User$paymentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     scannedValidations?: boolean | User$scannedValidationsArgs<ExtArgs>
+    paymentAccounts?: boolean | User$paymentAccountsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3391,6 +3492,7 @@ export namespace Prisma {
     payments?: boolean | User$paymentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     scannedValidations?: boolean | User$scannedValidationsArgs<ExtArgs>
+    paymentAccounts?: boolean | User$paymentAccountsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3407,6 +3509,7 @@ export namespace Prisma {
       payments: Prisma.$PaymentPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       scannedValidations: Prisma.$TerminalValidationPayload<ExtArgs>[]
+      paymentAccounts: Prisma.$UserPaymentAccountPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3823,6 +3926,7 @@ export namespace Prisma {
     payments<T extends User$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     scannedValidations<T extends User$scannedValidationsArgs<ExtArgs> = {}>(args?: Subset<T, User$scannedValidationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TerminalValidationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    paymentAccounts<T extends User$paymentAccountsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4441,6 +4545,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TerminalValidationScalarFieldEnum | TerminalValidationScalarFieldEnum[]
+  }
+
+  /**
+   * User.paymentAccounts
+   */
+  export type User$paymentAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    where?: UserPaymentAccountWhereInput
+    orderBy?: UserPaymentAccountOrderByWithRelationInput | UserPaymentAccountOrderByWithRelationInput[]
+    cursor?: UserPaymentAccountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserPaymentAccountScalarFieldEnum | UserPaymentAccountScalarFieldEnum[]
   }
 
   /**
@@ -26125,6 +26253,1095 @@ export namespace Prisma {
 
 
   /**
+   * Model UserPaymentAccount
+   */
+
+  export type AggregateUserPaymentAccount = {
+    _count: UserPaymentAccountCountAggregateOutputType | null
+    _min: UserPaymentAccountMinAggregateOutputType | null
+    _max: UserPaymentAccountMaxAggregateOutputType | null
+  }
+
+  export type UserPaymentAccountMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    providerName: string | null
+    accountNumber: string | null
+    accountName: string | null
+    isDefault: boolean | null
+    createdAt: Date | null
+  }
+
+  export type UserPaymentAccountMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    providerName: string | null
+    accountNumber: string | null
+    accountName: string | null
+    isDefault: boolean | null
+    createdAt: Date | null
+  }
+
+  export type UserPaymentAccountCountAggregateOutputType = {
+    id: number
+    userId: number
+    providerName: number
+    accountNumber: number
+    accountName: number
+    isDefault: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type UserPaymentAccountMinAggregateInputType = {
+    id?: true
+    userId?: true
+    providerName?: true
+    accountNumber?: true
+    accountName?: true
+    isDefault?: true
+    createdAt?: true
+  }
+
+  export type UserPaymentAccountMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    providerName?: true
+    accountNumber?: true
+    accountName?: true
+    isDefault?: true
+    createdAt?: true
+  }
+
+  export type UserPaymentAccountCountAggregateInputType = {
+    id?: true
+    userId?: true
+    providerName?: true
+    accountNumber?: true
+    accountName?: true
+    isDefault?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type UserPaymentAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserPaymentAccount to aggregate.
+     */
+    where?: UserPaymentAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPaymentAccounts to fetch.
+     */
+    orderBy?: UserPaymentAccountOrderByWithRelationInput | UserPaymentAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserPaymentAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPaymentAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPaymentAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserPaymentAccounts
+    **/
+    _count?: true | UserPaymentAccountCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserPaymentAccountMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserPaymentAccountMaxAggregateInputType
+  }
+
+  export type GetUserPaymentAccountAggregateType<T extends UserPaymentAccountAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserPaymentAccount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserPaymentAccount[P]>
+      : GetScalarType<T[P], AggregateUserPaymentAccount[P]>
+  }
+
+
+
+
+  export type UserPaymentAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserPaymentAccountWhereInput
+    orderBy?: UserPaymentAccountOrderByWithAggregationInput | UserPaymentAccountOrderByWithAggregationInput[]
+    by: UserPaymentAccountScalarFieldEnum[] | UserPaymentAccountScalarFieldEnum
+    having?: UserPaymentAccountScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserPaymentAccountCountAggregateInputType | true
+    _min?: UserPaymentAccountMinAggregateInputType
+    _max?: UserPaymentAccountMaxAggregateInputType
+  }
+
+  export type UserPaymentAccountGroupByOutputType = {
+    id: string
+    userId: string
+    providerName: string
+    accountNumber: string
+    accountName: string
+    isDefault: boolean
+    createdAt: Date
+    _count: UserPaymentAccountCountAggregateOutputType | null
+    _min: UserPaymentAccountMinAggregateOutputType | null
+    _max: UserPaymentAccountMaxAggregateOutputType | null
+  }
+
+  type GetUserPaymentAccountGroupByPayload<T extends UserPaymentAccountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserPaymentAccountGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserPaymentAccountGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserPaymentAccountGroupByOutputType[P]>
+            : GetScalarType<T[P], UserPaymentAccountGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserPaymentAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    providerName?: boolean
+    accountNumber?: boolean
+    accountName?: boolean
+    isDefault?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPaymentAccount"]>
+
+  export type UserPaymentAccountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    providerName?: boolean
+    accountNumber?: boolean
+    accountName?: boolean
+    isDefault?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPaymentAccount"]>
+
+  export type UserPaymentAccountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    providerName?: boolean
+    accountNumber?: boolean
+    accountName?: boolean
+    isDefault?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPaymentAccount"]>
+
+  export type UserPaymentAccountSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    providerName?: boolean
+    accountNumber?: boolean
+    accountName?: boolean
+    isDefault?: boolean
+    createdAt?: boolean
+  }
+
+  export type UserPaymentAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "providerName" | "accountNumber" | "accountName" | "isDefault" | "createdAt", ExtArgs["result"]["userPaymentAccount"]>
+  export type UserPaymentAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserPaymentAccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserPaymentAccountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserPaymentAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserPaymentAccount"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      providerName: string
+      accountNumber: string
+      accountName: string
+      isDefault: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["userPaymentAccount"]>
+    composites: {}
+  }
+
+  type UserPaymentAccountGetPayload<S extends boolean | null | undefined | UserPaymentAccountDefaultArgs> = $Result.GetResult<Prisma.$UserPaymentAccountPayload, S>
+
+  type UserPaymentAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserPaymentAccountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserPaymentAccountCountAggregateInputType | true
+    }
+
+  export interface UserPaymentAccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserPaymentAccount'], meta: { name: 'UserPaymentAccount' } }
+    /**
+     * Find zero or one UserPaymentAccount that matches the filter.
+     * @param {UserPaymentAccountFindUniqueArgs} args - Arguments to find a UserPaymentAccount
+     * @example
+     * // Get one UserPaymentAccount
+     * const userPaymentAccount = await prisma.userPaymentAccount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserPaymentAccountFindUniqueArgs>(args: SelectSubset<T, UserPaymentAccountFindUniqueArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserPaymentAccount that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserPaymentAccountFindUniqueOrThrowArgs} args - Arguments to find a UserPaymentAccount
+     * @example
+     * // Get one UserPaymentAccount
+     * const userPaymentAccount = await prisma.userPaymentAccount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserPaymentAccountFindUniqueOrThrowArgs>(args: SelectSubset<T, UserPaymentAccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserPaymentAccount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPaymentAccountFindFirstArgs} args - Arguments to find a UserPaymentAccount
+     * @example
+     * // Get one UserPaymentAccount
+     * const userPaymentAccount = await prisma.userPaymentAccount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserPaymentAccountFindFirstArgs>(args?: SelectSubset<T, UserPaymentAccountFindFirstArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserPaymentAccount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPaymentAccountFindFirstOrThrowArgs} args - Arguments to find a UserPaymentAccount
+     * @example
+     * // Get one UserPaymentAccount
+     * const userPaymentAccount = await prisma.userPaymentAccount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserPaymentAccountFindFirstOrThrowArgs>(args?: SelectSubset<T, UserPaymentAccountFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserPaymentAccounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPaymentAccountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserPaymentAccounts
+     * const userPaymentAccounts = await prisma.userPaymentAccount.findMany()
+     * 
+     * // Get first 10 UserPaymentAccounts
+     * const userPaymentAccounts = await prisma.userPaymentAccount.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userPaymentAccountWithIdOnly = await prisma.userPaymentAccount.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserPaymentAccountFindManyArgs>(args?: SelectSubset<T, UserPaymentAccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserPaymentAccount.
+     * @param {UserPaymentAccountCreateArgs} args - Arguments to create a UserPaymentAccount.
+     * @example
+     * // Create one UserPaymentAccount
+     * const UserPaymentAccount = await prisma.userPaymentAccount.create({
+     *   data: {
+     *     // ... data to create a UserPaymentAccount
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserPaymentAccountCreateArgs>(args: SelectSubset<T, UserPaymentAccountCreateArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserPaymentAccounts.
+     * @param {UserPaymentAccountCreateManyArgs} args - Arguments to create many UserPaymentAccounts.
+     * @example
+     * // Create many UserPaymentAccounts
+     * const userPaymentAccount = await prisma.userPaymentAccount.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserPaymentAccountCreateManyArgs>(args?: SelectSubset<T, UserPaymentAccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserPaymentAccounts and returns the data saved in the database.
+     * @param {UserPaymentAccountCreateManyAndReturnArgs} args - Arguments to create many UserPaymentAccounts.
+     * @example
+     * // Create many UserPaymentAccounts
+     * const userPaymentAccount = await prisma.userPaymentAccount.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserPaymentAccounts and only return the `id`
+     * const userPaymentAccountWithIdOnly = await prisma.userPaymentAccount.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserPaymentAccountCreateManyAndReturnArgs>(args?: SelectSubset<T, UserPaymentAccountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserPaymentAccount.
+     * @param {UserPaymentAccountDeleteArgs} args - Arguments to delete one UserPaymentAccount.
+     * @example
+     * // Delete one UserPaymentAccount
+     * const UserPaymentAccount = await prisma.userPaymentAccount.delete({
+     *   where: {
+     *     // ... filter to delete one UserPaymentAccount
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserPaymentAccountDeleteArgs>(args: SelectSubset<T, UserPaymentAccountDeleteArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserPaymentAccount.
+     * @param {UserPaymentAccountUpdateArgs} args - Arguments to update one UserPaymentAccount.
+     * @example
+     * // Update one UserPaymentAccount
+     * const userPaymentAccount = await prisma.userPaymentAccount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserPaymentAccountUpdateArgs>(args: SelectSubset<T, UserPaymentAccountUpdateArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserPaymentAccounts.
+     * @param {UserPaymentAccountDeleteManyArgs} args - Arguments to filter UserPaymentAccounts to delete.
+     * @example
+     * // Delete a few UserPaymentAccounts
+     * const { count } = await prisma.userPaymentAccount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserPaymentAccountDeleteManyArgs>(args?: SelectSubset<T, UserPaymentAccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserPaymentAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPaymentAccountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserPaymentAccounts
+     * const userPaymentAccount = await prisma.userPaymentAccount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserPaymentAccountUpdateManyArgs>(args: SelectSubset<T, UserPaymentAccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserPaymentAccounts and returns the data updated in the database.
+     * @param {UserPaymentAccountUpdateManyAndReturnArgs} args - Arguments to update many UserPaymentAccounts.
+     * @example
+     * // Update many UserPaymentAccounts
+     * const userPaymentAccount = await prisma.userPaymentAccount.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserPaymentAccounts and only return the `id`
+     * const userPaymentAccountWithIdOnly = await prisma.userPaymentAccount.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserPaymentAccountUpdateManyAndReturnArgs>(args: SelectSubset<T, UserPaymentAccountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserPaymentAccount.
+     * @param {UserPaymentAccountUpsertArgs} args - Arguments to update or create a UserPaymentAccount.
+     * @example
+     * // Update or create a UserPaymentAccount
+     * const userPaymentAccount = await prisma.userPaymentAccount.upsert({
+     *   create: {
+     *     // ... data to create a UserPaymentAccount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserPaymentAccount we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserPaymentAccountUpsertArgs>(args: SelectSubset<T, UserPaymentAccountUpsertArgs<ExtArgs>>): Prisma__UserPaymentAccountClient<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserPaymentAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPaymentAccountCountArgs} args - Arguments to filter UserPaymentAccounts to count.
+     * @example
+     * // Count the number of UserPaymentAccounts
+     * const count = await prisma.userPaymentAccount.count({
+     *   where: {
+     *     // ... the filter for the UserPaymentAccounts we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserPaymentAccountCountArgs>(
+      args?: Subset<T, UserPaymentAccountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserPaymentAccountCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserPaymentAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPaymentAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserPaymentAccountAggregateArgs>(args: Subset<T, UserPaymentAccountAggregateArgs>): Prisma.PrismaPromise<GetUserPaymentAccountAggregateType<T>>
+
+    /**
+     * Group by UserPaymentAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPaymentAccountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserPaymentAccountGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserPaymentAccountGroupByArgs['orderBy'] }
+        : { orderBy?: UserPaymentAccountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserPaymentAccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserPaymentAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserPaymentAccount model
+   */
+  readonly fields: UserPaymentAccountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserPaymentAccount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserPaymentAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserPaymentAccount model
+   */
+  interface UserPaymentAccountFieldRefs {
+    readonly id: FieldRef<"UserPaymentAccount", 'String'>
+    readonly userId: FieldRef<"UserPaymentAccount", 'String'>
+    readonly providerName: FieldRef<"UserPaymentAccount", 'String'>
+    readonly accountNumber: FieldRef<"UserPaymentAccount", 'String'>
+    readonly accountName: FieldRef<"UserPaymentAccount", 'String'>
+    readonly isDefault: FieldRef<"UserPaymentAccount", 'Boolean'>
+    readonly createdAt: FieldRef<"UserPaymentAccount", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserPaymentAccount findUnique
+   */
+  export type UserPaymentAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPaymentAccount to fetch.
+     */
+    where: UserPaymentAccountWhereUniqueInput
+  }
+
+  /**
+   * UserPaymentAccount findUniqueOrThrow
+   */
+  export type UserPaymentAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPaymentAccount to fetch.
+     */
+    where: UserPaymentAccountWhereUniqueInput
+  }
+
+  /**
+   * UserPaymentAccount findFirst
+   */
+  export type UserPaymentAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPaymentAccount to fetch.
+     */
+    where?: UserPaymentAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPaymentAccounts to fetch.
+     */
+    orderBy?: UserPaymentAccountOrderByWithRelationInput | UserPaymentAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserPaymentAccounts.
+     */
+    cursor?: UserPaymentAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPaymentAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPaymentAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPaymentAccounts.
+     */
+    distinct?: UserPaymentAccountScalarFieldEnum | UserPaymentAccountScalarFieldEnum[]
+  }
+
+  /**
+   * UserPaymentAccount findFirstOrThrow
+   */
+  export type UserPaymentAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPaymentAccount to fetch.
+     */
+    where?: UserPaymentAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPaymentAccounts to fetch.
+     */
+    orderBy?: UserPaymentAccountOrderByWithRelationInput | UserPaymentAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserPaymentAccounts.
+     */
+    cursor?: UserPaymentAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPaymentAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPaymentAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPaymentAccounts.
+     */
+    distinct?: UserPaymentAccountScalarFieldEnum | UserPaymentAccountScalarFieldEnum[]
+  }
+
+  /**
+   * UserPaymentAccount findMany
+   */
+  export type UserPaymentAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPaymentAccounts to fetch.
+     */
+    where?: UserPaymentAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPaymentAccounts to fetch.
+     */
+    orderBy?: UserPaymentAccountOrderByWithRelationInput | UserPaymentAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserPaymentAccounts.
+     */
+    cursor?: UserPaymentAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPaymentAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPaymentAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPaymentAccounts.
+     */
+    distinct?: UserPaymentAccountScalarFieldEnum | UserPaymentAccountScalarFieldEnum[]
+  }
+
+  /**
+   * UserPaymentAccount create
+   */
+  export type UserPaymentAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserPaymentAccount.
+     */
+    data: XOR<UserPaymentAccountCreateInput, UserPaymentAccountUncheckedCreateInput>
+  }
+
+  /**
+   * UserPaymentAccount createMany
+   */
+  export type UserPaymentAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserPaymentAccounts.
+     */
+    data: UserPaymentAccountCreateManyInput | UserPaymentAccountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserPaymentAccount createManyAndReturn
+   */
+  export type UserPaymentAccountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserPaymentAccounts.
+     */
+    data: UserPaymentAccountCreateManyInput | UserPaymentAccountCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserPaymentAccount update
+   */
+  export type UserPaymentAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserPaymentAccount.
+     */
+    data: XOR<UserPaymentAccountUpdateInput, UserPaymentAccountUncheckedUpdateInput>
+    /**
+     * Choose, which UserPaymentAccount to update.
+     */
+    where: UserPaymentAccountWhereUniqueInput
+  }
+
+  /**
+   * UserPaymentAccount updateMany
+   */
+  export type UserPaymentAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserPaymentAccounts.
+     */
+    data: XOR<UserPaymentAccountUpdateManyMutationInput, UserPaymentAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which UserPaymentAccounts to update
+     */
+    where?: UserPaymentAccountWhereInput
+    /**
+     * Limit how many UserPaymentAccounts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserPaymentAccount updateManyAndReturn
+   */
+  export type UserPaymentAccountUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * The data used to update UserPaymentAccounts.
+     */
+    data: XOR<UserPaymentAccountUpdateManyMutationInput, UserPaymentAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which UserPaymentAccounts to update
+     */
+    where?: UserPaymentAccountWhereInput
+    /**
+     * Limit how many UserPaymentAccounts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserPaymentAccount upsert
+   */
+  export type UserPaymentAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserPaymentAccount to update in case it exists.
+     */
+    where: UserPaymentAccountWhereUniqueInput
+    /**
+     * In case the UserPaymentAccount found by the `where` argument doesn't exist, create a new UserPaymentAccount with this data.
+     */
+    create: XOR<UserPaymentAccountCreateInput, UserPaymentAccountUncheckedCreateInput>
+    /**
+     * In case the UserPaymentAccount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserPaymentAccountUpdateInput, UserPaymentAccountUncheckedUpdateInput>
+  }
+
+  /**
+   * UserPaymentAccount delete
+   */
+  export type UserPaymentAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+    /**
+     * Filter which UserPaymentAccount to delete.
+     */
+    where: UserPaymentAccountWhereUniqueInput
+  }
+
+  /**
+   * UserPaymentAccount deleteMany
+   */
+  export type UserPaymentAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserPaymentAccounts to delete
+     */
+    where?: UserPaymentAccountWhereInput
+    /**
+     * Limit how many UserPaymentAccounts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserPaymentAccount without action
+   */
+  export type UserPaymentAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPaymentAccount
+     */
+    select?: UserPaymentAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPaymentAccount
+     */
+    omit?: UserPaymentAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPaymentAccountInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26396,6 +27613,19 @@ export namespace Prisma {
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+  export const UserPaymentAccountScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    providerName: 'providerName',
+    accountNumber: 'accountNumber',
+    accountName: 'accountName',
+    isDefault: 'isDefault',
+    createdAt: 'createdAt'
+  };
+
+  export type UserPaymentAccountScalarFieldEnum = (typeof UserPaymentAccountScalarFieldEnum)[keyof typeof UserPaymentAccountScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -26702,6 +27932,7 @@ export namespace Prisma {
     payments?: PaymentListRelationFilter
     notifications?: NotificationListRelationFilter
     scannedValidations?: TerminalValidationListRelationFilter
+    paymentAccounts?: UserPaymentAccountListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -26725,6 +27956,7 @@ export namespace Prisma {
     payments?: PaymentOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     scannedValidations?: TerminalValidationOrderByRelationAggregateInput
+    paymentAccounts?: UserPaymentAccountOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -26751,6 +27983,7 @@ export namespace Prisma {
     payments?: PaymentListRelationFilter
     notifications?: NotificationListRelationFilter
     scannedValidations?: TerminalValidationListRelationFilter
+    paymentAccounts?: UserPaymentAccountListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -28096,6 +29329,71 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
+  export type UserPaymentAccountWhereInput = {
+    AND?: UserPaymentAccountWhereInput | UserPaymentAccountWhereInput[]
+    OR?: UserPaymentAccountWhereInput[]
+    NOT?: UserPaymentAccountWhereInput | UserPaymentAccountWhereInput[]
+    id?: UuidFilter<"UserPaymentAccount"> | string
+    userId?: UuidFilter<"UserPaymentAccount"> | string
+    providerName?: StringFilter<"UserPaymentAccount"> | string
+    accountNumber?: StringFilter<"UserPaymentAccount"> | string
+    accountName?: StringFilter<"UserPaymentAccount"> | string
+    isDefault?: BoolFilter<"UserPaymentAccount"> | boolean
+    createdAt?: DateTimeFilter<"UserPaymentAccount"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserPaymentAccountOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    providerName?: SortOrder
+    accountNumber?: SortOrder
+    accountName?: SortOrder
+    isDefault?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserPaymentAccountWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserPaymentAccountWhereInput | UserPaymentAccountWhereInput[]
+    OR?: UserPaymentAccountWhereInput[]
+    NOT?: UserPaymentAccountWhereInput | UserPaymentAccountWhereInput[]
+    userId?: UuidFilter<"UserPaymentAccount"> | string
+    providerName?: StringFilter<"UserPaymentAccount"> | string
+    accountNumber?: StringFilter<"UserPaymentAccount"> | string
+    accountName?: StringFilter<"UserPaymentAccount"> | string
+    isDefault?: BoolFilter<"UserPaymentAccount"> | boolean
+    createdAt?: DateTimeFilter<"UserPaymentAccount"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type UserPaymentAccountOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    providerName?: SortOrder
+    accountNumber?: SortOrder
+    accountName?: SortOrder
+    isDefault?: SortOrder
+    createdAt?: SortOrder
+    _count?: UserPaymentAccountCountOrderByAggregateInput
+    _max?: UserPaymentAccountMaxOrderByAggregateInput
+    _min?: UserPaymentAccountMinOrderByAggregateInput
+  }
+
+  export type UserPaymentAccountScalarWhereWithAggregatesInput = {
+    AND?: UserPaymentAccountScalarWhereWithAggregatesInput | UserPaymentAccountScalarWhereWithAggregatesInput[]
+    OR?: UserPaymentAccountScalarWhereWithAggregatesInput[]
+    NOT?: UserPaymentAccountScalarWhereWithAggregatesInput | UserPaymentAccountScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"UserPaymentAccount"> | string
+    userId?: UuidWithAggregatesFilter<"UserPaymentAccount"> | string
+    providerName?: StringWithAggregatesFilter<"UserPaymentAccount"> | string
+    accountNumber?: StringWithAggregatesFilter<"UserPaymentAccount"> | string
+    accountName?: StringWithAggregatesFilter<"UserPaymentAccount"> | string
+    isDefault?: BoolWithAggregatesFilter<"UserPaymentAccount"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"UserPaymentAccount"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -28117,6 +29415,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -28140,6 +29439,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -28163,6 +29463,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -28186,6 +29487,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -29571,6 +30873,75 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserPaymentAccountCreateInput = {
+    id?: string
+    providerName: string
+    accountNumber: string
+    accountName: string
+    isDefault?: boolean
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutPaymentAccountsInput
+  }
+
+  export type UserPaymentAccountUncheckedCreateInput = {
+    id?: string
+    userId: string
+    providerName: string
+    accountNumber: string
+    accountName: string
+    isDefault?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserPaymentAccountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPaymentAccountsNestedInput
+  }
+
+  export type UserPaymentAccountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    providerName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserPaymentAccountCreateManyInput = {
+    id?: string
+    userId: string
+    providerName: string
+    accountNumber: string
+    accountName: string
+    isDefault?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserPaymentAccountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserPaymentAccountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    providerName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -29694,6 +31065,12 @@ export namespace Prisma {
     none?: TerminalValidationWhereInput
   }
 
+  export type UserPaymentAccountListRelationFilter = {
+    every?: UserPaymentAccountWhereInput
+    some?: UserPaymentAccountWhereInput
+    none?: UserPaymentAccountWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -29724,6 +31101,10 @@ export namespace Prisma {
   }
 
   export type TerminalValidationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserPaymentAccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31019,6 +32400,36 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type UserPaymentAccountCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    providerName?: SortOrder
+    accountNumber?: SortOrder
+    accountName?: SortOrder
+    isDefault?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserPaymentAccountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    providerName?: SortOrder
+    accountNumber?: SortOrder
+    accountName?: SortOrder
+    isDefault?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserPaymentAccountMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    providerName?: SortOrder
+    accountNumber?: SortOrder
+    accountName?: SortOrder
+    isDefault?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type AddressCreateNestedManyWithoutUserInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -31074,6 +32485,13 @@ export namespace Prisma {
     connect?: TerminalValidationWhereUniqueInput | TerminalValidationWhereUniqueInput[]
   }
 
+  export type UserPaymentAccountCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserPaymentAccountCreateWithoutUserInput, UserPaymentAccountUncheckedCreateWithoutUserInput> | UserPaymentAccountCreateWithoutUserInput[] | UserPaymentAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPaymentAccountCreateOrConnectWithoutUserInput | UserPaymentAccountCreateOrConnectWithoutUserInput[]
+    createMany?: UserPaymentAccountCreateManyUserInputEnvelope
+    connect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+  }
+
   export type AddressUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -31127,6 +32545,13 @@ export namespace Prisma {
     connectOrCreate?: TerminalValidationCreateOrConnectWithoutScannerInput | TerminalValidationCreateOrConnectWithoutScannerInput[]
     createMany?: TerminalValidationCreateManyScannerInputEnvelope
     connect?: TerminalValidationWhereUniqueInput | TerminalValidationWhereUniqueInput[]
+  }
+
+  export type UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserPaymentAccountCreateWithoutUserInput, UserPaymentAccountUncheckedCreateWithoutUserInput> | UserPaymentAccountCreateWithoutUserInput[] | UserPaymentAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPaymentAccountCreateOrConnectWithoutUserInput | UserPaymentAccountCreateOrConnectWithoutUserInput[]
+    createMany?: UserPaymentAccountCreateManyUserInputEnvelope
+    connect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -31261,6 +32686,20 @@ export namespace Prisma {
     deleteMany?: TerminalValidationScalarWhereInput | TerminalValidationScalarWhereInput[]
   }
 
+  export type UserPaymentAccountUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserPaymentAccountCreateWithoutUserInput, UserPaymentAccountUncheckedCreateWithoutUserInput> | UserPaymentAccountCreateWithoutUserInput[] | UserPaymentAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPaymentAccountCreateOrConnectWithoutUserInput | UserPaymentAccountCreateOrConnectWithoutUserInput[]
+    upsert?: UserPaymentAccountUpsertWithWhereUniqueWithoutUserInput | UserPaymentAccountUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserPaymentAccountCreateManyUserInputEnvelope
+    set?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    disconnect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    delete?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    connect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    update?: UserPaymentAccountUpdateWithWhereUniqueWithoutUserInput | UserPaymentAccountUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserPaymentAccountUpdateManyWithWhereWithoutUserInput | UserPaymentAccountUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserPaymentAccountScalarWhereInput | UserPaymentAccountScalarWhereInput[]
+  }
+
   export type AddressUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -31367,6 +32806,20 @@ export namespace Prisma {
     update?: TerminalValidationUpdateWithWhereUniqueWithoutScannerInput | TerminalValidationUpdateWithWhereUniqueWithoutScannerInput[]
     updateMany?: TerminalValidationUpdateManyWithWhereWithoutScannerInput | TerminalValidationUpdateManyWithWhereWithoutScannerInput[]
     deleteMany?: TerminalValidationScalarWhereInput | TerminalValidationScalarWhereInput[]
+  }
+
+  export type UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserPaymentAccountCreateWithoutUserInput, UserPaymentAccountUncheckedCreateWithoutUserInput> | UserPaymentAccountCreateWithoutUserInput[] | UserPaymentAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPaymentAccountCreateOrConnectWithoutUserInput | UserPaymentAccountCreateOrConnectWithoutUserInput[]
+    upsert?: UserPaymentAccountUpsertWithWhereUniqueWithoutUserInput | UserPaymentAccountUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserPaymentAccountCreateManyUserInputEnvelope
+    set?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    disconnect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    delete?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    connect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+    update?: UserPaymentAccountUpdateWithWhereUniqueWithoutUserInput | UserPaymentAccountUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserPaymentAccountUpdateManyWithWhereWithoutUserInput | UserPaymentAccountUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserPaymentAccountScalarWhereInput | UserPaymentAccountScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAddressesInput = {
@@ -32507,6 +33960,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type UserCreateNestedOneWithoutPaymentAccountsInput = {
+    create?: XOR<UserCreateWithoutPaymentAccountsInput, UserUncheckedCreateWithoutPaymentAccountsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaymentAccountsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPaymentAccountsNestedInput = {
+    create?: XOR<UserCreateWithoutPaymentAccountsInput, UserUncheckedCreateWithoutPaymentAccountsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaymentAccountsInput
+    upsert?: UserUpsertWithoutPaymentAccountsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPaymentAccountsInput, UserUpdateWithoutPaymentAccountsInput>, UserUncheckedUpdateWithoutPaymentAccountsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -33280,6 +34747,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserPaymentAccountCreateWithoutUserInput = {
+    id?: string
+    providerName: string
+    accountNumber: string
+    accountName: string
+    isDefault?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserPaymentAccountUncheckedCreateWithoutUserInput = {
+    id?: string
+    providerName: string
+    accountNumber: string
+    accountName: string
+    isDefault?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserPaymentAccountCreateOrConnectWithoutUserInput = {
+    where: UserPaymentAccountWhereUniqueInput
+    create: XOR<UserPaymentAccountCreateWithoutUserInput, UserPaymentAccountUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserPaymentAccountCreateManyUserInputEnvelope = {
+    data: UserPaymentAccountCreateManyUserInput | UserPaymentAccountCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AddressUpsertWithWhereUniqueWithoutUserInput = {
     where: AddressWhereUniqueInput
     update: XOR<AddressUpdateWithoutUserInput, AddressUncheckedUpdateWithoutUserInput>
@@ -33525,6 +35020,35 @@ export namespace Prisma {
     status?: StringFilter<"TerminalValidation"> | string
   }
 
+  export type UserPaymentAccountUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserPaymentAccountWhereUniqueInput
+    update: XOR<UserPaymentAccountUpdateWithoutUserInput, UserPaymentAccountUncheckedUpdateWithoutUserInput>
+    create: XOR<UserPaymentAccountCreateWithoutUserInput, UserPaymentAccountUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserPaymentAccountUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserPaymentAccountWhereUniqueInput
+    data: XOR<UserPaymentAccountUpdateWithoutUserInput, UserPaymentAccountUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserPaymentAccountUpdateManyWithWhereWithoutUserInput = {
+    where: UserPaymentAccountScalarWhereInput
+    data: XOR<UserPaymentAccountUpdateManyMutationInput, UserPaymentAccountUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserPaymentAccountScalarWhereInput = {
+    AND?: UserPaymentAccountScalarWhereInput | UserPaymentAccountScalarWhereInput[]
+    OR?: UserPaymentAccountScalarWhereInput[]
+    NOT?: UserPaymentAccountScalarWhereInput | UserPaymentAccountScalarWhereInput[]
+    id?: UuidFilter<"UserPaymentAccount"> | string
+    userId?: UuidFilter<"UserPaymentAccount"> | string
+    providerName?: StringFilter<"UserPaymentAccount"> | string
+    accountNumber?: StringFilter<"UserPaymentAccount"> | string
+    accountName?: StringFilter<"UserPaymentAccount"> | string
+    isDefault?: BoolFilter<"UserPaymentAccount"> | boolean
+    createdAt?: DateTimeFilter<"UserPaymentAccount"> | Date | string
+  }
+
   export type UserCreateWithoutAddressesInput = {
     id?: string
     name?: string | null
@@ -33545,6 +35069,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -33567,6 +35092,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -33661,6 +35187,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -33683,6 +35210,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderUpsertWithWhereUniqueWithoutAddressInput = {
@@ -33721,6 +35249,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouriersInput = {
@@ -33743,6 +35272,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouriersInput = {
@@ -33915,6 +35445,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouriersInput = {
@@ -33937,6 +35468,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderUpsertWithWhereUniqueWithoutCourierInput = {
@@ -34047,6 +35579,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -34069,6 +35602,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -34383,6 +35917,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -34405,6 +35940,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourierUpsertWithoutOrdersInput = {
@@ -35298,6 +36834,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWalletsInput = {
@@ -35320,6 +36857,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWalletsInput = {
@@ -35390,6 +36928,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWalletsInput = {
@@ -35412,6 +36951,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletTransactionUpsertWithWhereUniqueWithoutWalletInput = {
@@ -35513,6 +37053,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -35535,6 +37076,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -35573,6 +37115,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -35595,6 +37138,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderCreateWithoutPaymentsInput = {
@@ -35668,6 +37212,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -35690,6 +37235,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -35809,6 +37355,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -35831,6 +37378,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PaymentLogUpsertWithWhereUniqueWithoutPaymentInput = {
@@ -36399,6 +37947,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutScannedValidationsInput = {
@@ -36421,6 +37970,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutScannedValidationsInput = {
@@ -36516,6 +38066,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutScannedValidationsInput = {
@@ -36538,6 +38089,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -36560,6 +38112,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     payments?: PaymentCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -36582,6 +38135,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -36620,6 +38174,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     payments?: PaymentUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -36641,6 +38196,115 @@ export namespace Prisma {
     wallets?: WalletUncheckedUpdateOneWithoutUserNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
+    scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutPaymentAccountsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: $Enums.Role
+    phone?: string | null
+    isVerified?: boolean
+    refreshToken?: string | null
+    otpCode?: string | null
+    otpExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    couriers?: CourierCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    wallets?: WalletCreateNestedOneWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    payments?: PaymentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+  }
+
+  export type UserUncheckedCreateWithoutPaymentAccountsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: $Enums.Role
+    phone?: string | null
+    isVerified?: boolean
+    refreshToken?: string | null
+    otpCode?: string | null
+    otpExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    wallets?: WalletUncheckedCreateNestedOneWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+  }
+
+  export type UserCreateOrConnectWithoutPaymentAccountsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPaymentAccountsInput, UserUncheckedCreateWithoutPaymentAccountsInput>
+  }
+
+  export type UserUpsertWithoutPaymentAccountsInput = {
+    update: XOR<UserUpdateWithoutPaymentAccountsInput, UserUncheckedUpdateWithoutPaymentAccountsInput>
+    create: XOR<UserCreateWithoutPaymentAccountsInput, UserUncheckedCreateWithoutPaymentAccountsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPaymentAccountsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPaymentAccountsInput, UserUncheckedUpdateWithoutPaymentAccountsInput>
+  }
+
+  export type UserUpdateWithoutPaymentAccountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCode?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    couriers?: CourierUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    wallets?: WalletUpdateOneWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    payments?: PaymentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPaymentAccountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCode?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    wallets?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
   }
 
@@ -36720,6 +38384,15 @@ export namespace Prisma {
     qrCode: string
     scannedAt?: Date | string
     status?: string
+  }
+
+  export type UserPaymentAccountCreateManyUserInput = {
+    id?: string
+    providerName: string
+    accountNumber: string
+    accountName: string
+    isDefault?: boolean
+    createdAt?: Date | string
   }
 
   export type AddressUpdateWithoutUserInput = {
@@ -36982,6 +38655,33 @@ export namespace Prisma {
     qrCode?: StringFieldUpdateOperationsInput | string
     scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserPaymentAccountUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserPaymentAccountUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserPaymentAccountUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderCreateManyAddressInput = {
