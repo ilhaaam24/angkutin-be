@@ -54,6 +54,23 @@ export class CouriersController {
     return this.couriersService.updateStatus(req.user.userId, data.isOnline);
   }
 
+  @Patch('vehicle')
+  @Roles(Role.COURIER)
+  @ApiOperation({ summary: 'Update courier vehicle type' })
+  @ApiResponse({ status: 200, description: 'Vehicle type successfully updated.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        vehicleType: { type: 'string', example: 'MOTOR' },
+      },
+    },
+  })
+  updateVehicle(@Request() req, @Body() data: { vehicleType: any }) {
+    return this.couriersService.updateVehicle(req.user.userId, data.vehicleType);
+  }
+
   // --- ADMIN ENDPOINTS (Dynamic :id diletakkan di bawah) ---
 
   @Get()

@@ -21,6 +21,7 @@ async function bootstrap() {
   // Global Interceptors & Filters
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.setGlobalPrefix('api');
 
   // Swagger setup
   const config = new DocumentBuilder()
@@ -30,7 +31,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('api/swagger', app, document, {
     customCssUrl: [
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.18.2/swagger-ui.min.css',
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.18.2/swagger-ui-standalone-preset.min.css',
@@ -46,6 +47,6 @@ async function bootstrap() {
   app.enableCors(port === 3000 ? true : false);
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
-  console.log(`Swagger UI is available on: http://localhost:${port}/api`);
+  console.log(`Swagger UI is available on: http://localhost:${port}/api/swagger`);
 }
 bootstrap();

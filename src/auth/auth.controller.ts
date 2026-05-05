@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -25,6 +25,15 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   async login(@Request() req, @Body() LoginDto: LoginDto) {
     return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current authenticated user info' })
+  @ApiResponse({ status: 200, description: 'Return current user info.' })
+  async getMe(@Request() req) {
+    return req.user;
   }
 
   @Post('register')

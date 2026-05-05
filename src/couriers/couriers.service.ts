@@ -167,4 +167,14 @@ export class CouriersService {
       data: { isOnline },
     });
   }
+
+  async updateVehicle(userId: string, vehicleType: any): Promise<Courier> {
+    const courier = await this.prisma.courier.findFirst({ where: { userId } });
+    if (!courier) throw new BadRequestException('Courier record not found');
+
+    return this.prisma.courier.update({
+      where: { id: courier.id },
+      data: { vehicleType },
+    });
+  }
 }
