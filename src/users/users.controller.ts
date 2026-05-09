@@ -4,6 +4,7 @@ import { AddressesService } from '../addresses/addresses.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { CreateAddressDto } from '../addresses/dto/create-address.dto';
+import { UpdateAddressDto } from '../addresses/dto/update-address.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../upload/upload.service';
@@ -74,6 +75,14 @@ export class UsersController {
   @ApiBody({ type: CreateAddressDto })
   async addAddress(@Request() req, @Body() createAddressDto: CreateAddressDto) {
     return this.addressesService.create(req.user.userId, createAddressDto);
+  }
+
+  @Patch('addresses/:id')
+  @ApiOperation({ summary: 'Update address' })
+  @ApiResponse({ status: 200, description: 'Address successfully updated.' })
+  @ApiBody({ type: UpdateAddressDto })
+  async updateAddress(@Request() req, @Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
+    return this.addressesService.update(id, req.user.userId, updateAddressDto);
   }
 
   @Delete('addresses/:id')
