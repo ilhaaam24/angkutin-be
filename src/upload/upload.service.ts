@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import sharp from 'sharp';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UploadService {
@@ -69,7 +69,7 @@ export class UploadService {
     folder: string,
     bucket: string,
   ): Promise<string> {
-    const fileName = `${folder}/${uuidv4()}.jpg`;
+    const fileName = `${folder}/${randomUUID()}.jpg`;
 
     const { data, error } = await this.supabase.storage
       .from(bucket)
