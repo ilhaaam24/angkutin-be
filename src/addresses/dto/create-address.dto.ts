@@ -7,25 +7,10 @@ export class CreateAddressDto {
   @IsNotEmpty()
   label: string;
 
-  @ApiProperty({ example: 'Jawa Timur', description: 'Province' })
-  @IsString()
-  @IsNotEmpty()
-  province: string;
-
-  @ApiProperty({ example: 'Surabaya', description: 'City' })
-  @IsString()
-  @IsNotEmpty()
-  city: string;
-
   @ApiProperty({ example: 'Sukolilo', description: 'District' })
   @IsString()
   @IsNotEmpty()
   district: string;
-
-  @ApiProperty({ example: 'Semolowaru', description: 'Village' })
-  @IsString()
-  @IsNotEmpty()
-  village: string;
 
   @ApiProperty({ example: 'Jl. Semolowaru Utara 1 No 110B, RT 01 RW 02', description: 'Full address detail' })
   @IsString()

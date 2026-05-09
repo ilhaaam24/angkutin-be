@@ -49,17 +49,26 @@ export class AddressesService {
     throw new BadRequestException('Alamat tidak dapat ditemukan titik koordinatnya oleh Google Maps');
   }
 
-  async create(userId: string, data: Omit<Prisma.AddressCreateInput, 'user' | 'latitude' | 'longitude'>): Promise<AddressResponse> {
+  async create(userId: string, data: { label: string, district: string, addressDetail: string, isPrimary?: boolean }): Promise<AddressResponse> {
     if (data.isPrimary) {
       await this.unsetPrimary(userId);
     }
 
-    const addressText = `${data.village}, ${data.district}, ${data.city}, ${data.province}, ${data.addressDetail}`;
+    const province = 'Jawa Timur';
+    const city = 'Surabaya';
+    const village = ''; // Set empty as requested
+    const addressText = `${data.addressDetail}, Kecamatan ${data.district}, ${city}, ${province}`;
     const coords = await this.getCoordinates(addressText);
 
     const address = await this.prisma.address.create({
       data: {
-        ...data,
+        label: data.label,
+        district: data.district,
+        addressDetail: data.addressDetail,
+        isPrimary: data.isPrimary ?? false,
+        province,
+        city,
+        village,
         latitude: coords.latitude,
         longitude: coords.longitude,
         user: { connect: { id: userId } },
@@ -69,26 +78,36 @@ export class AddressesService {
     return this.excludeCoordinates(address);
   }
 
-  async update(id: string, userId: string, data: Omit<Prisma.AddressUpdateInput, 'latitude' | 'longitude'>): Promise<AddressResponse> {
+  async update(id: string, userId: string, data: { label?: string, district?: string, addressDetail?: string, isPrimary?: boolean }): Promise<AddressResponse> {
     if (data.isPrimary) {
       await this.unsetPrimary(userId);
     }
 
-    let updateData: Prisma.AddressUpdateInput = { ...data };
+    let updateData: Prisma.AddressUpdateInput = {
+      label: data.label,
+      district: data.district,
+      addressDetail: data.addressDetail,
+      isPrimary: data.isPrimary,
+    };
 
-    if (data.province || data.city || data.district || data.village || data.addressDetail) {
+    if (data.district || data.addressDetail) {
       const current = await this.prisma.address.findFirst({ where: { id, userId } });
       if (current) {
-        const province = data.province ?? current.province;
-        const city = data.city ?? current.city;
         const district = data.district ?? current.district;
-        const village = data.village ?? current.village;
         const addressDetail = data.addressDetail ?? current.addressDetail;
+        
+        // Hardcode province and city since the focus is Surabaya
+        const province = 'Jawa Timur';
+        const city = 'Surabaya';
 
-        const addressText = `${village}, ${district}, ${city}, ${province}, ${addressDetail}`;
+        const addressText = `${addressDetail}, Kecamatan ${district}, ${city}, ${province}`;
         const coords = await this.getCoordinates(addressText);
+        
         updateData.latitude = coords.latitude;
         updateData.longitude = coords.longitude;
+        updateData.province = province;
+        updateData.city = city;
+        updateData.village = '';
       }
     }
 
