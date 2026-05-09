@@ -49,13 +49,12 @@ async function bootstrap() {
     customSiteTitle: 'Angkutin API Documentation',
   });
 
-  const port = process.env.PORT ?? 4000;
+  const port = process.env.PORT ?? 3000;
   app.enableCors({
     origin: [
       'http://localhost:3000',
       'http://127.0.0.1:3000',
       'http://localhost:4000',
-      'https://angkutin.vercel.app', // Contoh jika ada domain production
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
