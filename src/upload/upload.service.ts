@@ -10,14 +10,18 @@ export class UploadService {
 
   constructor(private configService: ConfigService) {
     const url = this.configService.get('SUPABASE_URL');
-    const key = this.configService.get('SUPABASE_ANON_KEY');
+    // Gunakan SERVICE_ROLE_KEY agar bisa bypass RLS di server-side
+    const key = this.configService.get('SUPABASE_SERVICE_ROLE_KEY') || this.configService.get('SUPABASE_ANON_KEY');
 
     if (!url || !key) {
-      // Menangani case jika env belum diset, agar build tidak pecah
-      console.warn('SUPABASE_URL or SUPABASE_ANON_KEY is missing');
+      console.warn('SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing. Upload might fail.');
     }
 
-    this.supabase = createClient(url || '', key || '');
+    this.supabase = createClient(url || '', key || '', {
+      auth: {
+        persistSession: false,
+      },
+    });
   }
 
   /**
