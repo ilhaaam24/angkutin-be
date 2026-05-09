@@ -49,21 +49,21 @@ export class AddressesService {
     throw new BadRequestException('Alamat tidak dapat ditemukan titik koordinatnya oleh Google Maps');
   }
 
-  async create(userId: string, data: { label: string, district: string, addressDetail: string, isPrimary?: boolean }): Promise<AddressResponse> {
+  async create(userId: string, data: { label: string, district: string, village: string, addressDetail: string, isPrimary?: boolean }): Promise<AddressResponse> {
     if (data.isPrimary) {
       await this.unsetPrimary(userId);
     }
 
     const province = 'Jawa Timur';
     const city = 'Surabaya';
-    const village = ''; // Set empty as requested
-    const addressText = `${data.addressDetail}, Kecamatan ${data.district}, ${city}, ${province}`;
+    const addressText = `${data.addressDetail}, Kelurahan ${data.village}, Kecamatan ${data.district}, ${city}, ${province}`;
     const coords = await this.getCoordinates(addressText);
 
     const address = await this.prisma.address.create({
       data: {
         label: data.label,
         district: data.district,
+        village: data.village,
         addressDetail: data.addressDetail,
         isPrimary: data.isPrimary ?? false,
         latitude: coords.latitude,
@@ -75,7 +75,7 @@ export class AddressesService {
     return this.excludeCoordinates(address);
   }
 
-  async update(id: string, userId: string, data: { label?: string, district?: string, addressDetail?: string, isPrimary?: boolean }): Promise<AddressResponse> {
+  async update(id: string, userId: string, data: { label?: string, district?: string, village?: string, addressDetail?: string, isPrimary?: boolean }): Promise<AddressResponse> {
     if (data.isPrimary) {
       await this.unsetPrimary(userId);
     }
@@ -83,21 +83,23 @@ export class AddressesService {
     let updateData: Prisma.AddressUpdateInput = {
       label: data.label,
       district: data.district,
+      village: data.village,
       addressDetail: data.addressDetail,
       isPrimary: data.isPrimary,
     };
 
-    if (data.district || data.addressDetail) {
+    if (data.district || data.village || data.addressDetail) {
       const current = await this.prisma.address.findFirst({ where: { id, userId } });
       if (current) {
         const district = data.district ?? current.district;
+        const village = data.village ?? current.village;
         const addressDetail = data.addressDetail ?? current.addressDetail;
         
         // Hardcode province and city since the focus is Surabaya
         const province = 'Jawa Timur';
         const city = 'Surabaya';
 
-        const addressText = `${addressDetail}, Kecamatan ${district}, ${city}, ${province}`;
+        const addressText = `${addressDetail}, Kelurahan ${village}, Kecamatan ${district}, ${city}, ${province}`;
         const coords = await this.getCoordinates(addressText);
         
         updateData.latitude = coords.latitude;

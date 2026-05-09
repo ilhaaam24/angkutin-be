@@ -141,6 +141,7 @@ exports.Prisma.AddressScalarFieldEnum = {
   userId: 'userId',
   label: 'label',
   district: 'district',
+  village: 'village',
   latitude: 'latitude',
   longitude: 'longitude',
   addressDetail: 'addressDetail',
