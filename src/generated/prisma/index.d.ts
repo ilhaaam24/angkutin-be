@@ -4731,10 +4731,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     label: string | null
-    province: string | null
-    city: string | null
     district: string | null
-    village: string | null
     latitude: Decimal | null
     longitude: Decimal | null
     addressDetail: string | null
@@ -4745,10 +4742,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     label: string | null
-    province: string | null
-    city: string | null
     district: string | null
-    village: string | null
     latitude: Decimal | null
     longitude: Decimal | null
     addressDetail: string | null
@@ -4759,10 +4753,7 @@ export namespace Prisma {
     id: number
     userId: number
     label: number
-    province: number
-    city: number
     district: number
-    village: number
     latitude: number
     longitude: number
     addressDetail: number
@@ -4785,10 +4776,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     label?: true
-    province?: true
-    city?: true
     district?: true
-    village?: true
     latitude?: true
     longitude?: true
     addressDetail?: true
@@ -4799,10 +4787,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     label?: true
-    province?: true
-    city?: true
     district?: true
-    village?: true
     latitude?: true
     longitude?: true
     addressDetail?: true
@@ -4813,10 +4798,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     label?: true
-    province?: true
-    city?: true
     district?: true
-    village?: true
     latitude?: true
     longitude?: true
     addressDetail?: true
@@ -4914,10 +4896,7 @@ export namespace Prisma {
     id: string
     userId: string
     label: string | null
-    province: string
-    city: string
     district: string
-    village: string
     latitude: Decimal
     longitude: Decimal
     addressDetail: string
@@ -4947,10 +4926,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     label?: boolean
-    province?: boolean
-    city?: boolean
     district?: boolean
-    village?: boolean
     latitude?: boolean
     longitude?: boolean
     addressDetail?: boolean
@@ -4964,10 +4940,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     label?: boolean
-    province?: boolean
-    city?: boolean
     district?: boolean
-    village?: boolean
     latitude?: boolean
     longitude?: boolean
     addressDetail?: boolean
@@ -4979,10 +4952,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     label?: boolean
-    province?: boolean
-    city?: boolean
     district?: boolean
-    village?: boolean
     latitude?: boolean
     longitude?: boolean
     addressDetail?: boolean
@@ -4994,17 +4964,14 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     label?: boolean
-    province?: boolean
-    city?: boolean
     district?: boolean
-    village?: boolean
     latitude?: boolean
     longitude?: boolean
     addressDetail?: boolean
     isPrimary?: boolean
   }
 
-  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "label" | "province" | "city" | "district" | "village" | "latitude" | "longitude" | "addressDetail" | "isPrimary", ExtArgs["result"]["address"]>
+  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "label" | "district" | "latitude" | "longitude" | "addressDetail" | "isPrimary", ExtArgs["result"]["address"]>
   export type AddressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     orders?: boolean | Address$ordersArgs<ExtArgs>
@@ -5027,10 +4994,7 @@ export namespace Prisma {
       id: string
       userId: string
       label: string | null
-      province: string
-      city: string
       district: string
-      village: string
       latitude: Prisma.Decimal
       longitude: Prisma.Decimal
       addressDetail: string
@@ -5463,10 +5427,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Address", 'String'>
     readonly userId: FieldRef<"Address", 'String'>
     readonly label: FieldRef<"Address", 'String'>
-    readonly province: FieldRef<"Address", 'String'>
-    readonly city: FieldRef<"Address", 'String'>
     readonly district: FieldRef<"Address", 'String'>
-    readonly village: FieldRef<"Address", 'String'>
     readonly latitude: FieldRef<"Address", 'Decimal'>
     readonly longitude: FieldRef<"Address", 'Decimal'>
     readonly addressDetail: FieldRef<"Address", 'String'>
@@ -28668,10 +28629,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     label: 'label',
-    province: 'province',
-    city: 'city',
     district: 'district',
-    village: 'village',
     latitude: 'latitude',
     longitude: 'longitude',
     addressDetail: 'addressDetail',
@@ -29341,10 +29299,7 @@ export namespace Prisma {
     id?: UuidFilter<"Address"> | string
     userId?: UuidFilter<"Address"> | string
     label?: StringNullableFilter<"Address"> | string | null
-    province?: StringFilter<"Address"> | string
-    city?: StringFilter<"Address"> | string
     district?: StringFilter<"Address"> | string
-    village?: StringFilter<"Address"> | string
     latitude?: DecimalFilter<"Address"> | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFilter<"Address"> | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFilter<"Address"> | string
@@ -29357,10 +29312,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     label?: SortOrderInput | SortOrder
-    province?: SortOrder
-    city?: SortOrder
     district?: SortOrder
-    village?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     addressDetail?: SortOrder
@@ -29376,10 +29328,7 @@ export namespace Prisma {
     NOT?: AddressWhereInput | AddressWhereInput[]
     userId?: UuidFilter<"Address"> | string
     label?: StringNullableFilter<"Address"> | string | null
-    province?: StringFilter<"Address"> | string
-    city?: StringFilter<"Address"> | string
     district?: StringFilter<"Address"> | string
-    village?: StringFilter<"Address"> | string
     latitude?: DecimalFilter<"Address"> | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFilter<"Address"> | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFilter<"Address"> | string
@@ -29392,10 +29341,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     label?: SortOrderInput | SortOrder
-    province?: SortOrder
-    city?: SortOrder
     district?: SortOrder
-    village?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     addressDetail?: SortOrder
@@ -29414,10 +29360,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Address"> | string
     userId?: UuidWithAggregatesFilter<"Address"> | string
     label?: StringNullableWithAggregatesFilter<"Address"> | string | null
-    province?: StringWithAggregatesFilter<"Address"> | string
-    city?: StringWithAggregatesFilter<"Address"> | string
     district?: StringWithAggregatesFilter<"Address"> | string
-    village?: StringWithAggregatesFilter<"Address"> | string
     latitude?: DecimalWithAggregatesFilter<"Address"> | Decimal | DecimalJsLike | number | string
     longitude?: DecimalWithAggregatesFilter<"Address"> | Decimal | DecimalJsLike | number | string
     addressDetail?: StringWithAggregatesFilter<"Address"> | string
@@ -30940,10 +30883,7 @@ export namespace Prisma {
   export type AddressCreateInput = {
     id?: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -30956,10 +30896,7 @@ export namespace Prisma {
     id?: string
     userId: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -30970,10 +30907,7 @@ export namespace Prisma {
   export type AddressUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -30986,10 +30920,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -31001,10 +30932,7 @@ export namespace Prisma {
     id?: string
     userId: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -31014,10 +30942,7 @@ export namespace Prisma {
   export type AddressUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -31028,10 +30953,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -32769,10 +32691,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     label?: SortOrder
-    province?: SortOrder
-    city?: SortOrder
     district?: SortOrder
-    village?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     addressDetail?: SortOrder
@@ -32788,10 +32707,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     label?: SortOrder
-    province?: SortOrder
-    city?: SortOrder
     district?: SortOrder
-    village?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     addressDetail?: SortOrder
@@ -32802,10 +32718,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     label?: SortOrder
-    province?: SortOrder
-    city?: SortOrder
     district?: SortOrder
-    village?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     addressDetail?: SortOrder
@@ -36086,10 +35999,7 @@ export namespace Prisma {
   export type AddressCreateWithoutUserInput = {
     id?: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -36100,10 +36010,7 @@ export namespace Prisma {
   export type AddressUncheckedCreateWithoutUserInput = {
     id?: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -36419,10 +36326,7 @@ export namespace Prisma {
     id?: UuidFilter<"Address"> | string
     userId?: UuidFilter<"Address"> | string
     label?: StringNullableFilter<"Address"> | string | null
-    province?: StringFilter<"Address"> | string
-    city?: StringFilter<"Address"> | string
     district?: StringFilter<"Address"> | string
-    village?: StringFilter<"Address"> | string
     latitude?: DecimalFilter<"Address"> | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFilter<"Address"> | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFilter<"Address"> | string
@@ -37281,10 +37185,7 @@ export namespace Prisma {
   export type AddressCreateWithoutOrdersInput = {
     id?: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -37296,10 +37197,7 @@ export namespace Prisma {
     id?: string
     userId: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -37667,10 +37565,7 @@ export namespace Prisma {
   export type AddressUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -37682,10 +37577,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -40190,10 +40082,7 @@ export namespace Prisma {
   export type AddressCreateManyUserInput = {
     id?: string
     label?: string | null
-    province?: string
-    city?: string
     district?: string
-    village?: string
     latitude: Decimal | DecimalJsLike | number | string
     longitude: Decimal | DecimalJsLike | number | string
     addressDetail: string
@@ -40281,10 +40170,7 @@ export namespace Prisma {
   export type AddressUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -40295,10 +40181,7 @@ export namespace Prisma {
   export type AddressUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string
@@ -40309,10 +40192,7 @@ export namespace Prisma {
   export type AddressUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
-    province?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
     district?: StringFieldUpdateOperationsInput | string
-    village?: StringFieldUpdateOperationsInput | string
     latitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     longitude?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     addressDetail?: StringFieldUpdateOperationsInput | string

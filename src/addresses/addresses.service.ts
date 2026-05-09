@@ -66,9 +66,6 @@ export class AddressesService {
         district: data.district,
         addressDetail: data.addressDetail,
         isPrimary: data.isPrimary ?? false,
-        province,
-        city,
-        village,
         latitude: coords.latitude,
         longitude: coords.longitude,
         user: { connect: { id: userId } },
@@ -105,9 +102,6 @@ export class AddressesService {
         
         updateData.latitude = coords.latitude;
         updateData.longitude = coords.longitude;
-        updateData.province = province;
-        updateData.city = city;
-        updateData.village = '';
       }
     }
 

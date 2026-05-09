@@ -107,10 +107,7 @@ model Address {
   id            String  @id @default(uuid()) @db.Uuid
   userId        String  @map("user_id") @db.Uuid
   label         String?
-  province      String  @default("")
-  city          String  @default("")
   district      String  @default("")
-  village       String  @default("")
   latitude      Decimal @db.Decimal
   longitude     Decimal @db.Decimal
   addressDetail String  @map("address_detail")
