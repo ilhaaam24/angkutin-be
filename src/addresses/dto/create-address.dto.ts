@@ -7,20 +7,30 @@ export class CreateAddressDto {
   @IsNotEmpty()
   label: string;
 
-  @ApiProperty({ example: -6.2088, description: 'Latitude coordinate' })
-  @IsNumber()
-  @IsNotEmpty()
-  latitude: number;
-
-  @ApiProperty({ example: 106.8456, description: 'Longitude coordinate' })
-  @IsNumber()
-  @IsNotEmpty()
-  longitude: number;
-
-  @ApiProperty({ example: 'Jl. Sudirman No. 1, Jakarta Selatan', description: 'Full address detail' })
+  @ApiProperty({ example: 'Jawa Timur', description: 'Province' })
   @IsString()
-  @IsOptional()
-  addressDetail?: string;
+  @IsNotEmpty()
+  province: string;
+
+  @ApiProperty({ example: 'Surabaya', description: 'City' })
+  @IsString()
+  @IsNotEmpty()
+  city: string;
+
+  @ApiProperty({ example: 'Sukolilo', description: 'District' })
+  @IsString()
+  @IsNotEmpty()
+  district: string;
+
+  @ApiProperty({ example: 'Semolowaru', description: 'Village' })
+  @IsString()
+  @IsNotEmpty()
+  village: string;
+
+  @ApiProperty({ example: 'Jl. Semolowaru Utara 1 No 110B, RT 01 RW 02', description: 'Full address detail' })
+  @IsString()
+  @IsNotEmpty()
+  addressDetail: string;
 
   @ApiProperty({ example: true, description: 'Set as primary address', default: false })
   @IsBoolean()
