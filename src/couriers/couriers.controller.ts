@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Query, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { CouriersService } from './couriers.service';
 import { OrdersService } from '../orders/orders.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role, OrderStatus } from '../generated/prisma';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { RegisterCourierDto } from './dto/register-courier.dto';
 import { UpdateCourierDto } from './dto/update-courier.dto';
 import { AdminCreateCourierDto } from './dto/admin-create-courier.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadService } from '../upload/upload.service';
 
 @ApiTags('Couriers')
 @ApiBearerAuth()
@@ -18,6 +20,7 @@ export class CouriersController {
   constructor(
     private readonly couriersService: CouriersService,
     private readonly ordersService: OrdersService,
+    private readonly uploadService: UploadService,
   ) {}
 
   // --- COURIER ENDPOINTS (Statis harus di atas dynamic) ---
@@ -167,27 +170,42 @@ export class CouriersController {
 
   @Post('orders/:id/complete')
   @Roles(Role.COURIER)
-  @ApiOperation({ summary: 'Complete the order' })
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Complete the order with photo evidence' })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        photoUrl: { type: 'string', example: 'https://example.com/photo.jpg' },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
       },
+      required: ['file'],
     },
   })
   async completeOrder(
     @Request() req,
     @Param('id') id: string,
-    @Body() data: { photoUrl?: string },
+    @UploadedFile() file: Express.Multer.File,
   ) {
+    if (!file) {
+      throw new BadRequestException('Bukti foto (file) wajib diunggah saat menyelesaikan pesanan');
+    }
+
     const courier = await this.couriersService.getProfile(req.user.userId);
+    
+    // 1. Upload ke bucket 'waste' folder 'orders'
+    const photoUrl = await this.uploadService.uploadImage(file.buffer, 'orders', 'waste');
+
+    // 2. Transisi status
     return this.ordersService.transitionOrderStatus(
       id,
       courier!.id,
       OrderStatus.COMPLETED,
-      'Pesanan selesai',
-      data.photoUrl,
+      'Pesanan selesai dengan bukti foto',
+      photoUrl,
     );
   }
 

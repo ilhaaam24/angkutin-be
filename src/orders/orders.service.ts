@@ -391,17 +391,7 @@ export class OrdersService {
     }
 
     return this.prisma.$transaction(async (tx) => {
-      const updated = await tx.order.update({
-        where: { id: orderId },
-        data: { status: newStatus },
-        include: {
-          address: true,
-          wasteItems: { include: { wasteType: true } },
-          courier: { include: { user: true } },
-          statusHistory: { orderBy: { createdAt: 'asc' } },
-        },
-      });
-
+      // 1. Buat history record dulu
       await tx.orderStatusHistory.create({
         data: {
           orderId,
@@ -411,7 +401,17 @@ export class OrdersService {
         },
       });
 
-      return updated;
+      // 2. Update status order dan ambil data lengkapnya
+      return tx.order.update({
+        where: { id: orderId },
+        data: { status: newStatus },
+        include: {
+          address: true,
+          wasteItems: { include: { wasteType: true } },
+          courier: { include: { user: true } },
+          statusHistory: { orderBy: { createdAt: 'asc' } },
+        },
+      });
     });
   }
 
