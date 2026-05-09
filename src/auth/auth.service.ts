@@ -1,5 +1,4 @@
 import {
-
   Injectable,
   UnauthorizedException,
   BadRequestException,
@@ -7,14 +6,22 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
-import { jwtConstants } from './constants';
+import { OAuth2Client } from 'google-auth-library';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
+  private googleClient: OAuth2Client;
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.googleClient = new OAuth2Client(
+      this.configService.get('GOOGLE_CLIENT_ID'),
+    );
+  }
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(email);
@@ -132,5 +139,42 @@ export class AuthService {
       refreshToken: null,
     });
     return { message: 'Logged out successfully' };
+  }
+
+  async googleLogin(idToken: string) {
+    if (!idToken) {
+      throw new BadRequestException('ID Token tidak ditemukan dalam request');
+    }
+    try {
+      const ticket = await this.googleClient.verifyIdToken({
+        idToken: idToken,
+        audience: this.configService.get('GOOGLE_CLIENT_ID'),
+      });
+
+      const payload = ticket.getPayload();
+      if (!payload || !payload.email) {
+        throw new BadRequestException('Invalid Google token');
+      }
+
+      const { email, name, picture } = payload;
+
+      let user = await this.usersService.findOne(email);
+
+      if (!user) {
+        // Create new user if not exists
+        user = await this.usersService.create({
+          email,
+          name,
+          password: await bcrypt.hash(Math.random().toString(36), 10), // Random password for google users
+          isVerified: true, // Google emails are verified
+          photoUrl: picture,
+        });
+      }
+
+      return this.login(user);
+    } catch (error) {
+      console.error('Google Auth Detail Error:', error);
+      throw new UnauthorizedException('Google authentication failed: ' + error.message);
+    }
   }
 }

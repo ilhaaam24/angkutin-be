@@ -9,6 +9,12 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // COOP Header for Google Auth
+  app.use((req, res, next) => {
+    res.header('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+  });
+
   // Validation
   app.useGlobalPipes(
     new ValidationPipe({
@@ -43,8 +49,17 @@ async function bootstrap() {
     customSiteTitle: 'Angkutin API Documentation',
   });
 
-  const port = process.env.PORT ?? 3000;
-  app.enableCors(port === 3000 ? true : false);
+  const port = process.env.PORT ?? 4000;
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'http://localhost:4000',
+      'https://angkutin.vercel.app', // Contoh jika ada domain production
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
   console.log(`Swagger UI is available on: http://localhost:${port}/api/swagger`);
