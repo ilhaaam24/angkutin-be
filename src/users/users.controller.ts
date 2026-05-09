@@ -57,6 +57,13 @@ export class UsersController {
     },
   })
   async uploadProfilePic(@Request() req, @UploadedFile() file: Express.Multer.File) {
+    const user = await this.usersService.findOneById(req.user.userId);
+    
+    // Delete old image from bucket if it exists
+    if (user?.photoUrl) {
+      await this.uploadService.deleteImageByUrl(user.photoUrl, 'profile_pic');
+    }
+
     const photoUrl = await this.uploadService.uploadImage(file.buffer, 'profiles');
     await this.usersService.update(req.user.userId, { photoUrl });
     return { photoUrl };

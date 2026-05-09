@@ -88,4 +88,28 @@ export class UploadService {
 
     return publicUrl.publicUrl;
   }
+
+  /**
+   * Delete an image from Supabase Storage using its public URL
+   */
+  async deleteImageByUrl(url: string, bucket: string = 'profile_pic'): Promise<void> {
+    try {
+      if (!url) return;
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split(`/public/${bucket}/`);
+      
+      if (pathParts.length === 2) {
+        const filePath = decodeURIComponent(pathParts[1]);
+        const { error } = await this.supabase.storage
+          .from(bucket)
+          .remove([filePath]);
+          
+        if (error) {
+          console.error('Failed to delete old image from storage:', error.message);
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting old image:', error);
+    }
+  }
 }
