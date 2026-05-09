@@ -42,4 +42,9 @@ export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => WasteItemDto)
   wasteItems: WasteItemDto[];
+
+  @ApiProperty({ example: 'uuid-ai-result-id', required: false })
+  @IsUUID()
+  @IsOptional()
+  aiResultId?: string;
 }

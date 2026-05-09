@@ -88,10 +88,26 @@ export class AuthController {
     return this.authService.sendOtp(req.user.userId, req.user.email);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('logout')
   @ApiOperation({ summary: 'Logout and revoke refresh token' })
   async logout(@Request() req) {
     return this.authService.logout(req.user.userId);
+  }
+
+  @Post('google')
+  @ApiOperation({ summary: 'Login or Register with Google' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        idToken: { type: 'string', description: 'Google ID Token from Frontend' },
+      },
+      required: ['idToken'],
+    },
+  })
+  async googleLogin(@Body() body: any) {
+    console.log('[DEBUG] Received Google Login Body:', body);
+    const idToken = body.idToken || body.credential || body.token;
+    return this.authService.googleLogin(idToken);
   }
 }

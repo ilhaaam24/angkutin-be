@@ -11,4 +11,9 @@ export class UpdateProfileDto {
   @IsString()
   @IsOptional()
   phone?: string;
+
+  @ApiProperty({ example: 'https://example.com/photo.jpg', description: 'User photo URL', required: false })
+  @IsString()
+  @IsOptional()
+  photoUrl?: string;
 }

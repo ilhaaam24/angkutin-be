@@ -131,6 +131,7 @@ exports.Prisma.UserScalarFieldEnum = {
   refreshToken: 'refreshToken',
   otpCode: 'otpCode',
   otpExpiresAt: 'otpExpiresAt',
+  photoUrl: 'photoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -167,6 +168,15 @@ exports.Prisma.OrderScalarFieldEnum = {
   totalDebit: 'totalDebit',
   netTotal: 'netTotal',
   paymentStatus: 'paymentStatus',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.OrderStatusHistoryScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  status: 'status',
+  note: 'note',
+  photoUrl: 'photoUrl',
   createdAt: 'createdAt'
 };
 
@@ -374,6 +384,8 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   ARRIVED: 'ARRIVED',
   WEIGHING: 'WEIGHING',
   WAITING_PAYMENT: 'WAITING_PAYMENT',
+  PICKED_UP: 'PICKED_UP',
+  DELIVERING: 'DELIVERING',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
   REASSIGNING: 'REASSIGNING'
@@ -426,6 +438,7 @@ exports.Prisma.ModelName = {
   Address: 'Address',
   Courier: 'Courier',
   Order: 'Order',
+  OrderStatusHistory: 'OrderStatusHistory',
   OrderAiResult: 'OrderAiResult',
   OrderTrackingLog: 'OrderTrackingLog',
   WasteType: 'WasteType',
