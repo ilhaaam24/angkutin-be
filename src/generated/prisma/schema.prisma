@@ -26,6 +26,8 @@ enum OrderStatus {
   ARRIVED
   WEIGHING
   WAITING_PAYMENT
+  PICKED_UP
+  DELIVERING
   COMPLETED
   CANCELLED
   REASSIGNING
@@ -84,6 +86,7 @@ model User {
   refreshToken String?   @map("refresh_token")
   otpCode      String?   @map("otp_code")
   otpExpiresAt DateTime? @map("otp_expires_at")
+  photoUrl     String?   @map("photo_url")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
 
@@ -153,6 +156,7 @@ model Order {
 
   aiResults     OrderAiResult[]
   trackingLogs  OrderTrackingLog[]
+  statusHistory OrderStatusHistory[]
   wasteItems    OrderWasteItem[]
   residuals     OrderResidual[]
   payments      Payment[]
@@ -163,15 +167,28 @@ model Order {
   @@map("orders")
 }
 
+model OrderStatusHistory {
+  id        String      @id @default(uuid()) @db.Uuid
+  orderId   String      @map("order_id") @db.Uuid
+  status    OrderStatus
+  note      String?
+  photoUrl  String?     @map("photo_url")
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("order_status_histories")
+}
+
 model OrderAiResult {
   id                 String  @id @default(uuid()) @db.Uuid
-  orderId            String  @map("order_id") @db.Uuid
+  orderId            String? @map("order_id") @db.Uuid
   volumeEstimation   Float?  @map("volume_estimation")
   objectDetected     Json?   @map("object_detected")
   recommendedVehicle String? @map("recommended_vehicle")
   confidenceScore    Float?  @map("confidence_score")
 
-  order Order @relation(fields: [orderId], references: [id])
+  order Order? @relation(fields: [orderId], references: [id])
 
   @@map("order_ai_results")
 }

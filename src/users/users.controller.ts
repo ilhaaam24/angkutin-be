@@ -1,10 +1,12 @@
-import { Controller, Get, Body, Patch, Post, Delete, Param, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Post, Delete, Param, UseGuards, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AddressesService } from '../addresses/addresses.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { CreateAddressDto } from '../addresses/dto/create-address.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadService } from '../upload/upload.service';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -14,6 +16,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly addressesService: AddressesService,
+    private readonly uploadService: UploadService,
   ) {}
 
   @Get('profile')
@@ -35,6 +38,27 @@ export class UsersController {
   @ApiBody({ type: UpdateProfileDto })
   async updateProfile(@Request() req, @Body() updateProfileDto: UpdateProfileDto) {
     return this.usersService.update(req.user.userId, updateProfileDto);
+  }
+
+  @Post('profile-pic')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Upload profile picture' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async uploadProfilePic(@Request() req, @UploadedFile() file: Express.Multer.File) {
+    const photoUrl = await this.uploadService.uploadImage(file.buffer, 'profiles');
+    await this.usersService.update(req.user.userId, { photoUrl });
+    return { photoUrl };
   }
 
   @Get('addresses')

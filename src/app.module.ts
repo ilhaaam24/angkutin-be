@@ -10,6 +10,7 @@ import { CouriersModule } from './couriers/couriers.module';
 import { WasteTypesModule } from './waste-types/waste-types.module';
 import { OrdersModule } from './orders/orders.module';
 import { WalletModule } from './wallet/wallet.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { WalletModule } from './wallet/wallet.module';
     WasteTypesModule,
     OrdersModule,
     WalletModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
