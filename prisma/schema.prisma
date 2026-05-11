@@ -13,6 +13,11 @@ enum Role {
   ADMIN
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
 enum VehicleType {
   MOTOR
   PICKUP
@@ -75,20 +80,26 @@ enum CancelledBy {
   SYSTEM
 }
 
+enum WasteCategory {
+  MUTU
+  RESIDU
+}
+
 model User {
-  id           String    @id @default(uuid()) @db.Uuid
+  id           String     @id @default(uuid()) @db.Uuid
   name         String?
-  email        String    @unique
+  email        String     @unique
   password     String
-  role         Role      @default(USER)
+  role         Role       @default(USER)
+  status       UserStatus @default(ACTIVE)
   phone        String?
-  isVerified   Boolean   @default(false) @map("is_verified")
-  refreshToken String?   @map("refresh_token")
-  otpCode      String?   @map("otp_code")
-  otpExpiresAt DateTime? @map("otp_expires_at")
-  photoUrl     String?   @map("photo_url")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  isVerified   Boolean    @default(false) @map("is_verified")
+  refreshToken String?    @map("refresh_token")
+  otpCode      String?    @map("otp_code")
+  otpExpiresAt DateTime?  @map("otp_expires_at")
+  photoUrl     String?    @map("photo_url")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
 
   addresses    Address[]
   couriers     Courier[]
@@ -124,6 +135,7 @@ model Courier {
   id           String      @id @default(uuid()) @db.Uuid
   userId       String      @map("user_id") @db.Uuid
   vehicleType  VehicleType @map("vehicle_type")
+  vehiclePlate String?     @map("vehicle_plate")
   isOnline     Boolean     @default(false) @map("is_online")
   currentLat   Decimal?    @map("current_lat") @db.Decimal
   currentLng   Decimal?    @map("current_lng") @db.Decimal
@@ -210,9 +222,10 @@ model OrderTrackingLog {
 }
 
 model WasteType {
-  id         String      @id @default(uuid()) @db.Uuid
+  id         String        @id @default(uuid()) @db.Uuid
   name       String
-  unitPrice  Float       @map("unit_price")
+  category   WasteCategory @default(MUTU)
+  unitPrice  Float         @map("unit_price")
   wasteItems OrderWasteItem[]
   pricing    PricingWaste[]
 

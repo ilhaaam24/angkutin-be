@@ -126,6 +126,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
+  status: 'status',
   phone: 'phone',
   isVerified: 'isVerified',
   refreshToken: 'refreshToken',
@@ -152,6 +153,7 @@ exports.Prisma.CourierScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   vehicleType: 'vehicleType',
+  vehiclePlate: 'vehiclePlate',
   isOnline: 'isOnline',
   currentLat: 'currentLat',
   currentLng: 'currentLng'
@@ -203,6 +205,7 @@ exports.Prisma.OrderTrackingLogScalarFieldEnum = {
 exports.Prisma.WasteTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  category: 'category',
   unitPrice: 'unitPrice'
 };
 
@@ -373,6 +376,11 @@ exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN'
 };
 
+exports.UserStatus = exports.$Enums.UserStatus = {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED'
+};
+
 exports.VehicleType = exports.$Enums.VehicleType = {
   MOTOR: 'MOTOR',
   PICKUP: 'PICKUP',
@@ -396,6 +404,11 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
 exports.ScheduleType = exports.$Enums.ScheduleType = {
   INSTANT: 'INSTANT',
   SCHEDULED: 'SCHEDULED'
+};
+
+exports.WasteCategory = exports.$Enums.WasteCategory = {
+  MUTU: 'MUTU',
+  RESIDU: 'RESIDU'
 };
 
 exports.WalletTransactionType = exports.$Enums.WalletTransactionType = {

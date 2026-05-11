@@ -11,6 +11,7 @@ import { WasteTypesModule } from './waste-types/waste-types.module';
 import { OrdersModule } from './orders/orders.module';
 import { WalletModule } from './wallet/wallet.module';
 import { UploadModule } from './upload/upload.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UploadModule } from './upload/upload.module';
     OrdersModule,
     WalletModule,
     UploadModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

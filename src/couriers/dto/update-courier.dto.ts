@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { RegisterCourierDto } from './register-courier.dto';
-import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCourierDto extends PartialType(RegisterCourierDto) {
   @ApiProperty({ example: true, required: false })
@@ -17,4 +17,10 @@ export class UpdateCourierDto extends PartialType(RegisterCourierDto) {
   @IsNumber()
   @IsOptional()
   currentLng?: number;
+
+  @ApiProperty({ example: 'B 1234 ABC', required: false, description: 'Plat nomor kendaraan' })
+  @IsString()
+  @IsOptional()
+  vehiclePlate?: string;
 }
+

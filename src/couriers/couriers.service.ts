@@ -72,7 +72,7 @@ export class CouriersService {
   }
 
   async adminCreate(data: AdminCreateCourierDto): Promise<Courier> {
-    const { userId, email, password, name, phone, vehicleType } = data;
+    const { userId, email, password, name, phone, vehicleType, vehiclePlate } = data;
 
     // Skenario 1: Promosi User yang sudah ada
     if (userId) {
@@ -115,6 +115,7 @@ export class CouriersService {
       return tx.courier.create({
         data: {
           vehicleType,
+          vehiclePlate,
           user: { connect: { id: newUser.id } },
         },
       });

@@ -137,6 +137,14 @@ export namespace $Enums {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const UserStatus: {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED'
+};
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
 export const VehicleType: {
   MOTOR: 'MOTOR',
   PICKUP: 'PICKUP',
@@ -225,11 +233,23 @@ export const CancelledBy: {
 
 export type CancelledBy = (typeof CancelledBy)[keyof typeof CancelledBy]
 
+
+export const WasteCategory: {
+  MUTU: 'MUTU',
+  RESIDU: 'RESIDU'
+};
+
+export type WasteCategory = (typeof WasteCategory)[keyof typeof WasteCategory]
+
 }
 
 export type Role = $Enums.Role
 
 export const Role: typeof $Enums.Role
+
+export type UserStatus = $Enums.UserStatus
+
+export const UserStatus: typeof $Enums.UserStatus
 
 export type VehicleType = $Enums.VehicleType
 
@@ -266,6 +286,10 @@ export const PaymentStatus: typeof $Enums.PaymentStatus
 export type CancelledBy = $Enums.CancelledBy
 
 export const CancelledBy: typeof $Enums.CancelledBy
+
+export type WasteCategory = $Enums.WasteCategory
+
+export const WasteCategory: typeof $Enums.WasteCategory
 
 /**
  * ##  Prisma Client ʲˢ
@@ -3323,6 +3347,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.Role | null
+    status: $Enums.UserStatus | null
     phone: string | null
     isVerified: boolean | null
     refreshToken: string | null
@@ -3339,6 +3364,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.Role | null
+    status: $Enums.UserStatus | null
     phone: string | null
     isVerified: boolean | null
     refreshToken: string | null
@@ -3355,6 +3381,7 @@ export namespace Prisma {
     email: number
     password: number
     role: number
+    status: number
     phone: number
     isVerified: number
     refreshToken: number
@@ -3373,6 +3400,7 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    status?: true
     phone?: true
     isVerified?: true
     refreshToken?: true
@@ -3389,6 +3417,7 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    status?: true
     phone?: true
     isVerified?: true
     refreshToken?: true
@@ -3405,6 +3434,7 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    status?: true
     phone?: true
     isVerified?: true
     refreshToken?: true
@@ -3494,6 +3524,7 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.Role
+    status: $Enums.UserStatus
     phone: string | null
     isVerified: boolean
     refreshToken: string | null
@@ -3527,6 +3558,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    status?: boolean
     phone?: boolean
     isVerified?: boolean
     refreshToken?: boolean
@@ -3553,6 +3585,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    status?: boolean
     phone?: boolean
     isVerified?: boolean
     refreshToken?: boolean
@@ -3569,6 +3602,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    status?: boolean
     phone?: boolean
     isVerified?: boolean
     refreshToken?: boolean
@@ -3585,6 +3619,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    status?: boolean
     phone?: boolean
     isVerified?: boolean
     refreshToken?: boolean
@@ -3595,7 +3630,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "status" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     addresses?: boolean | User$addressesArgs<ExtArgs>
     couriers?: boolean | User$couriersArgs<ExtArgs>
@@ -3630,6 +3665,7 @@ export namespace Prisma {
       email: string
       password: string
       role: $Enums.Role
+      status: $Enums.UserStatus
       phone: string | null
       isVerified: boolean
       refreshToken: string | null
@@ -4075,6 +4111,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'Role'>
+    readonly status: FieldRef<"User", 'UserStatus'>
     readonly phone: FieldRef<"User", 'String'>
     readonly isVerified: FieldRef<"User", 'Boolean'>
     readonly refreshToken: FieldRef<"User", 'String'>
@@ -5914,6 +5951,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     vehicleType: $Enums.VehicleType | null
+    vehiclePlate: string | null
     isOnline: boolean | null
     currentLat: Decimal | null
     currentLng: Decimal | null
@@ -5923,6 +5961,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     vehicleType: $Enums.VehicleType | null
+    vehiclePlate: string | null
     isOnline: boolean | null
     currentLat: Decimal | null
     currentLng: Decimal | null
@@ -5932,6 +5971,7 @@ export namespace Prisma {
     id: number
     userId: number
     vehicleType: number
+    vehiclePlate: number
     isOnline: number
     currentLat: number
     currentLng: number
@@ -5953,6 +5993,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     vehicleType?: true
+    vehiclePlate?: true
     isOnline?: true
     currentLat?: true
     currentLng?: true
@@ -5962,6 +6003,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     vehicleType?: true
+    vehiclePlate?: true
     isOnline?: true
     currentLat?: true
     currentLng?: true
@@ -5971,6 +6013,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     vehicleType?: true
+    vehiclePlate?: true
     isOnline?: true
     currentLat?: true
     currentLng?: true
@@ -6067,6 +6110,7 @@ export namespace Prisma {
     id: string
     userId: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate: string | null
     isOnline: boolean
     currentLat: Decimal | null
     currentLng: Decimal | null
@@ -6095,6 +6139,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     vehicleType?: boolean
+    vehiclePlate?: boolean
     isOnline?: boolean
     currentLat?: boolean
     currentLng?: boolean
@@ -6110,6 +6155,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     vehicleType?: boolean
+    vehiclePlate?: boolean
     isOnline?: boolean
     currentLat?: boolean
     currentLng?: boolean
@@ -6120,6 +6166,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     vehicleType?: boolean
+    vehiclePlate?: boolean
     isOnline?: boolean
     currentLat?: boolean
     currentLng?: boolean
@@ -6130,12 +6177,13 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     vehicleType?: boolean
+    vehiclePlate?: boolean
     isOnline?: boolean
     currentLat?: boolean
     currentLng?: boolean
   }
 
-  export type CourierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "vehicleType" | "isOnline" | "currentLat" | "currentLng", ExtArgs["result"]["courier"]>
+  export type CourierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "vehicleType" | "vehiclePlate" | "isOnline" | "currentLat" | "currentLng", ExtArgs["result"]["courier"]>
   export type CourierInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     orders?: boolean | Courier$ordersArgs<ExtArgs>
@@ -6164,6 +6212,7 @@ export namespace Prisma {
       id: string
       userId: string
       vehicleType: $Enums.VehicleType
+      vehiclePlate: string | null
       isOnline: boolean
       currentLat: Prisma.Decimal | null
       currentLng: Prisma.Decimal | null
@@ -6598,6 +6647,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Courier", 'String'>
     readonly userId: FieldRef<"Courier", 'String'>
     readonly vehicleType: FieldRef<"Courier", 'VehicleType'>
+    readonly vehiclePlate: FieldRef<"Courier", 'String'>
     readonly isOnline: FieldRef<"Courier", 'Boolean'>
     readonly currentLat: FieldRef<"Courier", 'Decimal'>
     readonly currentLng: FieldRef<"Courier", 'Decimal'>
@@ -11964,18 +12014,21 @@ export namespace Prisma {
   export type WasteTypeMinAggregateOutputType = {
     id: string | null
     name: string | null
+    category: $Enums.WasteCategory | null
     unitPrice: number | null
   }
 
   export type WasteTypeMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    category: $Enums.WasteCategory | null
     unitPrice: number | null
   }
 
   export type WasteTypeCountAggregateOutputType = {
     id: number
     name: number
+    category: number
     unitPrice: number
     _all: number
   }
@@ -11992,18 +12045,21 @@ export namespace Prisma {
   export type WasteTypeMinAggregateInputType = {
     id?: true
     name?: true
+    category?: true
     unitPrice?: true
   }
 
   export type WasteTypeMaxAggregateInputType = {
     id?: true
     name?: true
+    category?: true
     unitPrice?: true
   }
 
   export type WasteTypeCountAggregateInputType = {
     id?: true
     name?: true
+    category?: true
     unitPrice?: true
     _all?: true
   }
@@ -12097,6 +12153,7 @@ export namespace Prisma {
   export type WasteTypeGroupByOutputType = {
     id: string
     name: string
+    category: $Enums.WasteCategory
     unitPrice: number
     _count: WasteTypeCountAggregateOutputType | null
     _avg: WasteTypeAvgAggregateOutputType | null
@@ -12122,6 +12179,7 @@ export namespace Prisma {
   export type WasteTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    category?: boolean
     unitPrice?: boolean
     wasteItems?: boolean | WasteType$wasteItemsArgs<ExtArgs>
     pricing?: boolean | WasteType$pricingArgs<ExtArgs>
@@ -12131,22 +12189,25 @@ export namespace Prisma {
   export type WasteTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    category?: boolean
     unitPrice?: boolean
   }, ExtArgs["result"]["wasteType"]>
 
   export type WasteTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    category?: boolean
     unitPrice?: boolean
   }, ExtArgs["result"]["wasteType"]>
 
   export type WasteTypeSelectScalar = {
     id?: boolean
     name?: boolean
+    category?: boolean
     unitPrice?: boolean
   }
 
-  export type WasteTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "unitPrice", ExtArgs["result"]["wasteType"]>
+  export type WasteTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "category" | "unitPrice", ExtArgs["result"]["wasteType"]>
   export type WasteTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     wasteItems?: boolean | WasteType$wasteItemsArgs<ExtArgs>
     pricing?: boolean | WasteType$pricingArgs<ExtArgs>
@@ -12164,6 +12225,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      category: $Enums.WasteCategory
       unitPrice: number
     }, ExtArgs["result"]["wasteType"]>
     composites: {}
@@ -12592,6 +12654,7 @@ export namespace Prisma {
   interface WasteTypeFieldRefs {
     readonly id: FieldRef<"WasteType", 'String'>
     readonly name: FieldRef<"WasteType", 'String'>
+    readonly category: FieldRef<"WasteType", 'WasteCategory'>
     readonly unitPrice: FieldRef<"WasteType", 'Float'>
   }
     
@@ -28625,6 +28688,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     role: 'role',
+    status: 'status',
     phone: 'phone',
     isVerified: 'isVerified',
     refreshToken: 'refreshToken',
@@ -28657,6 +28721,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     vehicleType: 'vehicleType',
+    vehiclePlate: 'vehiclePlate',
     isOnline: 'isOnline',
     currentLat: 'currentLat',
     currentLng: 'currentLng'
@@ -28723,6 +28788,7 @@ export namespace Prisma {
   export const WasteTypeScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    category: 'category',
     unitPrice: 'unitPrice'
   };
 
@@ -28982,6 +29048,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'UserStatus'
+   */
+  export type EnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserStatus[]'
+   */
+  export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -29083,6 +29163,20 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'WasteCategory'
+   */
+  export type EnumWasteCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WasteCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'WasteCategory[]'
+   */
+  export type ListEnumWasteCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WasteCategory[]'>
     
 
 
@@ -29196,6 +29290,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     phone?: StringNullableFilter<"User"> | string | null
     isVerified?: BoolFilter<"User"> | boolean
     refreshToken?: StringNullableFilter<"User"> | string | null
@@ -29221,6 +29316,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    status?: SortOrder
     phone?: SortOrderInput | SortOrder
     isVerified?: SortOrder
     refreshToken?: SortOrderInput | SortOrder
@@ -29249,6 +29345,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     phone?: StringNullableFilter<"User"> | string | null
     isVerified?: BoolFilter<"User"> | boolean
     refreshToken?: StringNullableFilter<"User"> | string | null
@@ -29274,6 +29371,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    status?: SortOrder
     phone?: SortOrderInput | SortOrder
     isVerified?: SortOrder
     refreshToken?: SortOrderInput | SortOrder
@@ -29296,6 +29394,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+    status?: EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     isVerified?: BoolWithAggregatesFilter<"User"> | boolean
     refreshToken?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -29393,6 +29492,7 @@ export namespace Prisma {
     id?: UuidFilter<"Courier"> | string
     userId?: UuidFilter<"Courier"> | string
     vehicleType?: EnumVehicleTypeFilter<"Courier"> | $Enums.VehicleType
+    vehiclePlate?: StringNullableFilter<"Courier"> | string | null
     isOnline?: BoolFilter<"Courier"> | boolean
     currentLat?: DecimalNullableFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
     currentLng?: DecimalNullableFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
@@ -29407,6 +29507,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     vehicleType?: SortOrder
+    vehiclePlate?: SortOrderInput | SortOrder
     isOnline?: SortOrder
     currentLat?: SortOrderInput | SortOrder
     currentLng?: SortOrderInput | SortOrder
@@ -29424,6 +29525,7 @@ export namespace Prisma {
     NOT?: CourierWhereInput | CourierWhereInput[]
     userId?: UuidFilter<"Courier"> | string
     vehicleType?: EnumVehicleTypeFilter<"Courier"> | $Enums.VehicleType
+    vehiclePlate?: StringNullableFilter<"Courier"> | string | null
     isOnline?: BoolFilter<"Courier"> | boolean
     currentLat?: DecimalNullableFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
     currentLng?: DecimalNullableFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
@@ -29438,6 +29540,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     vehicleType?: SortOrder
+    vehiclePlate?: SortOrderInput | SortOrder
     isOnline?: SortOrder
     currentLat?: SortOrderInput | SortOrder
     currentLng?: SortOrderInput | SortOrder
@@ -29455,6 +29558,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Courier"> | string
     userId?: UuidWithAggregatesFilter<"Courier"> | string
     vehicleType?: EnumVehicleTypeWithAggregatesFilter<"Courier"> | $Enums.VehicleType
+    vehiclePlate?: StringNullableWithAggregatesFilter<"Courier"> | string | null
     isOnline?: BoolWithAggregatesFilter<"Courier"> | boolean
     currentLat?: DecimalNullableWithAggregatesFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
     currentLng?: DecimalNullableWithAggregatesFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
@@ -29783,6 +29887,7 @@ export namespace Prisma {
     NOT?: WasteTypeWhereInput | WasteTypeWhereInput[]
     id?: UuidFilter<"WasteType"> | string
     name?: StringFilter<"WasteType"> | string
+    category?: EnumWasteCategoryFilter<"WasteType"> | $Enums.WasteCategory
     unitPrice?: FloatFilter<"WasteType"> | number
     wasteItems?: OrderWasteItemListRelationFilter
     pricing?: PricingWasteListRelationFilter
@@ -29791,6 +29896,7 @@ export namespace Prisma {
   export type WasteTypeOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    category?: SortOrder
     unitPrice?: SortOrder
     wasteItems?: OrderWasteItemOrderByRelationAggregateInput
     pricing?: PricingWasteOrderByRelationAggregateInput
@@ -29802,6 +29908,7 @@ export namespace Prisma {
     OR?: WasteTypeWhereInput[]
     NOT?: WasteTypeWhereInput | WasteTypeWhereInput[]
     name?: StringFilter<"WasteType"> | string
+    category?: EnumWasteCategoryFilter<"WasteType"> | $Enums.WasteCategory
     unitPrice?: FloatFilter<"WasteType"> | number
     wasteItems?: OrderWasteItemListRelationFilter
     pricing?: PricingWasteListRelationFilter
@@ -29810,6 +29917,7 @@ export namespace Prisma {
   export type WasteTypeOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    category?: SortOrder
     unitPrice?: SortOrder
     _count?: WasteTypeCountOrderByAggregateInput
     _avg?: WasteTypeAvgOrderByAggregateInput
@@ -29824,6 +29932,7 @@ export namespace Prisma {
     NOT?: WasteTypeScalarWhereWithAggregatesInput | WasteTypeScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"WasteType"> | string
     name?: StringWithAggregatesFilter<"WasteType"> | string
+    category?: EnumWasteCategoryWithAggregatesFilter<"WasteType"> | $Enums.WasteCategory
     unitPrice?: FloatWithAggregatesFilter<"WasteType"> | number
   }
 
@@ -30757,6 +30866,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -30782,6 +30892,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -30807,6 +30918,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30832,6 +30944,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30857,6 +30970,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -30873,6 +30987,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30889,6 +31004,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30989,6 +31105,7 @@ export namespace Prisma {
   export type CourierCreateInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -31003,6 +31120,7 @@ export namespace Prisma {
     id?: string
     userId: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -31015,6 +31133,7 @@ export namespace Prisma {
   export type CourierUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -31029,6 +31148,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -31042,6 +31162,7 @@ export namespace Prisma {
     id?: string
     userId: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -31050,6 +31171,7 @@ export namespace Prisma {
   export type CourierUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -31059,6 +31181,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -31397,6 +31520,7 @@ export namespace Prisma {
   export type WasteTypeCreateInput = {
     id?: string
     name: string
+    category?: $Enums.WasteCategory
     unitPrice: number
     wasteItems?: OrderWasteItemCreateNestedManyWithoutWasteTypeInput
     pricing?: PricingWasteCreateNestedManyWithoutWasteTypeInput
@@ -31405,6 +31529,7 @@ export namespace Prisma {
   export type WasteTypeUncheckedCreateInput = {
     id?: string
     name: string
+    category?: $Enums.WasteCategory
     unitPrice: number
     wasteItems?: OrderWasteItemUncheckedCreateNestedManyWithoutWasteTypeInput
     pricing?: PricingWasteUncheckedCreateNestedManyWithoutWasteTypeInput
@@ -31413,6 +31538,7 @@ export namespace Prisma {
   export type WasteTypeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
     wasteItems?: OrderWasteItemUpdateManyWithoutWasteTypeNestedInput
     pricing?: PricingWasteUpdateManyWithoutWasteTypeNestedInput
@@ -31421,6 +31547,7 @@ export namespace Prisma {
   export type WasteTypeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
     wasteItems?: OrderWasteItemUncheckedUpdateManyWithoutWasteTypeNestedInput
     pricing?: PricingWasteUncheckedUpdateManyWithoutWasteTypeNestedInput
@@ -31429,18 +31556,21 @@ export namespace Prisma {
   export type WasteTypeCreateManyInput = {
     id?: string
     name: string
+    category?: $Enums.WasteCategory
     unitPrice: number
   }
 
   export type WasteTypeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type WasteTypeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
   }
 
@@ -32435,6 +32565,13 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type EnumUserStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserStatus | EnumUserStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -32558,6 +32695,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    status?: SortOrder
     phone?: SortOrder
     isVerified?: SortOrder
     refreshToken?: SortOrder
@@ -32574,6 +32712,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    status?: SortOrder
     phone?: SortOrder
     isVerified?: SortOrder
     refreshToken?: SortOrder
@@ -32590,6 +32729,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    status?: SortOrder
     phone?: SortOrder
     isVerified?: SortOrder
     refreshToken?: SortOrder
@@ -32659,6 +32799,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type EnumUserStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserStatus | EnumUserStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserStatusWithAggregatesFilter<$PrismaModel> | $Enums.UserStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserStatusFilter<$PrismaModel>
+    _max?: NestedEnumUserStatusFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -32817,6 +32967,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     vehicleType?: SortOrder
+    vehiclePlate?: SortOrder
     isOnline?: SortOrder
     currentLat?: SortOrder
     currentLng?: SortOrder
@@ -32831,6 +32982,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     vehicleType?: SortOrder
+    vehiclePlate?: SortOrder
     isOnline?: SortOrder
     currentLat?: SortOrder
     currentLng?: SortOrder
@@ -32840,6 +32992,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     vehicleType?: SortOrder
+    vehiclePlate?: SortOrder
     isOnline?: SortOrder
     currentLat?: SortOrder
     currentLng?: SortOrder
@@ -33247,6 +33400,13 @@ export namespace Prisma {
     longitude?: SortOrder
   }
 
+  export type EnumWasteCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.WasteCategory | EnumWasteCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWasteCategoryFilter<$PrismaModel> | $Enums.WasteCategory
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -33271,6 +33431,7 @@ export namespace Prisma {
   export type WasteTypeCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    category?: SortOrder
     unitPrice?: SortOrder
   }
 
@@ -33281,17 +33442,29 @@ export namespace Prisma {
   export type WasteTypeMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    category?: SortOrder
     unitPrice?: SortOrder
   }
 
   export type WasteTypeMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    category?: SortOrder
     unitPrice?: SortOrder
   }
 
   export type WasteTypeSumOrderByAggregateInput = {
     unitPrice?: SortOrder
+  }
+
+  export type EnumWasteCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WasteCategory | EnumWasteCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWasteCategoryWithAggregatesFilter<$PrismaModel> | $Enums.WasteCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWasteCategoryFilter<$PrismaModel>
+    _max?: NestedEnumWasteCategoryFilter<$PrismaModel>
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -34059,6 +34232,10 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
+  }
+
+  export type EnumUserStatusFieldUpdateOperationsInput = {
+    set?: $Enums.UserStatus
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -35099,6 +35276,10 @@ export namespace Prisma {
     connect?: PricingWasteWhereUniqueInput | PricingWasteWhereUniqueInput[]
   }
 
+  export type EnumWasteCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.WasteCategory
+  }
+
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -35573,6 +35754,13 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type NestedEnumUserStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserStatus | EnumUserStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -35678,6 +35866,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserStatus | EnumUserStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserStatusWithAggregatesFilter<$PrismaModel> | $Enums.UserStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserStatusFilter<$PrismaModel>
+    _max?: NestedEnumUserStatusFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -35896,6 +36094,13 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumWasteCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.WasteCategory | EnumWasteCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWasteCategoryFilter<$PrismaModel> | $Enums.WasteCategory
+  }
+
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -35905,6 +36110,16 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumWasteCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WasteCategory | EnumWasteCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumWasteCategoryWithAggregatesFilter<$PrismaModel> | $Enums.WasteCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWasteCategoryFilter<$PrismaModel>
+    _max?: NestedEnumWasteCategoryFilter<$PrismaModel>
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -36062,6 +36277,7 @@ export namespace Prisma {
   export type CourierCreateWithoutUserInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -36074,6 +36290,7 @@ export namespace Prisma {
   export type CourierUncheckedCreateWithoutUserInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -36388,6 +36605,7 @@ export namespace Prisma {
     id?: UuidFilter<"Courier"> | string
     userId?: UuidFilter<"Courier"> | string
     vehicleType?: EnumVehicleTypeFilter<"Courier"> | $Enums.VehicleType
+    vehiclePlate?: StringNullableFilter<"Courier"> | string | null
     isOnline?: BoolFilter<"Courier"> | boolean
     currentLat?: DecimalNullableFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
     currentLng?: DecimalNullableFilter<"Courier"> | Decimal | DecimalJsLike | number | string | null
@@ -36616,6 +36834,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -36640,6 +36859,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -36738,6 +36958,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36762,6 +36983,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36802,6 +37024,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -36826,6 +37049,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -37002,6 +37226,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37026,6 +37251,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37138,6 +37364,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -37162,6 +37389,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -37188,6 +37416,7 @@ export namespace Prisma {
   export type CourierCreateWithoutOrdersInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -37201,6 +37430,7 @@ export namespace Prisma {
     id?: string
     userId: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -37508,6 +37738,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37532,6 +37763,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37564,6 +37796,7 @@ export namespace Prisma {
   export type CourierUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -37577,6 +37810,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -38103,6 +38337,7 @@ export namespace Prisma {
   export type CourierCreateWithoutTrackingLogsInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -38116,6 +38351,7 @@ export namespace Prisma {
     id?: string
     userId: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -38202,6 +38438,7 @@ export namespace Prisma {
   export type CourierUpdateWithoutTrackingLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -38215,6 +38452,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -38369,6 +38607,7 @@ export namespace Prisma {
   export type WasteTypeCreateWithoutWasteItemsInput = {
     id?: string
     name: string
+    category?: $Enums.WasteCategory
     unitPrice: number
     pricing?: PricingWasteCreateNestedManyWithoutWasteTypeInput
   }
@@ -38376,6 +38615,7 @@ export namespace Prisma {
   export type WasteTypeUncheckedCreateWithoutWasteItemsInput = {
     id?: string
     name: string
+    category?: $Enums.WasteCategory
     unitPrice: number
     pricing?: PricingWasteUncheckedCreateNestedManyWithoutWasteTypeInput
   }
@@ -38458,6 +38698,7 @@ export namespace Prisma {
   export type WasteTypeUpdateWithoutWasteItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
     pricing?: PricingWasteUpdateManyWithoutWasteTypeNestedInput
   }
@@ -38465,6 +38706,7 @@ export namespace Prisma {
   export type WasteTypeUncheckedUpdateWithoutWasteItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
     pricing?: PricingWasteUncheckedUpdateManyWithoutWasteTypeNestedInput
   }
@@ -38587,6 +38829,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -38611,6 +38854,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -38683,6 +38927,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38707,6 +38952,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38810,6 +39056,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -38834,6 +39081,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -38874,6 +39122,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38898,6 +39147,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38975,6 +39225,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -38999,6 +39250,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -39122,6 +39374,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39146,6 +39399,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39327,6 +39581,7 @@ export namespace Prisma {
   export type CourierCreateWithoutOldReassignmentsInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -39340,6 +39595,7 @@ export namespace Prisma {
     id?: string
     userId: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -39356,6 +39612,7 @@ export namespace Prisma {
   export type CourierCreateWithoutNewReassignmentsInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -39369,6 +39626,7 @@ export namespace Prisma {
     id?: string
     userId: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -39455,6 +39713,7 @@ export namespace Prisma {
   export type CourierUpdateWithoutOldReassignmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -39468,6 +39727,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -39490,6 +39750,7 @@ export namespace Prisma {
   export type CourierUpdateWithoutNewReassignmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -39503,6 +39764,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -39626,6 +39888,7 @@ export namespace Prisma {
   export type WasteTypeCreateWithoutPricingInput = {
     id?: string
     name: string
+    category?: $Enums.WasteCategory
     unitPrice: number
     wasteItems?: OrderWasteItemCreateNestedManyWithoutWasteTypeInput
   }
@@ -39633,6 +39896,7 @@ export namespace Prisma {
   export type WasteTypeUncheckedCreateWithoutPricingInput = {
     id?: string
     name: string
+    category?: $Enums.WasteCategory
     unitPrice: number
     wasteItems?: OrderWasteItemUncheckedCreateNestedManyWithoutWasteTypeInput
   }
@@ -39656,6 +39920,7 @@ export namespace Prisma {
   export type WasteTypeUpdateWithoutPricingInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
     wasteItems?: OrderWasteItemUpdateManyWithoutWasteTypeNestedInput
   }
@@ -39663,6 +39928,7 @@ export namespace Prisma {
   export type WasteTypeUncheckedUpdateWithoutPricingInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
     wasteItems?: OrderWasteItemUncheckedUpdateManyWithoutWasteTypeNestedInput
   }
@@ -39726,6 +39992,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -39750,6 +40017,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -39849,6 +40117,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39873,6 +40142,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39897,6 +40167,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -39921,6 +40192,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -39961,6 +40233,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39985,6 +40258,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40009,6 +40283,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -40033,6 +40308,7 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.Role
+    status?: $Enums.UserStatus
     phone?: string | null
     isVerified?: boolean
     refreshToken?: string | null
@@ -40073,6 +40349,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40097,6 +40374,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40129,6 +40407,7 @@ export namespace Prisma {
   export type CourierCreateManyUserInput = {
     id?: string
     vehicleType: $Enums.VehicleType
+    vehiclePlate?: string | null
     isOnline?: boolean
     currentLat?: Decimal | DecimalJsLike | number | string | null
     currentLng?: Decimal | DecimalJsLike | number | string | null
@@ -40242,6 +40521,7 @@ export namespace Prisma {
   export type CourierUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -40254,6 +40534,7 @@ export namespace Prisma {
   export type CourierUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -40266,6 +40547,7 @@ export namespace Prisma {
   export type CourierUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     vehicleType?: EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+    vehiclePlate?: NullableStringFieldUpdateOperationsInput | string | null
     isOnline?: BoolFieldUpdateOperationsInput | boolean
     currentLat?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currentLng?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null

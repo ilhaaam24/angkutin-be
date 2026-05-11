@@ -33,4 +33,9 @@ export class AdminCreateCourierDto {
   @IsEnum(VehicleType)
   @IsNotEmpty()
   vehicleType: VehicleType;
+
+  @ApiProperty({ example: 'B 1234 ABC', required: false, description: 'Plat nomor kendaraan' })
+  @IsString()
+  @IsOptional()
+  vehiclePlate?: string;
 }
