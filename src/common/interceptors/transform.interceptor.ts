@@ -38,6 +38,8 @@ export class TransformInterceptor<T>
     }
 
     if (typeof data === 'object') {
+      if (data instanceof Date) return data;
+      
       const { password, otpCode, refreshToken, ...rest } = data;
       const stripped: any = { ...rest };
       
