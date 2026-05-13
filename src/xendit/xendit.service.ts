@@ -73,25 +73,46 @@ export class XenditService {
     try {
       const idempotencyKey = `withdrawal-${params.referenceId}`;
 
+      // Check if it's an E-Wallet to adjust channelProperties
+      const channelInfo = Object.values(XenditService.CHANNEL_MAP).find(
+        (c) => c.code === params.channelCode,
+      );
+      const isEWallet = channelInfo?.category === 'EWALLET';
+
+      // Clean account number (remove spaces/dashes)
+      const sanitizedAccountNumber = params.accountNumber.replace(/[^0-9]/g, '');
+
+      const payoutData: any = {
+        referenceId: params.referenceId,
+        channelCode: params.channelCode,
+        channelProperties: {
+          accountNumber: sanitizedAccountNumber,
+        },
+        amount: Math.floor(params.amount), // Ensure integer for IDR
+        currency: 'IDR',
+        description: params.description,
+      };
+
+      // Xendit Payouts V2: accountHolderName is usually only for BANK channels
+      // Providing it for EWALLET might cause a 400 Bad Request
+      if (!isEWallet && params.accountHolderName) {
+        payoutData.channelProperties.accountHolderName = params.accountHolderName;
+      }
+
+      console.log(`[XENDIT] Attempting payout: ${params.referenceId} to ${params.channelCode}`);
+
       const response = await this.xenditClient.Payout.createPayout({
         idempotencyKey,
-        data: {
-          referenceId: params.referenceId,
-          channelCode: params.channelCode,
-          channelProperties: {
-            accountNumber: params.accountNumber,
-            accountHolderName: params.accountHolderName,
-          },
-          amount: params.amount,
-          currency: 'IDR',
-          description: params.description,
-        },
+        data: payoutData,
       });
 
       console.log(`[XENDIT] Payout created: ${response.id}, status: ${response.status}`);
       return response;
     } catch (error: any) {
-      console.error('[XENDIT] Payout creation failed:', error?.message || error);
+      // Improved error logging to see the exact reason from Xendit
+      const errorDetails = error.response?.data || error.fullError || error;
+      console.error('[XENDIT] Payout creation failed. Details:', JSON.stringify(errorDetails, null, 2));
+      
       throw new InternalServerErrorException(
         `Xendit disbursement failed: ${error?.message || 'Unknown error'}`,
       );
