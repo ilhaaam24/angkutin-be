@@ -1,7 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Xendit } from 'xendit-node';
 import * as crypto from 'crypto';
+import axios from 'axios';
 
 @Injectable()
 export class XenditService {
@@ -56,6 +57,43 @@ export class XenditService {
       channelCode: info.code,
       category: info.category,
     }));
+  }
+
+  /**
+   * Validate Bank Account Holder Name.
+   * Uses Xendit Bank Account Data Lookup API.
+   */
+  async validateBankAccount(bankCode: string, accountNumber: string) {
+    const secretKey = this.configService.get<string>('XENDIT_SECRET_API_KEY')?.trim();
+    if (!secretKey) throw new InternalServerErrorException('Xendit Key not configured');
+
+    try {
+      // Basic Auth: base64(apiKey:)
+      const auth = Buffer.from(`${secretKey}:`).toString('base64');
+      
+      const response = await axios.get(
+        `https://api.xendit.co/bank_account_data_lookup?bank_code=${bankCode}&account_number=${accountNumber}`,
+        {
+          headers: {
+            Authorization: `Basic ${auth}`,
+          },
+        },
+      );
+
+      return {
+        bankCode: response.data.bank_code,
+        accountNumber: response.data.account_number,
+        accountHolderName: response.data.bank_account_holder_name,
+      };
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        throw new BadRequestException('Rekening tidak ditemukan atau tidak valid');
+      }
+      console.error('[XENDIT] Bank lookup error:', error.response?.data || error.message);
+      throw new BadRequestException(
+        `Gagal memvalidasi rekening: ${error.response?.data?.message || 'Pastikan nomor rekening dan bank benar'}`,
+      );
+    }
   }
 
   /**

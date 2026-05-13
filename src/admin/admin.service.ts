@@ -14,12 +14,14 @@ import { AdminCreateWasteTypeDto } from './dto/create-waste-type.dto';
 import { CouriersService } from '../couriers/couriers.service';
 import { AdminCreateCourierDto } from '../couriers/dto/admin-create-courier.dto';
 import { UpdateCourierDto } from '../couriers/dto/update-courier.dto';
+import { WalletService } from '../wallet/wallet.service';
 
 @Injectable()
 export class AdminService {
   constructor(
     private prisma: PrismaService,
     private couriersService: CouriersService,
+    private walletService: WalletService,
   ) {}
 
   // ============================================
@@ -252,95 +254,6 @@ export class AdminService {
     });
   }
 
-  async getWithdrawals() {
-    return this.prisma.withdrawal.findMany({
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            phone: true,
-          },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
-  }
-
-  async approveWithdrawal(id: string) {
-    const withdrawal = await this.prisma.withdrawal.findUnique({ where: { id } });
-    if (!withdrawal) throw new NotFoundException(`Withdrawal with ID ${id} not found`);
-
-    if (withdrawal.status !== WithdrawalStatus.PENDING) {
-      throw new BadRequestException(
-        `Cannot approve withdrawal in ${withdrawal.status} status. Only PENDING withdrawals can be approved.`,
-      );
-    }
-
-    return this.prisma.withdrawal.update({
-      where: { id },
-      data: {
-        status: WithdrawalStatus.SUCCESS,
-        processedAt: new Date(),
-      },
-    });
-  }
-
-  async rejectWithdrawal(id: string, reason: string) {
-    const withdrawal = await this.prisma.withdrawal.findUnique({ where: { id } });
-    if (!withdrawal) throw new NotFoundException(`Withdrawal with ID ${id} not found`);
-
-    if (withdrawal.status !== WithdrawalStatus.PENDING) {
-      throw new BadRequestException(
-        `Cannot reject withdrawal in ${withdrawal.status} status. Only PENDING withdrawals can be rejected.`,
-      );
-    }
-
-    // Refund the balance back to wallet
-    return this.prisma.$transaction(async (tx) => {
-      // 1. Update withdrawal status
-      const updatedWithdrawal = await tx.withdrawal.update({
-        where: { id },
-        data: {
-          status: WithdrawalStatus.FAILED,
-          failureReason: reason,
-          processedAt: new Date(),
-        },
-      });
-
-      // 2. Refund balance to wallet
-      const wallet = await tx.wallet.findUnique({
-        where: { userId: withdrawal.userId },
-      });
-
-      if (wallet) {
-        // Create refund transaction
-        await tx.walletTransaction.create({
-          data: {
-            walletId: wallet.id,
-            type: WalletTransactionType.CREDIT,
-            amount: withdrawal.amount,
-            referenceType: WalletReferenceType.WITHDRAWAL,
-            referenceId: id,
-            status: TransactionStatus.SUCCESS,
-            description: `Refund: Withdrawal rejected - ${reason}`,
-          },
-        });
-
-        // Increment wallet balance
-        await tx.wallet.update({
-          where: { id: wallet.id },
-          data: {
-            balance: { increment: withdrawal.amount },
-          },
-        });
-      }
-
-      return updatedWithdrawal;
-    });
-  }
 
   // ============================================
   // 4. WASTE PRICING
@@ -482,5 +395,21 @@ export class AdminService {
 
   async removeCourier(id: string) {
     return this.couriersService.remove(id);
+  }
+
+  // ============================================
+  // --- WITHDRAWAL MANAGEMENT ---
+  // ============================================
+
+  async getAllWithdrawals() {
+    return this.walletService.getAllWithdrawals();
+  }
+
+  async approveWithdrawal(id: string) {
+    return this.walletService.approveWithdrawal(id);
+  }
+
+  async rejectWithdrawal(id: string, reason: string) {
+    return this.walletService.rejectWithdrawal(id, reason);
   }
 }

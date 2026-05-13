@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   Wallet,
@@ -189,30 +189,20 @@ export class WalletService {
     });
   }
 
-  // --- WITHDRAWAL WITH XENDIT ---
+  // --- WITHDRAWAL FLOW ---
 
-  /**
-   * Get list of supported withdrawal channels (bank & e-wallet).
-   */
   getSupportedChannels() {
     return this.xenditService.getSupportedChannels();
   }
 
   /**
-   * Request withdrawal via Xendit Payout API.
-   * Flow:
-   * 1. Validate balance & resolve payment details
-   * 2. Resolve Xendit channel code from provider name
-   * 3. Deduct balance immediately (hold)
-   * 4. Create Xendit payout (async - status ACCEPTED)
-   * 5. Store externalId for webhook tracking
-   * 6. Webhook will confirm or revert later
+   * 1. REQUEST WITHDRAWAL (User/Courier)
+   * Status: PENDING (Waiting for Admin)
    */
   async requestWithdrawal(userId: string, withdrawDto: WithdrawDto): Promise<Withdrawal> {
     const wallet = await this.getWallet(userId);
     let { amount, method, accountNumber, accountName, paymentAccountId } = withdrawDto;
 
-    // Jika menggunakan ID rekening tersimpan
     if (paymentAccountId) {
       const savedAccount = await this.prisma.userPaymentAccount.findFirst({
         where: { id: paymentAccountId, userId },
@@ -225,43 +215,37 @@ export class WalletService {
     }
 
     if (!method || !accountNumber) {
-      throw new BadRequestException('Payment details are required (either manual or via saved account)');
+      throw new BadRequestException('Payment details are required');
     }
 
-    // Resolve Xendit channel code
     const channel = this.xenditService.resolveChannelCode(method);
     if (!channel) {
-      throw new BadRequestException(
-        `Metode "${method}" tidak didukung. Gunakan: BCA, BNI, BRI, MANDIRI, OVO, DANA, GOPAY, SHOPEEPAY, dll.`,
-      );
+      throw new BadRequestException(`Metode "${method}" tidak didukung.`);
     }
 
-    // Default account name
     if (!accountName) {
       const user = await this.prisma.user.findUnique({ where: { id: userId } });
       accountName = user?.name || 'Angkutin User';
     }
 
-    // Validate balance
     if (wallet.balance < amount) {
       throw new BadRequestException('Saldo tidak cukup untuk penarikan');
     }
 
-    // Execute in transaction: create withdrawal record + deduct balance
-    const withdrawal = await this.prisma.$transaction(async (tx) => {
-      // 1. Create Withdrawal Record (PENDING → will be PROCESSING after Xendit call)
+    return this.prisma.$transaction(async (tx) => {
+      // Create Withdrawal Record (PENDING Approval)
       const w = await tx.withdrawal.create({
         data: {
           userId,
           amount,
-          method: channel.code, // Store Xendit channel code
+          method: channel.code,
           accountNumber,
           accountName,
           status: WithdrawalStatus.PENDING,
         },
       });
 
-      // 2. Create Wallet Transaction (DEBIT - PENDING until Xendit confirms)
+      // Create Wallet Transaction (DEBIT - PENDING)
       await tx.walletTransaction.create({
         data: {
           walletId: wallet.id,
@@ -270,90 +254,121 @@ export class WalletService {
           referenceType: WalletReferenceType.WITHDRAWAL,
           referenceId: w.id,
           status: TransactionStatus.PENDING,
-          description: `Penarikan ke ${method} (${accountNumber})`,
+          description: `Penarikan ke ${method} (${accountNumber}) - Menunggu Persetujuan`,
         },
       });
 
-      // 3. Deduct Wallet Balance (hold)
+      // Deduct Wallet Balance (Hold)
       await tx.wallet.update({
         where: { id: wallet.id },
-        data: {
-          balance: { decrement: amount },
-        },
+        data: { balance: { decrement: amount } },
       });
 
       return w;
     });
+  }
 
-    // 4. Call Xendit Payout API (outside transaction - async)
+  /**
+   * 2. APPROVE WITHDRAWAL (Admin)
+   * Status: PENDING -> PROCESSING (Sent to Xendit)
+   */
+  async approveWithdrawal(withdrawalId: string): Promise<Withdrawal> {
+    const withdrawal = await this.prisma.withdrawal.findUnique({
+      where: { id: withdrawalId },
+      include: { user: true },
+    });
+
+    if (!withdrawal) throw new NotFoundException('Withdrawal request not found');
+    if (withdrawal.status !== WithdrawalStatus.PENDING) {
+      throw new BadRequestException(`Cannot approve withdrawal with status ${withdrawal.status}`);
+    }
+
     try {
+      // Call Xendit API
       const xenditPayout = await this.xenditService.createPayout({
         referenceId: withdrawal.id,
-        channelCode: channel.code,
-        accountNumber,
-        accountHolderName: accountName,
-        amount,
+        channelCode: withdrawal.method,
+        accountNumber: withdrawal.accountNumber,
+        accountHolderName: withdrawal.accountName,
+        amount: withdrawal.amount,
         description: `Angkutin withdrawal - ${withdrawal.id}`,
       });
 
-      // 5. Update withdrawal with Xendit external ID
-      await this.prisma.withdrawal.update({
+      // Update status to PROCESSING
+      return this.prisma.withdrawal.update({
         where: { id: withdrawal.id },
         data: {
           externalId: xenditPayout.id,
           status: WithdrawalStatus.PROCESSING,
         },
       });
-
-      return {
-        ...withdrawal,
-        externalId: xenditPayout.id,
-        status: WithdrawalStatus.PROCESSING,
-      };
     } catch (error) {
-      // Xendit call failed → revert the balance deduction
-      console.error('[WITHDRAWAL] Xendit payout failed, reverting balance:', error.message);
+      console.error('[ADMIN APPROVE] Xendit payout failed:', error.message);
+      throw new BadRequestException(`Gagal mengirim ke Xendit: ${error.message}`);
+    }
+  }
 
-      await this.prisma.$transaction(async (tx) => {
-        // Revert wallet balance
-        await tx.wallet.update({
-          where: { id: wallet.id },
-          data: { balance: { increment: amount } },
-        });
+  /**
+   * 3. REJECT WITHDRAWAL (Admin)
+   * Status: PENDING -> FAILED (Refund Balance)
+   */
+  async rejectWithdrawal(withdrawalId: string, reason: string): Promise<Withdrawal> {
+    const withdrawal = await this.prisma.withdrawal.findUnique({
+      where: { id: withdrawalId },
+    });
 
-        // Mark withdrawal as FAILED
-        await tx.withdrawal.update({
-          where: { id: withdrawal.id },
-          data: {
-            status: WithdrawalStatus.FAILED,
-            failureReason: error.message || 'Xendit payout creation failed',
-          },
-        });
+    if (!withdrawal) throw new NotFoundException('Withdrawal request not found');
+    if (withdrawal.status !== WithdrawalStatus.PENDING) {
+      throw new BadRequestException(`Cannot reject withdrawal with status ${withdrawal.status}`);
+    }
 
-        // Mark wallet transaction as FAILED
-        await tx.walletTransaction.updateMany({
-          where: {
-            referenceId: withdrawal.id,
-            referenceType: WalletReferenceType.WITHDRAWAL,
-          },
-          data: { status: TransactionStatus.FAILED },
-        });
+    return this.prisma.$transaction(async (tx) => {
+      // 1. Refund Balance
+      const wallet = await tx.wallet.findUnique({
+        where: { userId: withdrawal.userId },
       });
 
-      throw new BadRequestException(
-        'Penarikan gagal diproses. Saldo Anda telah dikembalikan. Silakan coba lagi.',
-      );
-    }
+      if (wallet) {
+        await tx.wallet.update({
+          where: { id: wallet.id },
+          data: { balance: { increment: withdrawal.amount } },
+        });
+      }
+
+      // 2. Mark Transaction as FAILED
+      await tx.walletTransaction.updateMany({
+        where: {
+          referenceId: withdrawal.id,
+          referenceType: WalletReferenceType.WITHDRAWAL,
+        },
+        data: {
+          status: TransactionStatus.FAILED,
+          description: `Penarikan Ditolak: ${reason}`,
+        },
+      });
+
+      // 3. Mark Withdrawal as FAILED
+      return tx.withdrawal.update({
+        where: { id: withdrawal.id },
+        data: {
+          status: WithdrawalStatus.FAILED,
+          failureReason: `Ditolak Admin: ${reason}`,
+          processedAt: new Date(),
+        },
+      });
+    });
+  }
+
+  async getAllWithdrawals() {
+    return this.prisma.withdrawal.findMany({
+      include: { user: { select: { name: true, email: true, phone: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   // --- XENDIT WEBHOOK HANDLER ---
 
-  /**
-   * Handle Xendit payout webhook callback.
-   * Called when payout status changes (SUCCEEDED / FAILED).
-   */
   async handleXenditPayoutWebhook(payload: any) {
-    // Xendit Payout v2 membungkus data utama di dalam objek 'data'
     const data = payload.data || payload;
     const { reference_id, status, failure_code } = data;
 
@@ -366,43 +381,25 @@ export class WalletService {
       where: { id: reference_id },
     });
 
-    if (!withdrawal) {
-      console.warn(`[WEBHOOK] Withdrawal not found for reference_id: ${reference_id}`);
-      return { received: true };
-    }
-
-    // Skip if already in terminal state
+    if (!withdrawal) return { received: true };
     if (withdrawal.status === WithdrawalStatus.SUCCESS || withdrawal.status === WithdrawalStatus.FAILED) {
-      console.log(`[WEBHOOK] Withdrawal ${reference_id} already in terminal state: ${withdrawal.status}`);
       return { received: true };
     }
 
     if (status === 'SUCCEEDED') {
       await this.prisma.$transaction(async (tx) => {
-        // Mark withdrawal as SUCCESS
         await tx.withdrawal.update({
           where: { id: reference_id },
-          data: {
-            status: WithdrawalStatus.SUCCESS,
-            processedAt: new Date(),
-          },
+          data: { status: WithdrawalStatus.SUCCESS, processedAt: new Date() },
         });
 
-        // Mark wallet transaction as SUCCESS
         await tx.walletTransaction.updateMany({
-          where: {
-            referenceId: reference_id,
-            referenceType: WalletReferenceType.WITHDRAWAL,
-          },
+          where: { referenceId: reference_id, referenceType: WalletReferenceType.WITHDRAWAL },
           data: { status: TransactionStatus.SUCCESS },
         });
       });
-
-      console.log(`[WEBHOOK] Withdrawal ${reference_id} SUCCEEDED`);
     } else if (status === 'FAILED') {
-      // Refund balance
       await this.prisma.$transaction(async (tx) => {
-        // Refund wallet balance
         const wallet = await tx.wallet.findUnique({
           where: { userId: withdrawal.userId },
         });
@@ -414,7 +411,6 @@ export class WalletService {
           });
         }
 
-        // Mark withdrawal as FAILED
         await tx.withdrawal.update({
           where: { id: reference_id },
           data: {
@@ -424,17 +420,11 @@ export class WalletService {
           },
         });
 
-        // Mark wallet transaction as FAILED
         await tx.walletTransaction.updateMany({
-          where: {
-            referenceId: reference_id,
-            referenceType: WalletReferenceType.WITHDRAWAL,
-          },
+          where: { referenceId: reference_id, referenceType: WalletReferenceType.WITHDRAWAL },
           data: { status: TransactionStatus.FAILED },
         });
       });
-
-      console.log(`[WEBHOOK] Withdrawal ${reference_id} FAILED: ${failure_code}`);
     }
 
     return { received: true };

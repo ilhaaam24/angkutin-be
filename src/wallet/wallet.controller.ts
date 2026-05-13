@@ -11,11 +11,12 @@ import {
   Headers,
   UnauthorizedException,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { XenditService } from '../xendit/xendit.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiExcludeEndpoint } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiExcludeEndpoint, ApiQuery } from '@nestjs/swagger';
 import { TopUpDto, WithdrawDto, CreatePaymentAccountDto, UpdatePaymentAccountDto } from './dto/wallet.dto';
 
 @ApiTags('Wallet')
@@ -64,6 +65,20 @@ export class WalletController {
   @ApiResponse({ status: 200, description: 'Return list of supported channels.' })
   async getSupportedChannels() {
     return this.walletService.getSupportedChannels();
+  }
+
+  @Get('validate-account')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Validate bank account holder name before withdrawal' })
+  @ApiQuery({ name: 'bankCode', example: 'ID_BCA' })
+  @ApiQuery({ name: 'accountNumber', example: '1234567890' })
+  @ApiResponse({ status: 200, description: 'Returns account holder name if valid.' })
+  async validateAccount(
+    @Query('bankCode') bankCode: string,
+    @Query('accountNumber') accountNumber: string,
+  ) {
+    return this.xenditService.validateBankAccount(bankCode, accountNumber);
   }
 
   @Post('withdraw')

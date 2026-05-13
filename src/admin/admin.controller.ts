@@ -103,30 +103,28 @@ export class AdminController {
     return this.adminService.getTransactions();
   }
 
-  @Get('finance/withdrawals')
-  @ApiOperation({ summary: 'Get all withdrawal requests' })
+  @Get('withdrawals')
+  @ApiOperation({ summary: 'Get all withdrawal requests (Pending & Processed)' })
   @ApiResponse({ status: 200, description: 'Return all withdrawals with user data.' })
-  getWithdrawals() {
-    return this.adminService.getWithdrawals();
+  getAllWithdrawals() {
+    return this.adminService.getAllWithdrawals();
   }
 
-  @Post('finance/withdrawals/:id/approve')
-  @ApiOperation({ summary: 'Approve a pending withdrawal' })
+  @Post('withdrawals/:id/approve')
+  @ApiOperation({ summary: 'Approve a pending withdrawal and trigger Xendit' })
   @ApiParam({ name: 'id', description: 'Withdrawal UUID' })
-  @ApiResponse({ status: 200, description: 'Withdrawal approved and processed.' })
+  @ApiResponse({ status: 200, description: 'Withdrawal approved and sent to Xendit.' })
   @ApiResponse({ status: 404, description: 'Withdrawal not found.' })
-  @ApiResponse({ status: 400, description: 'Only PENDING withdrawals can be approved.' })
   approveWithdrawal(@Param('id') id: string) {
     return this.adminService.approveWithdrawal(id);
   }
 
-  @Post('finance/withdrawals/:id/reject')
-  @ApiOperation({ summary: 'Reject a pending withdrawal with reason' })
+  @Post('withdrawals/:id/reject')
+  @ApiOperation({ summary: 'Reject a pending withdrawal and refund balance' })
   @ApiParam({ name: 'id', description: 'Withdrawal UUID' })
   @ApiBody({ type: RejectWithdrawalDto })
   @ApiResponse({ status: 200, description: 'Withdrawal rejected and balance refunded.' })
   @ApiResponse({ status: 404, description: 'Withdrawal not found.' })
-  @ApiResponse({ status: 400, description: 'Only PENDING withdrawals can be rejected.' })
   rejectWithdrawal(
     @Param('id') id: string,
     @Body() data: RejectWithdrawalDto,
