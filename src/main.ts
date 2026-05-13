@@ -55,6 +55,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'http://127.0.0.1:3000',
       'http://localhost:4000',
+      'https://angkutin-ten.vercel.app'
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
