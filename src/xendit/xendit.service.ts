@@ -87,17 +87,12 @@ export class XenditService {
         channelCode: params.channelCode,
         channelProperties: {
           accountNumber: sanitizedAccountNumber,
+          accountHolderName: params.accountHolderName,
         },
         amount: Math.floor(params.amount), // Ensure integer for IDR
         currency: 'IDR',
         description: params.description,
       };
-
-      // Xendit Payouts V2: accountHolderName is usually only for BANK channels
-      // Providing it for EWALLET might cause a 400 Bad Request
-      if (!isEWallet && params.accountHolderName) {
-        payoutData.channelProperties.accountHolderName = params.accountHolderName;
-      }
 
       console.log(`[XENDIT] Attempting payout: ${params.referenceId} to ${params.channelCode}`);
 
