@@ -8,5 +8,6 @@ import { UploadModule } from '../upload/upload.module';
   imports: [OrdersModule, UploadModule],
   controllers: [CouriersController],
   providers: [CouriersService],
+  exports: [CouriersService],
 })
 export class CouriersModule {}

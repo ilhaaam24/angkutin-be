@@ -86,20 +86,22 @@ enum WasteCategory {
 }
 
 model User {
-  id           String     @id @default(uuid()) @db.Uuid
-  name         String?
-  email        String     @unique
-  password     String
-  role         Role       @default(USER)
-  status       UserStatus @default(ACTIVE)
-  phone        String?
-  isVerified   Boolean    @default(false) @map("is_verified")
-  refreshToken String?    @map("refresh_token")
-  otpCode      String?    @map("otp_code")
-  otpExpiresAt DateTime?  @map("otp_expires_at")
-  photoUrl     String?    @map("photo_url")
-  createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @updatedAt @map("updated_at")
+  id                  String     @id @default(uuid()) @db.Uuid
+  name                String?
+  email               String     @unique
+  password            String
+  role                Role       @default(USER)
+  status              UserStatus @default(ACTIVE)
+  phone               String?
+  isVerified          Boolean    @default(false) @map("is_verified")
+  refreshToken        String?    @map("refresh_token")
+  otpCode             String?    @map("otp_code")
+  otpExpiresAt        DateTime?  @map("otp_expires_at")
+  resetToken          String?    @map("reset_token")
+  resetTokenExpiresAt DateTime?  @map("reset_token_expires_at")
+  photoUrl            String?    @map("photo_url")
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
 
   addresses          Address[]
   couriers           Courier[]
@@ -230,7 +232,7 @@ model WasteType {
   pricing    PricingWaste[]
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("waste_types")
 }

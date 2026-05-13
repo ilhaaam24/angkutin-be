@@ -8,7 +8,6 @@ import { Role, OrderStatus } from '../generated/prisma';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { RegisterCourierDto } from './dto/register-courier.dto';
 import { UpdateCourierDto } from './dto/update-courier.dto';
-import { AdminCreateCourierDto } from './dto/admin-create-courier.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../upload/upload.service';
 
@@ -232,46 +231,5 @@ export class CouriersController {
     return this.ordersService.updateCourierLocation(
       id, courier!.id, data.latitude, data.longitude,
     );
-  }
-
-  // --- ADMIN ENDPOINTS (Dynamic :id diletakkan di bawah) ---
-
-  @Get()
-  @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Get all couriers (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Return all couriers.' })
-  findAll() {
-    return this.couriersService.findAll();
-  }
-
-  @Get(':id/detail')
-  @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Get courier detail by ID (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Return courier detail.' })
-  findOne(@Param('id') id: string) {
-    return this.couriersService.findOne(id);
-  }
-
-  @Post('admin')
-  @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Create new courier OR Promote existing user (Admin only)' })
-  @ApiBody({ type: AdminCreateCourierDto })
-  adminCreate(@Body() adminCreateCourierDto: AdminCreateCourierDto) {
-    return this.couriersService.adminCreate(adminCreateCourierDto);
-  }
-
-  @Patch(':id')
-  @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Update courier details (Admin only)' })
-  @ApiBody({ type: UpdateCourierDto })
-  update(@Param('id') id: string, @Body() updateCourierDto: UpdateCourierDto) {
-    return this.couriersService.adminUpdate(id, updateCourierDto);
-  }
-
-  @Delete(':id')
-  @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Remove courier (Admin only)' })
-  remove(@Param('id') id: string) {
-    return this.couriersService.remove(id);
   }
 }

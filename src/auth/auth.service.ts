@@ -6,8 +6,10 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +19,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private mailService: MailService,
   ) {
     this.googleClient = new OAuth2Client(
       this.configService.get('GOOGLE_CLIENT_ID'),
@@ -53,6 +56,9 @@ export class AuthService {
         email: user.email,
         name: user.name,
         role: user.role,
+        phone: user.phone,
+        status: user.status,
+        photoUrl: user.photoUrl,
         isVerified: user.isVerified,
       },
     };
@@ -176,5 +182,79 @@ export class AuthService {
       console.error('Google Auth Detail Error:', error);
       throw new UnauthorizedException('Google authentication failed: ' + error.message);
     }
+  }
+
+  // --- FORGOT PASSWORD ---
+
+  async forgotPassword(email: string) {
+    const user = await this.usersService.findOne(email);
+
+    if (!user) {
+      // Return success even if user not found to prevent email enumeration
+      return { message: 'Jika email terdaftar, link reset password telah dikirim' };
+    }
+
+    // Generate random token
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = await bcrypt.hash(rawToken, 10);
+
+    // Set expiry to 30 minutes
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+
+    // Save hashed token to DB
+    await this.usersService.update(user.id, {
+      resetToken: hashedToken,
+      resetTokenExpiresAt: expiresAt,
+    });
+
+    // Build reset link
+    const frontendUrl = this.configService.get('FRONTEND_URL', 'http://localhost:3000');
+    const resetLink = `${frontendUrl}/reset-password?token=${rawToken}&email=${encodeURIComponent(email)}`;
+
+    // Send email
+    try {
+      await this.mailService.sendResetPasswordEmail(email, user.name || '', resetLink);
+    } catch (error) {
+      console.error('[MAIL ERROR]', error);
+      // Log reset link to console as fallback
+      console.log(`[RESET PASSWORD] Link for ${email}: ${resetLink}`);
+    }
+
+    return { message: 'Jika email terdaftar, link reset password telah dikirim' };
+  }
+
+  async resetPassword(token: string, email: string, newPassword: string) {
+    const user = await this.usersService.findOne(email);
+
+    if (!user || !user.resetToken) {
+      throw new BadRequestException('Token reset tidak valid atau sudah kadaluarsa');
+    }
+
+    // Check token expiry
+    if (user.resetTokenExpiresAt && user.resetTokenExpiresAt < new Date()) {
+      // Clear expired token
+      await this.usersService.update(user.id, {
+        resetToken: null,
+        resetTokenExpiresAt: null,
+      });
+      throw new BadRequestException('Token reset sudah kadaluarsa. Silakan request ulang.');
+    }
+
+    // Verify token
+    const isTokenValid = await bcrypt.compare(token, user.resetToken);
+    if (!isTokenValid) {
+      throw new BadRequestException('Token reset tidak valid');
+    }
+
+    // Hash new password and update
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.usersService.update(user.id, {
+      password: hashedPassword,
+      resetToken: null,
+      resetTokenExpiresAt: null,
+    });
+
+    return { message: 'Password berhasil direset. Silakan login dengan password baru.' };
   }
 }

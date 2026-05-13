@@ -7,11 +7,13 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { AuthController } from './auth.controller';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
+    MailModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },

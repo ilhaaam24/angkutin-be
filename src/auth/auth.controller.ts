@@ -11,6 +11,8 @@ import {
 } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -109,5 +111,24 @@ export class AuthController {
     console.log('[DEBUG] Received Google Login Body:', body);
     const idToken = body.idToken || body.credential || body.token;
     return this.authService.googleLogin(idToken);
+  }
+
+  // --- FORGOT & RESET PASSWORD ---
+
+  @Post('forgot-password')
+  @ApiOperation({ summary: 'Request a password reset link via email' })
+  @ApiResponse({ status: 200, description: 'Reset link sent if email is registered.' })
+  @ApiBody({ type: ForgotPasswordDto })
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto.email);
+  }
+
+  @Post('reset-password')
+  @ApiOperation({ summary: 'Reset password using token from email' })
+  @ApiResponse({ status: 200, description: 'Password successfully reset.' })
+  @ApiResponse({ status: 400, description: 'Invalid or expired token.' })
+  @ApiBody({ type: ResetPasswordDto })
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto.token, dto.email, dto.newPassword);
   }
 }

@@ -11,10 +11,16 @@ import {
 } from '../generated/prisma';
 import { AdminUpdateUserDto } from './dto/update-user.dto';
 import { AdminCreateWasteTypeDto } from './dto/create-waste-type.dto';
+import { CouriersService } from '../couriers/couriers.service';
+import { AdminCreateCourierDto } from '../couriers/dto/admin-create-courier.dto';
+import { UpdateCourierDto } from '../couriers/dto/update-courier.dto';
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private couriersService: CouriersService,
+  ) {}
 
   // ============================================
   // 1. DASHBOARD & ANALYTICS
@@ -452,5 +458,29 @@ export class AdminService {
     ]);
 
     return { total, created, matched, onGoing, completed, cancelled };
+  }
+
+  // ============================================
+  // 7. COURIER MANAGEMENT
+  // ============================================
+
+  async getAllCouriers() {
+    return this.couriersService.findAll();
+  }
+
+  async getCourierDetail(id: string) {
+    return this.couriersService.findOne(id);
+  }
+
+  async createCourier(data: AdminCreateCourierDto) {
+    return this.couriersService.adminCreate(data);
+  }
+
+  async updateCourier(id: string, data: UpdateCourierDto) {
+    return this.couriersService.adminUpdate(id, data);
+  }
+
+  async removeCourier(id: string) {
+    return this.couriersService.remove(id);
   }
 }

@@ -26,6 +26,8 @@ import {
 import { AdminUpdateUserDto } from './dto/update-user.dto';
 import { RejectWithdrawalDto } from './dto/reject-withdrawal.dto';
 import { AdminCreateWasteTypeDto } from './dto/create-waste-type.dto';
+import { AdminCreateCourierDto } from '../couriers/dto/admin-create-courier.dto';
+import { UpdateCourierDto } from '../couriers/dto/update-courier.dto';
 
 @ApiTags('Admin')
 @ApiBearerAuth()
@@ -174,5 +176,52 @@ export class AdminController {
   @ApiResponse({ status: 200, description: 'Return order counts grouped by status.' })
   getOrdersSummary() {
     return this.adminService.getOrdersSummary();
+  }
+
+  // ============================================
+  // 7. COURIER MANAGEMENT
+  // ============================================
+
+  @Get('couriers')
+  @ApiOperation({ summary: 'Get all couriers' })
+  @ApiResponse({ status: 200, description: 'Return all couriers.' })
+  getAllCouriers() {
+    return this.adminService.getAllCouriers();
+  }
+
+  @Get('couriers/:id')
+  @ApiOperation({ summary: 'Get courier detail by ID' })
+  @ApiParam({ name: 'id', description: 'Courier UUID' })
+  @ApiResponse({ status: 200, description: 'Return courier detail.' })
+  @ApiResponse({ status: 404, description: 'Courier not found.' })
+  getCourierDetail(@Param('id') id: string) {
+    return this.adminService.getCourierDetail(id);
+  }
+
+  @Post('couriers')
+  @ApiOperation({ summary: 'Create new courier OR Promote existing user' })
+  @ApiBody({ type: AdminCreateCourierDto })
+  @ApiResponse({ status: 201, description: 'Courier successfully created.' })
+  createCourier(@Body() data: AdminCreateCourierDto) {
+    return this.adminService.createCourier(data);
+  }
+
+  @Patch('couriers/:id')
+  @ApiOperation({ summary: 'Update courier details' })
+  @ApiParam({ name: 'id', description: 'Courier UUID' })
+  @ApiBody({ type: UpdateCourierDto })
+  @ApiResponse({ status: 200, description: 'Courier successfully updated.' })
+  @ApiResponse({ status: 404, description: 'Courier not found.' })
+  updateCourier(@Param('id') id: string, @Body() data: UpdateCourierDto) {
+    return this.adminService.updateCourier(id, data);
+  }
+
+  @Delete('couriers/:id')
+  @ApiOperation({ summary: 'Remove courier' })
+  @ApiParam({ name: 'id', description: 'Courier UUID' })
+  @ApiResponse({ status: 200, description: 'Courier successfully removed.' })
+  @ApiResponse({ status: 404, description: 'Courier not found.' })
+  removeCourier(@Param('id') id: string) {
+    return this.adminService.removeCourier(id);
   }
 }

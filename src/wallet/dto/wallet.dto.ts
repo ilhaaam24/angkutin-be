@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNumber, IsNotEmpty, Min, IsString, IsOptional } from 'class-validator';
 
 export class TopUpDto {
@@ -83,3 +83,4 @@ export class CreatePaymentAccountDto {
   isDefault?: boolean;
 }
 
+export class UpdatePaymentAccountDto extends PartialType(CreatePaymentAccountDto) {}

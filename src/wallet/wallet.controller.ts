@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, UseGuards, Request, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, UseGuards, Request, Param, Delete } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { TopUpDto, WithdrawDto, CreatePaymentAccountDto } from './dto/wallet.dto';
+import { TopUpDto, WithdrawDto, CreatePaymentAccountDto, UpdatePaymentAccountDto } from './dto/wallet.dto';
 
 @ApiTags('Wallet')
 @ApiBearerAuth()
@@ -51,6 +51,12 @@ export class WalletController {
   @ApiOperation({ summary: 'Save a new payment account' })
   async createAccount(@Request() req, @Body() data: CreatePaymentAccountDto) {
     return this.walletService.createPaymentAccount(req.user.userId, data);
+  }
+
+  @Patch('accounts/:id')
+  @ApiOperation({ summary: 'Update a saved payment account' })
+  async updateAccount(@Request() req, @Param('id') id: string, @Body() data: UpdatePaymentAccountDto) {
+    return this.walletService.updatePaymentAccount(req.user.userId, id, data);
   }
 
   @Delete('accounts/:id')

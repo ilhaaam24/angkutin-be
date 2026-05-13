@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Wallet, WalletTransaction, WalletTransactionType, WalletReferenceType, TransactionStatus, Withdrawal } from '../generated/prisma';
-import { TopUpDto, WithdrawDto, CreatePaymentAccountDto } from './dto/wallet.dto';
+import { TopUpDto, WithdrawDto, CreatePaymentAccountDto, UpdatePaymentAccountDto } from './dto/wallet.dto';
 
 @Injectable()
 export class WalletService {
@@ -142,7 +142,27 @@ export class WalletService {
         userId,
       },
     });
+  }  async updatePaymentAccount(userId: string, id: string, data: UpdatePaymentAccountDto) {
+    const account = await this.prisma.userPaymentAccount.findFirst({
+      where: { id, userId },
+    });
+
+    if (!account) throw new NotFoundException('Payment account not found');
+
+    if (data.isDefault) {
+      // Unset previous default
+      await this.prisma.userPaymentAccount.updateMany({
+        where: { userId, isDefault: true },
+        data: { isDefault: false },
+      });
+    }
+
+    return this.prisma.userPaymentAccount.update({
+      where: { id },
+      data,
+    });
   }
+
 
   async removePaymentAccount(userId: string, id: string) {
     const account = await this.prisma.userPaymentAccount.findFirst({

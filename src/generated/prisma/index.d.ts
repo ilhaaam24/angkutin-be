@@ -3353,6 +3353,8 @@ export namespace Prisma {
     refreshToken: string | null
     otpCode: string | null
     otpExpiresAt: Date | null
+    resetToken: string | null
+    resetTokenExpiresAt: Date | null
     photoUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3370,6 +3372,8 @@ export namespace Prisma {
     refreshToken: string | null
     otpCode: string | null
     otpExpiresAt: Date | null
+    resetToken: string | null
+    resetTokenExpiresAt: Date | null
     photoUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3387,6 +3391,8 @@ export namespace Prisma {
     refreshToken: number
     otpCode: number
     otpExpiresAt: number
+    resetToken: number
+    resetTokenExpiresAt: number
     photoUrl: number
     createdAt: number
     updatedAt: number
@@ -3406,6 +3412,8 @@ export namespace Prisma {
     refreshToken?: true
     otpCode?: true
     otpExpiresAt?: true
+    resetToken?: true
+    resetTokenExpiresAt?: true
     photoUrl?: true
     createdAt?: true
     updatedAt?: true
@@ -3423,6 +3431,8 @@ export namespace Prisma {
     refreshToken?: true
     otpCode?: true
     otpExpiresAt?: true
+    resetToken?: true
+    resetTokenExpiresAt?: true
     photoUrl?: true
     createdAt?: true
     updatedAt?: true
@@ -3440,6 +3450,8 @@ export namespace Prisma {
     refreshToken?: true
     otpCode?: true
     otpExpiresAt?: true
+    resetToken?: true
+    resetTokenExpiresAt?: true
     photoUrl?: true
     createdAt?: true
     updatedAt?: true
@@ -3530,6 +3542,8 @@ export namespace Prisma {
     refreshToken: string | null
     otpCode: string | null
     otpExpiresAt: Date | null
+    resetToken: string | null
+    resetTokenExpiresAt: Date | null
     photoUrl: string | null
     createdAt: Date
     updatedAt: Date
@@ -3564,6 +3578,8 @@ export namespace Prisma {
     refreshToken?: boolean
     otpCode?: boolean
     otpExpiresAt?: boolean
+    resetToken?: boolean
+    resetTokenExpiresAt?: boolean
     photoUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3591,6 +3607,8 @@ export namespace Prisma {
     refreshToken?: boolean
     otpCode?: boolean
     otpExpiresAt?: boolean
+    resetToken?: boolean
+    resetTokenExpiresAt?: boolean
     photoUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3608,6 +3626,8 @@ export namespace Prisma {
     refreshToken?: boolean
     otpCode?: boolean
     otpExpiresAt?: boolean
+    resetToken?: boolean
+    resetTokenExpiresAt?: boolean
     photoUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3625,12 +3645,14 @@ export namespace Prisma {
     refreshToken?: boolean
     otpCode?: boolean
     otpExpiresAt?: boolean
+    resetToken?: boolean
+    resetTokenExpiresAt?: boolean
     photoUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "status" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "status" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "resetToken" | "resetTokenExpiresAt" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     addresses?: boolean | User$addressesArgs<ExtArgs>
     couriers?: boolean | User$couriersArgs<ExtArgs>
@@ -3671,6 +3693,8 @@ export namespace Prisma {
       refreshToken: string | null
       otpCode: string | null
       otpExpiresAt: Date | null
+      resetToken: string | null
+      resetTokenExpiresAt: Date | null
       photoUrl: string | null
       createdAt: Date
       updatedAt: Date
@@ -4117,6 +4141,8 @@ export namespace Prisma {
     readonly refreshToken: FieldRef<"User", 'String'>
     readonly otpCode: FieldRef<"User", 'String'>
     readonly otpExpiresAt: FieldRef<"User", 'DateTime'>
+    readonly resetToken: FieldRef<"User", 'String'>
+    readonly resetTokenExpiresAt: FieldRef<"User", 'DateTime'>
     readonly photoUrl: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
@@ -28720,6 +28746,8 @@ export namespace Prisma {
     refreshToken: 'refreshToken',
     otpCode: 'otpCode',
     otpExpiresAt: 'otpExpiresAt',
+    resetToken: 'resetToken',
+    resetTokenExpiresAt: 'resetTokenExpiresAt',
     photoUrl: 'photoUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -29324,6 +29352,8 @@ export namespace Prisma {
     refreshToken?: StringNullableFilter<"User"> | string | null
     otpCode?: StringNullableFilter<"User"> | string | null
     otpExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
     photoUrl?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
@@ -29350,6 +29380,8 @@ export namespace Prisma {
     refreshToken?: SortOrderInput | SortOrder
     otpCode?: SortOrderInput | SortOrder
     otpExpiresAt?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiresAt?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -29379,6 +29411,8 @@ export namespace Prisma {
     refreshToken?: StringNullableFilter<"User"> | string | null
     otpCode?: StringNullableFilter<"User"> | string | null
     otpExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
     photoUrl?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
@@ -29405,6 +29439,8 @@ export namespace Prisma {
     refreshToken?: SortOrderInput | SortOrder
     otpCode?: SortOrderInput | SortOrder
     otpExpiresAt?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiresAt?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -29428,6 +29464,8 @@ export namespace Prisma {
     refreshToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     otpCode?: StringNullableWithAggregatesFilter<"User"> | string | null
     otpExpiresAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetTokenExpiresAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     photoUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -30910,6 +30948,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30936,6 +30976,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30962,6 +31004,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30988,6 +31032,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31014,6 +31060,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -31031,6 +31079,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31048,6 +31098,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32753,6 +32805,8 @@ export namespace Prisma {
     refreshToken?: SortOrder
     otpCode?: SortOrder
     otpExpiresAt?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiresAt?: SortOrder
     photoUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -32770,6 +32824,8 @@ export namespace Prisma {
     refreshToken?: SortOrder
     otpCode?: SortOrder
     otpExpiresAt?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiresAt?: SortOrder
     photoUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -32787,6 +32843,8 @@ export namespace Prisma {
     refreshToken?: SortOrder
     otpCode?: SortOrder
     otpExpiresAt?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiresAt?: SortOrder
     photoUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36898,6 +36956,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36923,6 +36983,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37022,6 +37084,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37047,6 +37111,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37088,6 +37154,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37113,6 +37181,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37290,6 +37360,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37315,6 +37387,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37428,6 +37502,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37453,6 +37529,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37802,6 +37880,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37827,6 +37907,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38901,6 +38983,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -38926,6 +39010,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -38999,6 +39085,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39024,6 +39112,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39128,6 +39218,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39153,6 +39245,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39194,6 +39288,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39219,6 +39315,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39297,6 +39395,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39322,6 +39422,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39446,6 +39548,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39471,6 +39575,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40072,6 +40178,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40097,6 +40205,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40197,6 +40307,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40222,6 +40334,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40247,6 +40361,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40272,6 +40388,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40313,6 +40431,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40338,6 +40458,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40363,6 +40485,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40388,6 +40512,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otpCode?: string | null
     otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40429,6 +40555,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40454,6 +40582,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otpCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
