@@ -67,6 +67,17 @@ export class CouriersService {
           vehicleType: data.vehicleType,
           user: { connect: { id: userId } },
         },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              role: true,
+            },
+          },
+        },
       });
     });
   }
@@ -118,6 +129,17 @@ export class CouriersService {
           vehiclePlate,
           user: { connect: { id: newUser.id } },
         },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              role: true,
+            },
+          },
+        },
       });
     });
   }
@@ -155,7 +177,19 @@ export class CouriersService {
   async getProfile(userId: string): Promise<Courier | null> {
     return this.prisma.courier.findFirst({
       where: { userId },
-      include: { user: true },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            role: true,
+            photoUrl: true,
+            isVerified: true,
+          },
+        },
+      },
     });
   }
 

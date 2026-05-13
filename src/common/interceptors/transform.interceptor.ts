@@ -25,8 +25,30 @@ export class TransformInterceptor<T>
       map((data) => ({
         status: 'success',
         message: data?.message || 'Operation successful',
-        data: data?.data !== undefined ? data.data : data,
+        data: this.stripSensitiveFields(data?.data !== undefined ? data.data : data),
       })),
     );
+  }
+
+  private stripSensitiveFields(data: any): any {
+    if (data === null || data === undefined) return data;
+
+    if (Array.isArray(data)) {
+      return data.map((item) => this.stripSensitiveFields(item));
+    }
+
+    if (typeof data === 'object') {
+      const { password, otpCode, refreshToken, ...rest } = data;
+      const stripped: any = { ...rest };
+      
+      for (const key in stripped) {
+        if (Object.prototype.hasOwnProperty.call(stripped, key)) {
+          stripped[key] = this.stripSensitiveFields(stripped[key]);
+        }
+      }
+      return stripped;
+    }
+
+    return data;
   }
 }

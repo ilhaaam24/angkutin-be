@@ -158,7 +158,18 @@ export class OrdersService {
         },
         aiResults: true,
         courier: {
-          include: { user: true },
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true,
+                role: true,
+                photoUrl: true,
+              },
+            },
+          },
         },
       },
     });
@@ -408,7 +419,19 @@ export class OrdersService {
         include: {
           address: true,
           wasteItems: { include: { wasteType: true } },
-          courier: { include: { user: true } },
+          courier: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                  phone: true,
+                  role: true,
+                },
+              },
+            },
+          },
           statusHistory: { orderBy: { createdAt: 'asc' } },
         },
       });
