@@ -210,7 +210,7 @@ export class AuthService {
 
     // Build reset link
     const frontendUrl = this.configService.get('FRONTEND_URL', 'http://localhost:3000');
-    const resetLink = `${frontendUrl}/reset-password?token=${rawToken}&email=${encodeURIComponent(email)}`;
+    const resetLink = `${frontendUrl}/auth/reset-password?token=${rawToken}&email=${encodeURIComponent(email)}`;
 
     // Send email
     try {
