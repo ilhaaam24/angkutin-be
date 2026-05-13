@@ -22,17 +22,6 @@ export class CouriersController {
     private readonly uploadService: UploadService,
   ) {}
 
-  // --- COURIER ENDPOINTS (Statis harus di atas dynamic) ---
-
-  @Post('register')
-  @Roles(Role.USER)
-  @ApiOperation({ summary: 'Register as a courier' })
-  @ApiResponse({ status: 201, description: 'Successfully registered as courier.' })
-  @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  @ApiBody({ type: RegisterCourierDto })
-  register(@Request() req, @Body() registerCourierDto: RegisterCourierDto) {
-    return this.couriersService.register(req.user.userId, registerCourierDto);
-  }
 
   @Get('profile')
   @Roles(Role.COURIER, Role.ADMIN)
@@ -58,23 +47,6 @@ export class CouriersController {
   })
   updateStatus(@Request() req, @Body() data: { isOnline: boolean }) {
     return this.couriersService.updateStatus(req.user.userId, data.isOnline);
-  }
-
-  @Patch('vehicle')
-  @Roles(Role.COURIER)
-  @ApiOperation({ summary: 'Update courier vehicle type' })
-  @ApiResponse({ status: 200, description: 'Vehicle type successfully updated.' })
-  @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        vehicleType: { type: 'string', example: 'MOTOR' },
-      },
-    },
-  })
-  updateVehicle(@Request() req, @Body() data: { vehicleType: any }) {
-    return this.couriersService.updateVehicle(req.user.userId, data.vehicleType);
   }
 
   // --- COURIER ORDER ENDPOINTS ---
