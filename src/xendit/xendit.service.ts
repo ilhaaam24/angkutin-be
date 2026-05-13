@@ -12,7 +12,8 @@ export class XenditService {
     if (!secretKey) {
       console.error('[XENDIT] XENDIT_SECRET_API_KEY is not configured!');
     }
-    this.xenditClient = new Xendit({ secretKey: secretKey || '' });
+    // Tambahkan .trim() untuk membersihkan spasi yang tidak sengaja terbawa
+    this.xenditClient = new Xendit({ secretKey: secretKey?.trim() || '' });
   }
 
   /**
