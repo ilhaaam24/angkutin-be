@@ -121,13 +121,26 @@ export class XenditService {
    */
   verifyWebhookToken(callbackToken: string): boolean {
     const expectedToken = this.configService.get<string>('XENDIT_WEBHOOK_TOKEN');
+    
     if (!expectedToken) {
       console.warn('[XENDIT] XENDIT_WEBHOOK_TOKEN not configured, skipping verification');
-      return true; // Allow in development
+      return true; 
     }
-    return crypto.timingSafeEqual(
-      Buffer.from(callbackToken),
-      Buffer.from(expectedToken),
-    );
+
+    // Mencegah error "Inputs must have the same length" pada timingSafeEqual
+    if (!callbackToken || callbackToken.length !== expectedToken.length) {
+      console.error(`[XENDIT] Webhook token length mismatch. Received: ${callbackToken?.length}, Expected: ${expectedToken.length}`);
+      return false;
+    }
+
+    try {
+      return crypto.timingSafeEqual(
+        Buffer.from(callbackToken),
+        Buffer.from(expectedToken),
+      );
+    } catch (error) {
+      console.error('[XENDIT] Error during timingSafeEqual:', error.message);
+      return false;
+    }
   }
 }

@@ -353,10 +353,12 @@ export class WalletService {
    * Called when payout status changes (SUCCEEDED / FAILED).
    */
   async handleXenditPayoutWebhook(payload: any) {
-    const { reference_id, status, failure_code } = payload;
+    // Xendit Payout v2 membungkus data utama di dalam objek 'data'
+    const data = payload.data || payload;
+    const { reference_id, status, failure_code } = data;
 
     if (!reference_id) {
-      console.warn('[WEBHOOK] Missing reference_id in payload');
+      console.warn('[WEBHOOK] Missing reference_id in payload data:', JSON.stringify(payload));
       return { received: true };
     }
 
