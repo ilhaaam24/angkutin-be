@@ -14,10 +14,19 @@ export class WasteTypesService {
     });
   }
 
-  async findAll(): Promise<WasteType[]> {
-    return this.prisma.wasteType.findMany({
+  async findAll(): Promise<{ lastUpdate: Date | null; data: WasteType[] }> {
+    const wasteTypes = await this.prisma.wasteType.findMany({
       orderBy: { name: 'asc' },
     });
+
+    const lastUpdate = wasteTypes.reduce((max, curr) => {
+      return !max || curr.updatedAt > max ? curr.updatedAt : max;
+    }, null as Date | null);
+
+    return {
+      lastUpdate,
+      data: wasteTypes,
+    };
   }
 
   async findOne(id: string): Promise<WasteType> {

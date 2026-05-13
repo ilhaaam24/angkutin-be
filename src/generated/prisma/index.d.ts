@@ -12016,6 +12016,8 @@ export namespace Prisma {
     name: string | null
     category: $Enums.WasteCategory | null
     unitPrice: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type WasteTypeMaxAggregateOutputType = {
@@ -12023,6 +12025,8 @@ export namespace Prisma {
     name: string | null
     category: $Enums.WasteCategory | null
     unitPrice: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type WasteTypeCountAggregateOutputType = {
@@ -12030,6 +12034,8 @@ export namespace Prisma {
     name: number
     category: number
     unitPrice: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -12047,6 +12053,8 @@ export namespace Prisma {
     name?: true
     category?: true
     unitPrice?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type WasteTypeMaxAggregateInputType = {
@@ -12054,6 +12062,8 @@ export namespace Prisma {
     name?: true
     category?: true
     unitPrice?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type WasteTypeCountAggregateInputType = {
@@ -12061,6 +12071,8 @@ export namespace Prisma {
     name?: true
     category?: true
     unitPrice?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -12155,6 +12167,8 @@ export namespace Prisma {
     name: string
     category: $Enums.WasteCategory
     unitPrice: number
+    createdAt: Date
+    updatedAt: Date
     _count: WasteTypeCountAggregateOutputType | null
     _avg: WasteTypeAvgAggregateOutputType | null
     _sum: WasteTypeSumAggregateOutputType | null
@@ -12181,6 +12195,8 @@ export namespace Prisma {
     name?: boolean
     category?: boolean
     unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     wasteItems?: boolean | WasteType$wasteItemsArgs<ExtArgs>
     pricing?: boolean | WasteType$pricingArgs<ExtArgs>
     _count?: boolean | WasteTypeCountOutputTypeDefaultArgs<ExtArgs>
@@ -12191,6 +12207,8 @@ export namespace Prisma {
     name?: boolean
     category?: boolean
     unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["wasteType"]>
 
   export type WasteTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12198,6 +12216,8 @@ export namespace Prisma {
     name?: boolean
     category?: boolean
     unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["wasteType"]>
 
   export type WasteTypeSelectScalar = {
@@ -12205,9 +12225,11 @@ export namespace Prisma {
     name?: boolean
     category?: boolean
     unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type WasteTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "category" | "unitPrice", ExtArgs["result"]["wasteType"]>
+  export type WasteTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "category" | "unitPrice" | "createdAt" | "updatedAt", ExtArgs["result"]["wasteType"]>
   export type WasteTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     wasteItems?: boolean | WasteType$wasteItemsArgs<ExtArgs>
     pricing?: boolean | WasteType$pricingArgs<ExtArgs>
@@ -12227,6 +12249,8 @@ export namespace Prisma {
       name: string
       category: $Enums.WasteCategory
       unitPrice: number
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["wasteType"]>
     composites: {}
   }
@@ -12656,6 +12680,8 @@ export namespace Prisma {
     readonly name: FieldRef<"WasteType", 'String'>
     readonly category: FieldRef<"WasteType", 'WasteCategory'>
     readonly unitPrice: FieldRef<"WasteType", 'Float'>
+    readonly createdAt: FieldRef<"WasteType", 'DateTime'>
+    readonly updatedAt: FieldRef<"WasteType", 'DateTime'>
   }
     
 
@@ -28789,7 +28815,9 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     category: 'category',
-    unitPrice: 'unitPrice'
+    unitPrice: 'unitPrice',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type WasteTypeScalarFieldEnum = (typeof WasteTypeScalarFieldEnum)[keyof typeof WasteTypeScalarFieldEnum]
@@ -29889,6 +29917,8 @@ export namespace Prisma {
     name?: StringFilter<"WasteType"> | string
     category?: EnumWasteCategoryFilter<"WasteType"> | $Enums.WasteCategory
     unitPrice?: FloatFilter<"WasteType"> | number
+    createdAt?: DateTimeFilter<"WasteType"> | Date | string
+    updatedAt?: DateTimeFilter<"WasteType"> | Date | string
     wasteItems?: OrderWasteItemListRelationFilter
     pricing?: PricingWasteListRelationFilter
   }
@@ -29898,6 +29928,8 @@ export namespace Prisma {
     name?: SortOrder
     category?: SortOrder
     unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     wasteItems?: OrderWasteItemOrderByRelationAggregateInput
     pricing?: PricingWasteOrderByRelationAggregateInput
   }
@@ -29910,6 +29942,8 @@ export namespace Prisma {
     name?: StringFilter<"WasteType"> | string
     category?: EnumWasteCategoryFilter<"WasteType"> | $Enums.WasteCategory
     unitPrice?: FloatFilter<"WasteType"> | number
+    createdAt?: DateTimeFilter<"WasteType"> | Date | string
+    updatedAt?: DateTimeFilter<"WasteType"> | Date | string
     wasteItems?: OrderWasteItemListRelationFilter
     pricing?: PricingWasteListRelationFilter
   }, "id">
@@ -29919,6 +29953,8 @@ export namespace Prisma {
     name?: SortOrder
     category?: SortOrder
     unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: WasteTypeCountOrderByAggregateInput
     _avg?: WasteTypeAvgOrderByAggregateInput
     _max?: WasteTypeMaxOrderByAggregateInput
@@ -29934,6 +29970,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"WasteType"> | string
     category?: EnumWasteCategoryWithAggregatesFilter<"WasteType"> | $Enums.WasteCategory
     unitPrice?: FloatWithAggregatesFilter<"WasteType"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"WasteType"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WasteType"> | Date | string
   }
 
   export type OrderWasteItemWhereInput = {
@@ -31522,6 +31560,8 @@ export namespace Prisma {
     name: string
     category?: $Enums.WasteCategory
     unitPrice: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
     wasteItems?: OrderWasteItemCreateNestedManyWithoutWasteTypeInput
     pricing?: PricingWasteCreateNestedManyWithoutWasteTypeInput
   }
@@ -31531,6 +31571,8 @@ export namespace Prisma {
     name: string
     category?: $Enums.WasteCategory
     unitPrice: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
     wasteItems?: OrderWasteItemUncheckedCreateNestedManyWithoutWasteTypeInput
     pricing?: PricingWasteUncheckedCreateNestedManyWithoutWasteTypeInput
   }
@@ -31540,6 +31582,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wasteItems?: OrderWasteItemUpdateManyWithoutWasteTypeNestedInput
     pricing?: PricingWasteUpdateManyWithoutWasteTypeNestedInput
   }
@@ -31549,6 +31593,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wasteItems?: OrderWasteItemUncheckedUpdateManyWithoutWasteTypeNestedInput
     pricing?: PricingWasteUncheckedUpdateManyWithoutWasteTypeNestedInput
   }
@@ -31558,6 +31604,8 @@ export namespace Prisma {
     name: string
     category?: $Enums.WasteCategory
     unitPrice: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WasteTypeUpdateManyMutationInput = {
@@ -31565,6 +31613,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WasteTypeUncheckedUpdateManyInput = {
@@ -31572,6 +31622,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderWasteItemCreateInput = {
@@ -33433,6 +33485,8 @@ export namespace Prisma {
     name?: SortOrder
     category?: SortOrder
     unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WasteTypeAvgOrderByAggregateInput = {
@@ -33444,6 +33498,8 @@ export namespace Prisma {
     name?: SortOrder
     category?: SortOrder
     unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WasteTypeMinOrderByAggregateInput = {
@@ -33451,6 +33507,8 @@ export namespace Prisma {
     name?: SortOrder
     category?: SortOrder
     unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WasteTypeSumOrderByAggregateInput = {
@@ -38609,6 +38667,8 @@ export namespace Prisma {
     name: string
     category?: $Enums.WasteCategory
     unitPrice: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pricing?: PricingWasteCreateNestedManyWithoutWasteTypeInput
   }
 
@@ -38617,6 +38677,8 @@ export namespace Prisma {
     name: string
     category?: $Enums.WasteCategory
     unitPrice: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pricing?: PricingWasteUncheckedCreateNestedManyWithoutWasteTypeInput
   }
 
@@ -38700,6 +38762,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pricing?: PricingWasteUpdateManyWithoutWasteTypeNestedInput
   }
 
@@ -38708,6 +38772,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pricing?: PricingWasteUncheckedUpdateManyWithoutWasteTypeNestedInput
   }
 
@@ -39890,6 +39956,8 @@ export namespace Prisma {
     name: string
     category?: $Enums.WasteCategory
     unitPrice: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
     wasteItems?: OrderWasteItemCreateNestedManyWithoutWasteTypeInput
   }
 
@@ -39898,6 +39966,8 @@ export namespace Prisma {
     name: string
     category?: $Enums.WasteCategory
     unitPrice: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
     wasteItems?: OrderWasteItemUncheckedCreateNestedManyWithoutWasteTypeInput
   }
 
@@ -39922,6 +39992,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wasteItems?: OrderWasteItemUpdateManyWithoutWasteTypeNestedInput
   }
 
@@ -39930,6 +40002,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     category?: EnumWasteCategoryFieldUpdateOperationsInput | $Enums.WasteCategory
     unitPrice?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wasteItems?: OrderWasteItemUncheckedUpdateManyWithoutWasteTypeNestedInput
   }
 

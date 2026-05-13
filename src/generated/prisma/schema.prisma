@@ -229,6 +229,9 @@ model WasteType {
   wasteItems OrderWasteItem[]
   pricing    PricingWaste[]
 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   @@map("waste_types")
 }
 

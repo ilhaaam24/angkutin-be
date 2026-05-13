@@ -206,7 +206,9 @@ exports.Prisma.WasteTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
   category: 'category',
-  unitPrice: 'unitPrice'
+  unitPrice: 'unitPrice',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.OrderWasteItemScalarFieldEnum = {
