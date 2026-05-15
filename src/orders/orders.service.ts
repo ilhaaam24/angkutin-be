@@ -158,7 +158,15 @@ export class OrdersService {
 
   async findOneByRole(id: string, userId: string, role: string) {
     const where: any = { id };
-    if (role !== 'ADMIN') {
+    
+    if (role === Role.COURIER) {
+      const courier = await this.prisma.courier.findFirst({ where: { userId } });
+      if (courier) {
+        where.courierId = courier.id;
+      } else {
+        where.userId = userId; // Fallback
+      }
+    } else if (role !== Role.ADMIN) {
       where.userId = userId;
     }
 
@@ -188,23 +196,54 @@ export class OrdersService {
 
     if (!order) throw new NotFoundException('Order not found');
 
-    // Only owner or admin can cancel
-    if (role !== 'ADMIN' && order.userId !== userId) {
-      throw new BadRequestException('You cannot cancel this order');
+    // 1. Permission check
+    let isAllowed = false;
+    let courierId: string | null = null;
+
+    if (role === Role.ADMIN) {
+      isAllowed = true;
+    } else if (role === Role.USER && order.userId === userId) {
+      isAllowed = true;
+    } else if (role === Role.COURIER) {
+      const courier = await this.prisma.courier.findFirst({ where: { userId } });
+      if (courier && order.courierId === courier.id) {
+        isAllowed = true;
+        courierId = courier.id;
+      }
     }
 
-    // Can only cancel before WEIGHING
-    const cancellableStatuses: OrderStatus[] = [
-      OrderStatus.CREATED,
-      OrderStatus.MATCHED,
-      OrderStatus.ON_GOING,
-      OrderStatus.ARRIVED,
-    ];
+    if (!isAllowed) {
+      throw new BadRequestException('Anda tidak memiliki izin untuk membatalkan pesanan ini');
+    }
 
-    if (!cancellableStatuses.includes(order.status)) {
-      throw new BadRequestException(
-        `Cannot cancel order in ${order.status} status. Can only cancel before weighing.`,
-      );
+    // 2. Status check based on Role
+    if (role === Role.USER) {
+      const userBlockedStatuses: OrderStatus[] = [
+        OrderStatus.ARRIVED,
+        OrderStatus.WEIGHING,
+        OrderStatus.PICKED_UP,
+        OrderStatus.DELIVERING,
+        OrderStatus.COMPLETED,
+      ];
+      if (userBlockedStatuses.includes(order.status)) {
+        throw new BadRequestException('User tidak bisa membatalkan pesanan setelah kurir tiba (ARRIVED)');
+      }
+    }
+
+    if (role === Role.COURIER) {
+      const courierBlockedStatuses: OrderStatus[] = [
+        OrderStatus.PICKED_UP,
+        OrderStatus.DELIVERING,
+        OrderStatus.COMPLETED,
+      ];
+      if (courierBlockedStatuses.includes(order.status)) {
+        throw new BadRequestException('Kurir tidak bisa membatalkan pesanan setelah sampah diangkut (PICKED_UP)');
+      }
+    }
+
+    // Fallback for any other cases (Completed or already cancelled)
+    if (order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELLED) {
+      throw new BadRequestException(`Pesanan sudah dalam status ${order.status}`);
     }
 
     return this.prisma.$transaction(async (tx) => {
@@ -213,11 +252,15 @@ export class OrdersService {
         data: { status: OrderStatus.CANCELLED },
       });
 
+      let cancelledByValue: 'USER' | 'COURIER' | 'SYSTEM' = 'SYSTEM';
+      if (role === Role.USER) cancelledByValue = 'USER';
+      if (role === Role.COURIER) cancelledByValue = 'COURIER';
+
       await tx.orderCancellation.create({
         data: {
           orderId,
-          cancelledBy: role === 'ADMIN' ? 'SYSTEM' : 'USER',
-          reason: reason || 'Dibatalkan oleh user',
+          cancelledBy: cancelledByValue,
+          reason: reason || `Dibatalkan oleh ${role.toLowerCase()}`,
         },
       });
 
@@ -233,9 +276,18 @@ export class OrdersService {
     });
   }
 
-  async getTimeline(id: string, userId: string) {
+  async getTimeline(id: string, userId: string, role: string) {
+    const where: any = { id };
+    
+    if (role === Role.COURIER) {
+      const courier = await this.prisma.courier.findFirst({ where: { userId } });
+      if (courier) where.courierId = courier.id;
+    } else if (role !== Role.ADMIN) {
+      where.userId = userId;
+    }
+
     const order = await this.prisma.order.findFirst({
-      where: { id, userId },
+      where,
       include: {
         statusHistory: {
           orderBy: { createdAt: 'asc' },
@@ -291,45 +343,81 @@ export class OrdersService {
   async autoAssignCourier(orderId: string) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
-      include: { aiResults: true },
-    });
-
-    if (!order || !order.aiResults.length) return;
-
-    const recommendedVehicle = order.aiResults[0].recommendedVehicle as VehicleType;
-
-    let courier = await this.prisma.courier.findFirst({
-      where: {
-        isOnline: true,
-        vehicleType: recommendedVehicle || VehicleType.MOTOR,
+      include: { 
+        address: true,
+        aiResults: { orderBy: { createdAt: 'desc' }, take: 1 }
       },
     });
 
-    if (!courier) {
-      courier = await this.prisma.courier.findFirst({
-        where: { isOnline: true },
-      });
+    if (!order || !order.address.latitude || !order.address.longitude) return;
+
+    const { latitude, longitude } = order.address;
+    const radii = [2000, 5000]; // 2km dan 5km
+
+    for (let i = 0; i < radii.length; i++) {
+      const radius = radii[i];
+      
+      // Pencarian kurir terdekat yang Online via PostGIS
+      const couriers: any[] = await this.prisma.$queryRaw`
+        SELECT c.id, c.user_id,
+          ST_Distance(
+            ST_SetSRID(ST_MakePoint(CAST(c.current_lng AS float8), CAST(c.current_lat AS float8)), 4326)::geography,
+            ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography
+          ) as distance
+        FROM couriers c
+        WHERE c.is_online = true
+        AND ST_DWithin(
+          ST_SetSRID(ST_MakePoint(CAST(c.current_lng AS float8), CAST(c.current_lat AS float8)), 4326)::geography,
+          ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography,
+          ${radius}
+        )
+        ORDER BY distance ASC
+        LIMIT 1
+      `;
+
+      if (couriers.length > 0) {
+        const courier = couriers[0];
+        
+        await this.prisma.$transaction(async (tx) => {
+          await tx.order.update({
+            where: { id: orderId },
+            data: {
+              courierId: courier.id,
+              status: OrderStatus.MATCHED,
+            },
+          });
+
+          await tx.orderStatusHistory.create({
+            data: {
+              orderId,
+              status: OrderStatus.MATCHED,
+              note: `Kurir ditemukan dalam radius ${radius/1000}km`,
+            },
+          });
+        });
+        return; 
+      }
+
+      if (i < radii.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 10000)); 
+      }
     }
 
-    if (courier) {
-      await this.prisma.$transaction(async (tx) => {
-        await tx.order.update({
-          where: { id: orderId },
-          data: {
-            courierId: courier!.id,
-            status: OrderStatus.MATCHED,
-          },
-        });
-
-        await tx.orderStatusHistory.create({
-          data: {
-            orderId,
-            status: OrderStatus.MATCHED,
-            note: `Kurir ditemukan dan pesanan telah dikonfirmasi`,
-          },
-        });
+    // Auto-cancel if no courier found
+    await this.prisma.$transaction(async (tx) => {
+      await tx.order.update({
+        where: { id: orderId },
+        data: { status: OrderStatus.CANCELLED },
       });
-    }
+
+      await tx.orderStatusHistory.create({
+        data: {
+          orderId,
+          status: OrderStatus.CANCELLED,
+          note: 'Pesanan dibatalkan otomatis karena tidak ada kurir di sekitar lokasi',
+        },
+      });
+    });
   }
 
   // ==========================================
@@ -575,10 +663,18 @@ export class OrdersService {
   }
 
   /** Get latest courier location for an order (fallback if realtime fails) */
-  async getLatestTracking(orderId: string, userId: string) {
-    // Verify order belongs to user or user is admin
+  async getLatestTracking(orderId: string, userId: string, role: string) {
+    const where: any = { id: orderId };
+    
+    if (role === Role.COURIER) {
+      const courier = await this.prisma.courier.findFirst({ where: { userId } });
+      if (courier) where.courierId = courier.id;
+    } else if (role !== Role.ADMIN) {
+      where.userId = userId;
+    }
+
     const order = await this.prisma.order.findFirst({
-      where: { id: orderId },
+      where,
     });
 
     if (!order) {

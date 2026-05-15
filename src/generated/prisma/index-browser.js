@@ -191,7 +191,8 @@ exports.Prisma.OrderAiResultScalarFieldEnum = {
   orderId: 'orderId',
   volumeEstimation: 'volumeEstimation',
   recommendedVehicle: 'recommendedVehicle',
-  confidenceScore: 'confidenceScore'
+  confidenceScore: 'confidenceScore',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.OrderTrackingLogScalarFieldEnum = {

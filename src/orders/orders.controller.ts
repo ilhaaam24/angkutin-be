@@ -56,7 +56,7 @@ export class OrdersController {
   @ApiResponse({ status: 200, description: 'Return order status history with labels.' })
   @ApiResponse({ status: 404, description: 'Order not found.' })
   getTimeline(@Request() req, @Param('id') id: string) {
-    return this.ordersService.getTimeline(id, req.user.userId);
+    return this.ordersService.getTimeline(id, req.user.userId, req.user.role);
   }
 
   @Post(':id/cancel')
@@ -76,7 +76,7 @@ export class OrdersController {
   @ApiOperation({ summary: 'Get latest courier location for an order (fallback)' })
   @ApiResponse({ status: 200, description: 'Return latest courier location.' })
   getTracking(@Request() req, @Param('id') id: string) {
-    return this.ordersService.getLatestTracking(id, req.user.userId);
+    return this.ordersService.getLatestTracking(id, req.user.userId, req.user.role);
   }
 
   @Get(':id/tracking/history')

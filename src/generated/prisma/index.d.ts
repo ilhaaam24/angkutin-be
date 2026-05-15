@@ -9794,6 +9794,7 @@ export namespace Prisma {
     volumeEstimation: number | null
     recommendedVehicle: string | null
     confidenceScore: number | null
+    createdAt: Date | null
   }
 
   export type OrderAiResultMaxAggregateOutputType = {
@@ -9802,6 +9803,7 @@ export namespace Prisma {
     volumeEstimation: number | null
     recommendedVehicle: string | null
     confidenceScore: number | null
+    createdAt: Date | null
   }
 
   export type OrderAiResultCountAggregateOutputType = {
@@ -9810,6 +9812,7 @@ export namespace Prisma {
     volumeEstimation: number
     recommendedVehicle: number
     confidenceScore: number
+    createdAt: number
     _all: number
   }
 
@@ -9830,6 +9833,7 @@ export namespace Prisma {
     volumeEstimation?: true
     recommendedVehicle?: true
     confidenceScore?: true
+    createdAt?: true
   }
 
   export type OrderAiResultMaxAggregateInputType = {
@@ -9838,6 +9842,7 @@ export namespace Prisma {
     volumeEstimation?: true
     recommendedVehicle?: true
     confidenceScore?: true
+    createdAt?: true
   }
 
   export type OrderAiResultCountAggregateInputType = {
@@ -9846,6 +9851,7 @@ export namespace Prisma {
     volumeEstimation?: true
     recommendedVehicle?: true
     confidenceScore?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -9941,6 +9947,7 @@ export namespace Prisma {
     volumeEstimation: number | null
     recommendedVehicle: string | null
     confidenceScore: number | null
+    createdAt: Date
     _count: OrderAiResultCountAggregateOutputType | null
     _avg: OrderAiResultAvgAggregateOutputType | null
     _sum: OrderAiResultSumAggregateOutputType | null
@@ -9968,6 +9975,7 @@ export namespace Prisma {
     volumeEstimation?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
+    createdAt?: boolean
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
   }, ExtArgs["result"]["orderAiResult"]>
 
@@ -9977,6 +9985,7 @@ export namespace Prisma {
     volumeEstimation?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
+    createdAt?: boolean
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
   }, ExtArgs["result"]["orderAiResult"]>
 
@@ -9986,6 +9995,7 @@ export namespace Prisma {
     volumeEstimation?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
+    createdAt?: boolean
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
   }, ExtArgs["result"]["orderAiResult"]>
 
@@ -9995,9 +10005,10 @@ export namespace Prisma {
     volumeEstimation?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
+    createdAt?: boolean
   }
 
-  export type OrderAiResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "volumeEstimation" | "recommendedVehicle" | "confidenceScore", ExtArgs["result"]["orderAiResult"]>
+  export type OrderAiResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "volumeEstimation" | "recommendedVehicle" | "confidenceScore" | "createdAt", ExtArgs["result"]["orderAiResult"]>
   export type OrderAiResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
   }
@@ -10019,6 +10030,7 @@ export namespace Prisma {
       volumeEstimation: number | null
       recommendedVehicle: string | null
       confidenceScore: number | null
+      createdAt: Date
     }, ExtArgs["result"]["orderAiResult"]>
     composites: {}
   }
@@ -10448,6 +10460,7 @@ export namespace Prisma {
     readonly volumeEstimation: FieldRef<"OrderAiResult", 'Float'>
     readonly recommendedVehicle: FieldRef<"OrderAiResult", 'String'>
     readonly confidenceScore: FieldRef<"OrderAiResult", 'Float'>
+    readonly createdAt: FieldRef<"OrderAiResult", 'DateTime'>
   }
     
 
@@ -28811,7 +28824,8 @@ export namespace Prisma {
     orderId: 'orderId',
     volumeEstimation: 'volumeEstimation',
     recommendedVehicle: 'recommendedVehicle',
-    confidenceScore: 'confidenceScore'
+    confidenceScore: 'confidenceScore',
+    createdAt: 'createdAt'
   };
 
   export type OrderAiResultScalarFieldEnum = (typeof OrderAiResultScalarFieldEnum)[keyof typeof OrderAiResultScalarFieldEnum]
@@ -29819,6 +29833,7 @@ export namespace Prisma {
     volumeEstimation?: FloatNullableFilter<"OrderAiResult"> | number | null
     recommendedVehicle?: StringNullableFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableFilter<"OrderAiResult"> | number | null
+    createdAt?: DateTimeFilter<"OrderAiResult"> | Date | string
     order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
   }
 
@@ -29828,6 +29843,7 @@ export namespace Prisma {
     volumeEstimation?: SortOrderInput | SortOrder
     recommendedVehicle?: SortOrderInput | SortOrder
     confidenceScore?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     order?: OrderOrderByWithRelationInput
   }
 
@@ -29840,6 +29856,7 @@ export namespace Prisma {
     volumeEstimation?: FloatNullableFilter<"OrderAiResult"> | number | null
     recommendedVehicle?: StringNullableFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableFilter<"OrderAiResult"> | number | null
+    createdAt?: DateTimeFilter<"OrderAiResult"> | Date | string
     order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
   }, "id">
 
@@ -29849,6 +29866,7 @@ export namespace Prisma {
     volumeEstimation?: SortOrderInput | SortOrder
     recommendedVehicle?: SortOrderInput | SortOrder
     confidenceScore?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     _count?: OrderAiResultCountOrderByAggregateInput
     _avg?: OrderAiResultAvgOrderByAggregateInput
     _max?: OrderAiResultMaxOrderByAggregateInput
@@ -29865,6 +29883,7 @@ export namespace Prisma {
     volumeEstimation?: FloatNullableWithAggregatesFilter<"OrderAiResult"> | number | null
     recommendedVehicle?: StringNullableWithAggregatesFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableWithAggregatesFilter<"OrderAiResult"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"OrderAiResult"> | Date | string
   }
 
   export type OrderTrackingLogWhereInput = {
@@ -31474,6 +31493,7 @@ export namespace Prisma {
     volumeEstimation?: number | null
     recommendedVehicle?: string | null
     confidenceScore?: number | null
+    createdAt?: Date | string
     order?: OrderCreateNestedOneWithoutAiResultsInput
   }
 
@@ -31483,6 +31503,7 @@ export namespace Prisma {
     volumeEstimation?: number | null
     recommendedVehicle?: string | null
     confidenceScore?: number | null
+    createdAt?: Date | string
   }
 
   export type OrderAiResultUpdateInput = {
@@ -31490,6 +31511,7 @@ export namespace Prisma {
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     order?: OrderUpdateOneWithoutAiResultsNestedInput
   }
 
@@ -31499,6 +31521,7 @@ export namespace Prisma {
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderAiResultCreateManyInput = {
@@ -31507,6 +31530,7 @@ export namespace Prisma {
     volumeEstimation?: number | null
     recommendedVehicle?: string | null
     confidenceScore?: number | null
+    createdAt?: Date | string
   }
 
   export type OrderAiResultUpdateManyMutationInput = {
@@ -31514,6 +31538,7 @@ export namespace Prisma {
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderAiResultUncheckedUpdateManyInput = {
@@ -31522,6 +31547,7 @@ export namespace Prisma {
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderTrackingLogCreateInput = {
@@ -33368,6 +33394,7 @@ export namespace Prisma {
     volumeEstimation?: SortOrder
     recommendedVehicle?: SortOrder
     confidenceScore?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type OrderAiResultAvgOrderByAggregateInput = {
@@ -33381,6 +33408,7 @@ export namespace Prisma {
     volumeEstimation?: SortOrder
     recommendedVehicle?: SortOrder
     confidenceScore?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type OrderAiResultMinOrderByAggregateInput = {
@@ -33389,6 +33417,7 @@ export namespace Prisma {
     volumeEstimation?: SortOrder
     recommendedVehicle?: SortOrder
     confidenceScore?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type OrderAiResultSumOrderByAggregateInput = {
@@ -37591,6 +37620,7 @@ export namespace Prisma {
     volumeEstimation?: number | null
     recommendedVehicle?: string | null
     confidenceScore?: number | null
+    createdAt?: Date | string
   }
 
   export type OrderAiResultUncheckedCreateWithoutOrderInput = {
@@ -37598,6 +37628,7 @@ export namespace Prisma {
     volumeEstimation?: number | null
     recommendedVehicle?: string | null
     confidenceScore?: number | null
+    createdAt?: Date | string
   }
 
   export type OrderAiResultCreateOrConnectWithoutOrderInput = {
@@ -37994,6 +38025,7 @@ export namespace Prisma {
     volumeEstimation?: FloatNullableFilter<"OrderAiResult"> | number | null
     recommendedVehicle?: StringNullableFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableFilter<"OrderAiResult"> | number | null
+    createdAt?: DateTimeFilter<"OrderAiResult"> | Date | string
   }
 
   export type OrderTrackingLogUpsertWithWhereUniqueWithoutOrderInput = {
@@ -41218,6 +41250,7 @@ export namespace Prisma {
     volumeEstimation?: number | null
     recommendedVehicle?: string | null
     confidenceScore?: number | null
+    createdAt?: Date | string
   }
 
   export type OrderTrackingLogCreateManyOrderInput = {
@@ -41295,6 +41328,7 @@ export namespace Prisma {
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderAiResultUncheckedUpdateWithoutOrderInput = {
@@ -41302,6 +41336,7 @@ export namespace Prisma {
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderAiResultUncheckedUpdateManyWithoutOrderInput = {
@@ -41309,6 +41344,7 @@ export namespace Prisma {
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderTrackingLogUpdateWithoutOrderInput = {

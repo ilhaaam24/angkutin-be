@@ -197,11 +197,12 @@ model OrderStatusHistory {
 }
 
 model OrderAiResult {
-  id                 String  @id @default(uuid()) @db.Uuid
-  orderId            String? @map("order_id") @db.Uuid
-  volumeEstimation   Float?  @map("volume_estimation")
-  recommendedVehicle String? @map("recommended_vehicle")
-  confidenceScore    Float?  @map("confidence_score")
+  id                 String   @id @default(uuid()) @db.Uuid
+  orderId            String?  @map("order_id") @db.Uuid
+  volumeEstimation   Float?   @map("volume_estimation")
+  recommendedVehicle String?  @map("recommended_vehicle")
+  confidenceScore    Float?   @map("confidence_score")
+  createdAt          DateTime @default(now()) @map("created_at")
 
   order Order? @relation(fields: [orderId], references: [id])
 
