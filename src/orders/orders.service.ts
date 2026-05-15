@@ -2,7 +2,8 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AiAnalyzeDto } from './dto/ai-analyze.dto';
-import { Order, OrderStatus, OrderAiResult, Role, VehicleType } from '../generated/prisma';
+import { SubmitWeighingDto } from './dto/submit-weighing.dto';
+import { Order, OrderStatus, OrderAiResult, Role, VehicleType, WalletTransactionType, WalletReferenceType, TransactionStatus } from '../generated/prisma';
 
 @Injectable()
 export class OrdersService {
@@ -476,7 +477,47 @@ export class OrdersService {
         },
       });
 
-      // 2. Update status order dan ambil data lengkapnya
+      // 2. Jika status COMPLETED, proses dompet (wallet)
+      if (newStatus === OrderStatus.COMPLETED && order.netTotal !== null) {
+        const amount = Math.abs(order.netTotal);
+        const type = order.netTotal >= 0 ? WalletTransactionType.CREDIT : WalletTransactionType.DEBIT;
+        const description = order.netTotal >= 0 
+          ? `Hasil penjualan sampah - Order #${order.id.slice(0, 8)}` 
+          : `Biaya pengangkutan residu - Order #${order.id.slice(0, 8)}`;
+
+        // Cari atau buat wallet
+        let wallet = await tx.wallet.findUnique({ where: { userId: order.userId } });
+        if (!wallet) {
+          wallet = await tx.wallet.create({
+            data: { userId: order.userId, balance: 0 }
+          });
+        }
+
+        // Update saldo wallet
+        const newBalance = type === WalletTransactionType.CREDIT 
+          ? wallet.balance + amount 
+          : wallet.balance - amount;
+
+        await tx.wallet.update({
+          where: { id: wallet.id },
+          data: { balance: newBalance }
+        });
+
+        // Catat transaksi wallet
+        await tx.walletTransaction.create({
+          data: {
+            walletId: wallet.id,
+            amount: amount,
+            type: type,
+            referenceType: WalletReferenceType.ORDER,
+            referenceId: order.id,
+            status: TransactionStatus.SUCCESS,
+            description: description,
+          }
+        });
+      }
+
+      // 3. Update status order dan ambil data lengkapnya
       return tx.order.update({
         where: { id: orderId },
         data: { status: newStatus },
@@ -728,6 +769,110 @@ export class OrdersService {
         longitude: true,
         recordedAt: true,
       },
+    });
+  }
+
+  async submitWeighing(orderId: string, courierId: string, data: SubmitWeighingDto) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: { wasteItems: true },
+    });
+
+    if (!order) throw new NotFoundException('Order not found');
+    if (order.courierId !== courierId) throw new BadRequestException('Order is not assigned to you');
+
+    if (order.status !== OrderStatus.ARRIVED && order.status !== OrderStatus.WEIGHING) {
+      throw new BadRequestException(`Cannot submit weighing in ${order.status} status`);
+    }
+
+    let mutuItems = data.mutuItems || [];
+    let residualWeight = data.residualWeight || 0;
+
+    // AUTO-MOCK LOGIC
+    if (mutuItems.length === 0 && residualWeight === 0) {
+      const allMutuTypes = await this.prisma.wasteType.findMany({ where: { category: 'MUTU' } });
+      if (allMutuTypes.length > 0) {
+        mutuItems = [{
+          wasteTypeId: allMutuTypes[0].id,
+          weight: 5 + Math.random() * 5,
+        }];
+      }
+      residualWeight = 1 + Math.random() * 3;
+    }
+
+    const processedItems: any[] = [];
+    let totalCredit = 0;
+    let totalDebit = 0;
+
+    // 1. Process Mutu Items
+    if (mutuItems.length > 0) {
+      const mutuTypeIds = mutuItems.map(i => i.wasteTypeId);
+      const mutuTypes = await this.prisma.wasteType.findMany({
+        where: { id: { in: mutuTypeIds } }
+      });
+
+      for (const item of mutuItems) {
+        const type = mutuTypes.find(t => t.id === item.wasteTypeId);
+        if (type) {
+          const subtotal = item.weight * type.unitPrice;
+          totalCredit += subtotal;
+          processedItems.push({
+            wasteTypeId: item.wasteTypeId,
+            weight: item.weight,
+            price: type.unitPrice,
+            subtotal,
+          });
+        }
+      }
+    }
+
+    // 2. Process Residual
+    if (residualWeight > 0) {
+      const residuType = await this.prisma.wasteType.findFirst({
+        where: { category: 'RESIDU' }
+      });
+
+      if (residuType) {
+        const subtotal = residualWeight * residuType.unitPrice;
+        totalDebit += subtotal;
+        processedItems.push({
+          wasteTypeId: residuType.id,
+          weight: residualWeight,
+          price: residuType.unitPrice,
+          subtotal,
+        });
+      }
+    }
+
+    const netTotal = totalCredit - totalDebit;
+
+    return this.prisma.$transaction(async (tx) => {
+      await tx.orderWasteItem.deleteMany({ where: { orderId } });
+
+      const updatedOrder = await tx.order.update({
+        where: { id: orderId },
+        data: {
+          totalCredit,
+          totalDebit,
+          netTotal,
+          status: OrderStatus.PICKED_UP,
+          wasteItems: {
+            create: processedItems,
+          },
+          statusHistory: {
+            create: {
+              status: OrderStatus.PICKED_UP,
+              note: `Penimbangan selesai. Mutu: ${totalCredit}, Residu: ${totalDebit}. Net: ${netTotal}`,
+            },
+          },
+        },
+        include: {
+          wasteItems: { include: { wasteType: true } },
+          statusHistory: { orderBy: { createdAt: 'desc' }, take: 5 },
+        },
+      });
+
+      return updatedOrder;
     });
   }
 }

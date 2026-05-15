@@ -9,6 +9,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody, ApiQuery, A
 import { RegisterCourierDto } from './dto/register-courier.dto';
 import { UpdateCourierDto } from './dto/update-courier.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
+import { SubmitWeighingDto } from '../orders/dto/submit-weighing.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../upload/upload.service';
 
@@ -126,6 +127,18 @@ export class CouriersController {
     return this.ordersService.transitionOrderStatus(
       id, courier!.id, OrderStatus.WEIGHING, 'Proses penimbangan sampah dimulai',
     );
+  }
+
+  @Post('orders/:id/weigh')
+  @Roles(Role.COURIER)
+  @ApiOperation({ summary: 'Submit waste weights (mutu & residual)' })
+  async weighOrder(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() data: SubmitWeighingDto,
+  ) {
+    const courier = await this.couriersService.getProfile(req.user.userId);
+    return this.ordersService.submitWeighing(id, courier!.id, data);
   }
 
   @Post('orders/:id/pickup')
