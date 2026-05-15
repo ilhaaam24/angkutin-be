@@ -9,7 +9,7 @@ export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: string, createOrderDto: CreateOrderDto): Promise<Order> {
-    const { addressId, wasteItems, scheduleType, scheduledAt, note, aiResultId } = createOrderDto;
+    const { addressId, scheduleType, scheduledAt, note, aiResultId } = createOrderDto;
 
     // 1. Verify address belongs to user
     const address = await this.prisma.address.findFirst({
@@ -20,41 +20,20 @@ export class OrdersService {
       throw new NotFoundException('Address not found or does not belong to user');
     }
 
-    // 2. Process waste items and calculate prices
-    const wasteTypeIds = wasteItems.map((item) => item.wasteTypeId);
-    const wasteTypes = await this.prisma.wasteType.findMany({
-      where: { id: { in: wasteTypeIds } },
-    });
-
-    if (wasteTypes.length !== wasteItems.length) {
-      throw new BadRequestException('One or more waste types are invalid');
-    }
-
-    let totalCredit = 0;
-    const processedWasteItems = wasteItems.map((item) => {
-      const wasteType = wasteTypes.find((wt) => wt.id === item.wasteTypeId);
-      const subtotal = item.weight * wasteType!.unitPrice;
-      totalCredit += subtotal;
-      return {
-        wasteTypeId: item.wasteTypeId,
-        weight: item.weight,
-        price: wasteType!.unitPrice,
-        subtotal,
-      };
-    });
+    // 2. Handle Schedule Logic
+    // If INSTANT, always set scheduledAt to null
+    const finalScheduledAt = scheduleType === 'INSTANT' ? null : (scheduledAt ? new Date(scheduledAt) : null);
 
     // 3. Mock AI Results (Only if NOT provided)
     let aiData: any = null;
     if (!aiResultId) {
-      const totalWeight = wasteItems.reduce((acc, item) => acc + item.weight, 0);
-      const volumeEstimation = totalWeight * 1.2;
-      const recommendedVehicle = totalWeight > 10 ? 'PICKUP' : 'MOTOR';
-      const confidenceScore = 0.85 + Math.random() * 0.1;
+      const volumeEstimation = 5 + Math.random() * 10;
+      const recommendedVehicle = volumeEstimation > 12 ? 'PICKUP' : 'MOTOR';
+      const confidenceScore = 0.90 + Math.random() * 0.08;
       aiData = {
         volumeEstimation,
         recommendedVehicle,
         confidenceScore,
-        objectDetected: { items: wasteTypes.map((w) => w.name) },
       };
     }
 
@@ -65,13 +44,10 @@ export class OrdersService {
           userId,
           addressId,
           scheduleType,
-          scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
+          scheduledAt: finalScheduledAt,
           note,
           status: OrderStatus.CREATED,
-          totalCredit,
-          wasteItems: {
-            create: processedWasteItems,
-          },
+          totalCredit: 0, // Starts at 0 until courier weighs it
           statusHistory: {
             create: {
               status: OrderStatus.CREATED,
@@ -85,7 +61,6 @@ export class OrdersService {
           }),
         },
         include: {
-          wasteItems: true,
           aiResults: true,
           address: true,
         },
@@ -291,23 +266,24 @@ export class OrdersService {
       label: labels[h.status] || h.status,
       timestamp: h.createdAt,
       note: h.note,
-      photoUrl: h.photoUrl,
     }));
   }
 
   async analyzeAndSaveAiResult(data: AiAnalyzeDto): Promise<OrderAiResult> {
-    // Mock AI Analysis Logic
-    const volumeEstimation = 5 + Math.random() * 20; // 5 - 25 units
-    const recommendedVehicle = volumeEstimation > 15 ? 'PICKUP' : 'MOTOR';
-    const confidenceScore = 0.85 + Math.random() * 0.1;
-    const objects = data.manualHint ? data.manualHint.split(',') : ['Plastik', 'Kardus'];
+    // Randomized logic based on manualHint if available
+    let baseVolume = 5;
+    if (data.manualHint?.toLowerCase().includes('banyak')) baseVolume = 15;
+    if (data.manualHint?.toLowerCase().includes('sedikit')) baseVolume = 2;
+
+    const volumeEstimation = baseVolume + Math.random() * 10;
+    const recommendedVehicle = volumeEstimation > 12 ? 'PICKUP' : 'MOTOR';
+    const confidenceScore = 0.90 + Math.random() * 0.08; // Higher confidence for mock
 
     return this.prisma.orderAiResult.create({
       data: {
         volumeEstimation,
         recommendedVehicle,
         confidenceScore,
-        objectDetected: { items: objects.map((o) => o.trim()) },
       },
     });
   }

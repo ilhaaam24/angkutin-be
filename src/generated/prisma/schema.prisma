@@ -200,7 +200,6 @@ model OrderAiResult {
   id                 String  @id @default(uuid()) @db.Uuid
   orderId            String? @map("order_id") @db.Uuid
   volumeEstimation   Float?  @map("volume_estimation")
-  objectDetected     Json?   @map("object_detected")
   recommendedVehicle String? @map("recommended_vehicle")
   confidenceScore    Float?  @map("confidence_score")
 

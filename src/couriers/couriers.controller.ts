@@ -8,6 +8,7 @@ import { Role, OrderStatus } from '../generated/prisma';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { RegisterCourierDto } from './dto/register-courier.dto';
 import { UpdateCourierDto } from './dto/update-courier.dto';
+import { UpdateLocationDto } from './dto/update-location.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../upload/upload.service';
 
@@ -47,6 +48,14 @@ export class CouriersController {
   })
   updateStatus(@Request() req, @Body() data: { isOnline: boolean }) {
     return this.couriersService.updateStatus(req.user.userId, data.isOnline);
+  }
+  
+  @Patch('location')
+  @Roles(Role.COURIER)
+  @ApiOperation({ summary: 'Update general courier GPS location' })
+  @ApiResponse({ status: 200, description: 'Location successfully updated.' })
+  updateGeneralLocation(@Request() req, @Body() data: UpdateLocationDto) {
+    return this.couriersService.updateLocation(req.user.userId, data.latitude, data.longitude);
   }
 
   // --- COURIER ORDER ENDPOINTS ---

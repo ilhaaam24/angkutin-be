@@ -190,7 +190,6 @@ exports.Prisma.OrderAiResultScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   volumeEstimation: 'volumeEstimation',
-  objectDetected: 'objectDetected',
   recommendedVehicle: 'recommendedVehicle',
   confidenceScore: 'confidenceScore'
 };

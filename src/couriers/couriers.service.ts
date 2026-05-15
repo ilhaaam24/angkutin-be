@@ -230,4 +230,17 @@ export class CouriersService {
       data: { vehicleType },
     });
   }
+
+  async updateLocation(userId: string, latitude: number, longitude: number): Promise<Courier> {
+    const courier = await this.prisma.courier.findFirst({ where: { userId } });
+    if (!courier) throw new BadRequestException('Courier record not found');
+
+    return this.prisma.courier.update({
+      where: { id: courier.id },
+      data: {
+        currentLat: latitude,
+        currentLng: longitude,
+      },
+    });
+  }
 }

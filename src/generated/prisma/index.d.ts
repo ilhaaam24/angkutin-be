@@ -9808,7 +9808,6 @@ export namespace Prisma {
     id: number
     orderId: number
     volumeEstimation: number
-    objectDetected: number
     recommendedVehicle: number
     confidenceScore: number
     _all: number
@@ -9845,7 +9844,6 @@ export namespace Prisma {
     id?: true
     orderId?: true
     volumeEstimation?: true
-    objectDetected?: true
     recommendedVehicle?: true
     confidenceScore?: true
     _all?: true
@@ -9941,7 +9939,6 @@ export namespace Prisma {
     id: string
     orderId: string | null
     volumeEstimation: number | null
-    objectDetected: JsonValue | null
     recommendedVehicle: string | null
     confidenceScore: number | null
     _count: OrderAiResultCountAggregateOutputType | null
@@ -9969,7 +9966,6 @@ export namespace Prisma {
     id?: boolean
     orderId?: boolean
     volumeEstimation?: boolean
-    objectDetected?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
@@ -9979,7 +9975,6 @@ export namespace Prisma {
     id?: boolean
     orderId?: boolean
     volumeEstimation?: boolean
-    objectDetected?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
@@ -9989,7 +9984,6 @@ export namespace Prisma {
     id?: boolean
     orderId?: boolean
     volumeEstimation?: boolean
-    objectDetected?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
@@ -9999,12 +9993,11 @@ export namespace Prisma {
     id?: boolean
     orderId?: boolean
     volumeEstimation?: boolean
-    objectDetected?: boolean
     recommendedVehicle?: boolean
     confidenceScore?: boolean
   }
 
-  export type OrderAiResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "volumeEstimation" | "objectDetected" | "recommendedVehicle" | "confidenceScore", ExtArgs["result"]["orderAiResult"]>
+  export type OrderAiResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "volumeEstimation" | "recommendedVehicle" | "confidenceScore", ExtArgs["result"]["orderAiResult"]>
   export type OrderAiResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderAiResult$orderArgs<ExtArgs>
   }
@@ -10024,7 +10017,6 @@ export namespace Prisma {
       id: string
       orderId: string | null
       volumeEstimation: number | null
-      objectDetected: Prisma.JsonValue | null
       recommendedVehicle: string | null
       confidenceScore: number | null
     }, ExtArgs["result"]["orderAiResult"]>
@@ -10454,7 +10446,6 @@ export namespace Prisma {
     readonly id: FieldRef<"OrderAiResult", 'String'>
     readonly orderId: FieldRef<"OrderAiResult", 'String'>
     readonly volumeEstimation: FieldRef<"OrderAiResult", 'Float'>
-    readonly objectDetected: FieldRef<"OrderAiResult", 'Json'>
     readonly recommendedVehicle: FieldRef<"OrderAiResult", 'String'>
     readonly confidenceScore: FieldRef<"OrderAiResult", 'Float'>
   }
@@ -28819,7 +28810,6 @@ export namespace Prisma {
     id: 'id',
     orderId: 'orderId',
     volumeEstimation: 'volumeEstimation',
-    objectDetected: 'objectDetected',
     recommendedVehicle: 'recommendedVehicle',
     confidenceScore: 'confidenceScore'
   };
@@ -29209,20 +29199,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-  /**
    * Reference to a field of type 'WasteCategory'
    */
   export type EnumWasteCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WasteCategory'>
@@ -29303,6 +29279,20 @@ export namespace Prisma {
    * Reference to a field of type 'PaymentStatus[]'
    */
   export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -29827,7 +29817,6 @@ export namespace Prisma {
     id?: UuidFilter<"OrderAiResult"> | string
     orderId?: UuidNullableFilter<"OrderAiResult"> | string | null
     volumeEstimation?: FloatNullableFilter<"OrderAiResult"> | number | null
-    objectDetected?: JsonNullableFilter<"OrderAiResult">
     recommendedVehicle?: StringNullableFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableFilter<"OrderAiResult"> | number | null
     order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
@@ -29837,7 +29826,6 @@ export namespace Prisma {
     id?: SortOrder
     orderId?: SortOrderInput | SortOrder
     volumeEstimation?: SortOrderInput | SortOrder
-    objectDetected?: SortOrderInput | SortOrder
     recommendedVehicle?: SortOrderInput | SortOrder
     confidenceScore?: SortOrderInput | SortOrder
     order?: OrderOrderByWithRelationInput
@@ -29850,7 +29838,6 @@ export namespace Prisma {
     NOT?: OrderAiResultWhereInput | OrderAiResultWhereInput[]
     orderId?: UuidNullableFilter<"OrderAiResult"> | string | null
     volumeEstimation?: FloatNullableFilter<"OrderAiResult"> | number | null
-    objectDetected?: JsonNullableFilter<"OrderAiResult">
     recommendedVehicle?: StringNullableFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableFilter<"OrderAiResult"> | number | null
     order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
@@ -29860,7 +29847,6 @@ export namespace Prisma {
     id?: SortOrder
     orderId?: SortOrderInput | SortOrder
     volumeEstimation?: SortOrderInput | SortOrder
-    objectDetected?: SortOrderInput | SortOrder
     recommendedVehicle?: SortOrderInput | SortOrder
     confidenceScore?: SortOrderInput | SortOrder
     _count?: OrderAiResultCountOrderByAggregateInput
@@ -29877,7 +29863,6 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"OrderAiResult"> | string
     orderId?: UuidNullableWithAggregatesFilter<"OrderAiResult"> | string | null
     volumeEstimation?: FloatNullableWithAggregatesFilter<"OrderAiResult"> | number | null
-    objectDetected?: JsonNullableWithAggregatesFilter<"OrderAiResult">
     recommendedVehicle?: StringNullableWithAggregatesFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableWithAggregatesFilter<"OrderAiResult"> | number | null
   }
@@ -31487,7 +31472,6 @@ export namespace Prisma {
   export type OrderAiResultCreateInput = {
     id?: string
     volumeEstimation?: number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: string | null
     confidenceScore?: number | null
     order?: OrderCreateNestedOneWithoutAiResultsInput
@@ -31497,7 +31481,6 @@ export namespace Prisma {
     id?: string
     orderId?: string | null
     volumeEstimation?: number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: string | null
     confidenceScore?: number | null
   }
@@ -31505,7 +31488,6 @@ export namespace Prisma {
   export type OrderAiResultUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
     order?: OrderUpdateOneWithoutAiResultsNestedInput
@@ -31515,7 +31497,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -31524,7 +31505,6 @@ export namespace Prisma {
     id?: string
     orderId?: string | null
     volumeEstimation?: number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: string | null
     confidenceScore?: number | null
   }
@@ -31532,7 +31512,6 @@ export namespace Prisma {
   export type OrderAiResultUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -31541,7 +31520,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -33378,29 +33356,6 @@ export namespace Prisma {
     photoUrl?: SortOrder
     createdAt?: SortOrder
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type OrderNullableScalarRelationFilter = {
     is?: OrderWhereInput | null
@@ -33411,7 +33366,6 @@ export namespace Prisma {
     id?: SortOrder
     orderId?: SortOrder
     volumeEstimation?: SortOrder
-    objectDetected?: SortOrder
     recommendedVehicle?: SortOrder
     confidenceScore?: SortOrder
   }
@@ -33440,32 +33394,6 @@ export namespace Prisma {
   export type OrderAiResultSumOrderByAggregateInput = {
     volumeEstimation?: SortOrder
     confidenceScore?: SortOrder
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type CourierScalarRelationFilter = {
@@ -33976,6 +33904,29 @@ export namespace Prisma {
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type PaymentScalarRelationFilter = {
     is?: PaymentWhereInput
@@ -34002,6 +33953,32 @@ export namespace Prisma {
     paymentId?: SortOrder
     eventType?: SortOrder
     createdAt?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type OrderReassignmentCountOrderByAggregateInput = {
@@ -36186,29 +36163,6 @@ export namespace Prisma {
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type NestedEnumWasteCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.WasteCategory | EnumWasteCategoryFieldRefInput<$PrismaModel>
@@ -36337,6 +36291,29 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumCancelledByFilter<$PrismaModel = never> = {
@@ -37612,7 +37589,6 @@ export namespace Prisma {
   export type OrderAiResultCreateWithoutOrderInput = {
     id?: string
     volumeEstimation?: number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: string | null
     confidenceScore?: number | null
   }
@@ -37620,7 +37596,6 @@ export namespace Prisma {
   export type OrderAiResultUncheckedCreateWithoutOrderInput = {
     id?: string
     volumeEstimation?: number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: string | null
     confidenceScore?: number | null
   }
@@ -38017,7 +37992,6 @@ export namespace Prisma {
     id?: UuidFilter<"OrderAiResult"> | string
     orderId?: UuidNullableFilter<"OrderAiResult"> | string | null
     volumeEstimation?: FloatNullableFilter<"OrderAiResult"> | number | null
-    objectDetected?: JsonNullableFilter<"OrderAiResult">
     recommendedVehicle?: StringNullableFilter<"OrderAiResult"> | string | null
     confidenceScore?: FloatNullableFilter<"OrderAiResult"> | number | null
   }
@@ -41242,7 +41216,6 @@ export namespace Prisma {
   export type OrderAiResultCreateManyOrderInput = {
     id?: string
     volumeEstimation?: number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: string | null
     confidenceScore?: number | null
   }
@@ -41320,7 +41293,6 @@ export namespace Prisma {
   export type OrderAiResultUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -41328,7 +41300,6 @@ export namespace Prisma {
   export type OrderAiResultUncheckedUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -41336,7 +41307,6 @@ export namespace Prisma {
   export type OrderAiResultUncheckedUpdateManyWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     volumeEstimation?: NullableFloatFieldUpdateOperationsInput | number | null
-    objectDetected?: NullableJsonNullValueInput | InputJsonValue
     recommendedVehicle?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
   }
