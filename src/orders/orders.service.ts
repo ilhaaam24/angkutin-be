@@ -964,8 +964,10 @@ export class OrdersService {
     }
 
     // Generate random weights (simulasi timbangan digital)
-    const mutuWeight = Number((3 + Math.random() * 7).toFixed(2));     // 3-10 kg
-    const residualWeight = Number((1 + Math.random() * 3).toFixed(2)); // 1-4 kg
+    // const mutuWeight = Number((3 + Math.random() * 7).toFixed(2));     // 3-10 kg
+    // const residualWeight = Number((1 + Math.random() * 3).toFixed(2)); // 1-4 kg
+    const mutuWeight = 3;     // 3-10 kg
+    const residualWeight = 7; // 1-4 kg
 
     // Simpan weights di StatusHistory note sebagai JSON (untuk dibaca di step 2)
     const weighingData = JSON.stringify({ mutuWeight, residualWeight });
