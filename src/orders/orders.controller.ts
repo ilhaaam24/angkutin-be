@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, UseGuards, Request, Query } from '@
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AiAnalyzeDto } from './dto/ai-analyze.dto';
+import { PayOrderDto } from './dto/pay-order.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -21,6 +22,23 @@ export class OrdersController {
   @ApiBody({ type: CreateOrderDto })
   create(@Request() req, @Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(req.user.userId, createOrderDto);
+  }
+
+  @Post(':id/pay')
+  @Roles(Role.USER)
+  @ApiOperation({ summary: 'Pay for order (when netTotal < 0)' })
+  async payOrder(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() payOrderDto: PayOrderDto,
+  ) {
+    return this.ordersService.payOrder(id, req.user.userId, payOrderDto);
+  }
+
+  @Get(':id/payment')
+  @ApiOperation({ summary: 'Get payment status for an order' })
+  async getPaymentStatus(@Param('id') id: string) {
+    return this.ordersService.getPaymentStatus(id);
   }
 
   @Post('ai-analyze')

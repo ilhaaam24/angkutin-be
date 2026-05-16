@@ -1,13 +1,20 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { WalletService } from '../wallet/wallet.service';
+import { XenditService } from '../xendit/xendit.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AiAnalyzeDto } from './dto/ai-analyze.dto';
 import { SubmitWeighingDto } from './dto/submit-weighing.dto';
-import { Order, OrderStatus, OrderAiResult, Role, VehicleType, WalletTransactionType, WalletReferenceType, TransactionStatus } from '../generated/prisma';
+import { PayOrderDto, PaymentMethod } from './dto/pay-order.dto';
+import { Order, OrderStatus, OrderAiResult, Role, VehicleType, WalletTransactionType, WalletReferenceType, TransactionStatus, PaymentStatus } from '../generated/prisma';
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private walletService: WalletService,
+    private xenditService: XenditService,
+  ) {}
 
   async create(userId: string, createOrderDto: CreateOrderDto): Promise<Order> {
     const { addressId, scheduleType, scheduledAt, note, aiResultId } = createOrderDto;
@@ -772,10 +779,15 @@ export class OrdersService {
     });
   }
 
-  async submitWeighing(orderId: string, courierId: string, data: SubmitWeighingDto) {
+  async submitWeighing(
+    orderId: string, 
+    courierId: string, 
+    data: SubmitWeighingDto,
+    photoUrl?: string
+  ) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
-      include: { wasteItems: true },
+      include: { wasteItems: true, residuals: true },
     });
 
     if (!order) throw new NotFoundException('Order not found');
@@ -788,19 +800,20 @@ export class OrdersService {
     let mutuItems = data.mutuItems || [];
     let residualWeight = data.residualWeight || 0;
 
-    // AUTO-MOCK LOGIC
-    if (mutuItems.length === 0 && residualWeight === 0) {
+    // AUTO-MOCK/HARDCODE LOGIC
+    if (mutuItems.length === 0 && residualWeight === 0 && !photoUrl) {
       const allMutuTypes = await this.prisma.wasteType.findMany({ where: { category: 'MUTU' } });
       if (allMutuTypes.length > 0) {
+        const randomType = allMutuTypes[Math.floor(Math.random() * allMutuTypes.length)];
         mutuItems = [{
-          wasteTypeId: allMutuTypes[0].id,
-          weight: 5 + Math.random() * 5,
+          wasteTypeId: randomType.id,
+          weight: Number((3 + Math.random() * 7).toFixed(2)),
         }];
       }
-      residualWeight = 1 + Math.random() * 3;
+      residualWeight = Number((1 + Math.random() * 2).toFixed(2));
     }
 
-    const processedItems: any[] = [];
+    const processedMutuItems: any[] = [];
     let totalCredit = 0;
     let totalDebit = 0;
 
@@ -813,41 +826,52 @@ export class OrdersService {
 
       for (const item of mutuItems) {
         const type = mutuTypes.find(t => t.id === item.wasteTypeId);
-        if (type) {
-          const subtotal = item.weight * type.unitPrice;
-          totalCredit += subtotal;
-          processedItems.push({
-            wasteTypeId: item.wasteTypeId,
-            weight: item.weight,
-            price: type.unitPrice,
-            subtotal,
-          });
-        }
-      }
-    }
-
-    // 2. Process Residual
-    if (residualWeight > 0) {
-      const residuType = await this.prisma.wasteType.findFirst({
-        where: { category: 'RESIDU' }
-      });
-
-      if (residuType) {
-        const subtotal = residualWeight * residuType.unitPrice;
-        totalDebit += subtotal;
-        processedItems.push({
-          wasteTypeId: residuType.id,
-          weight: residualWeight,
-          price: residuType.unitPrice,
+        if (!type) throw new BadRequestException(`Jenis sampah mutu dengan ID ${item.wasteTypeId} tidak ditemukan`);
+        
+        const subtotal = item.weight * type.unitPrice;
+        totalCredit += subtotal;
+        processedMutuItems.push({
+          wasteTypeId: item.wasteTypeId,
+          weight: item.weight,
+          price: type.unitPrice,
           subtotal,
         });
       }
     }
 
+    // 2. Process Residual (Save to OrderResidual)
+    let residualData: any = null;
+    if (residualWeight > 0) {
+      const residuType = await this.prisma.wasteType.findFirst({
+        where: { category: 'RESIDU' },
+        orderBy: { createdAt: 'asc' }
+      });
+
+      if (!residuType) {
+        throw new BadRequestException('Kategori sampah RESIDU belum dikonfigurasi di database.');
+      }
+
+      const subtotal = residualWeight * residuType.unitPrice;
+      totalDebit += subtotal;
+      residualData = {
+        weight: residualWeight,
+        pricePerKg: residuType.unitPrice,
+        subtotal,
+        photoUrl: photoUrl || null,
+      };
+    }
+
+    if (processedMutuItems.length === 0 && !residualData) {
+      throw new BadRequestException('Harap masukkan setidaknya satu data timbangan (Mutu atau Residu)');
+    }
+
     const netTotal = totalCredit - totalDebit;
+    const nextStatus = netTotal < 0 ? OrderStatus.WAITING_PAYMENT : OrderStatus.PICKED_UP;
 
     return this.prisma.$transaction(async (tx) => {
+      // Cleanup
       await tx.orderWasteItem.deleteMany({ where: { orderId } });
+      await tx.orderResidual.deleteMany({ where: { orderId } });
 
       const updatedOrder = await tx.order.update({
         where: { id: orderId },
@@ -855,24 +879,168 @@ export class OrdersService {
           totalCredit,
           totalDebit,
           netTotal,
-          status: OrderStatus.PICKED_UP,
+          status: nextStatus,
           wasteItems: {
-            create: processedItems,
+            create: processedMutuItems,
           },
+          residuals: residualData ? {
+            create: residualData,
+          } : undefined,
           statusHistory: {
             create: {
-              status: OrderStatus.PICKED_UP,
-              note: `Penimbangan selesai. Mutu: ${totalCredit}, Residu: ${totalDebit}. Net: ${netTotal}`,
+              status: nextStatus,
+              note: `Triage selesai. Net Total: ${netTotal.toLocaleString()}. Status: ${nextStatus}`,
+              photoUrl: photoUrl,
             },
           },
         },
         include: {
           wasteItems: { include: { wasteType: true } },
+          residuals: true,
           statusHistory: { orderBy: { createdAt: 'desc' }, take: 5 },
         },
       });
 
       return updatedOrder;
     });
+  }
+
+  async payOrder(orderId: string, userId: string, data: PayOrderDto) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!order) throw new NotFoundException('Order not found');
+    if (order.userId !== userId) throw new BadRequestException('Not your order');
+    if (order.status !== OrderStatus.WAITING_PAYMENT) {
+      throw new BadRequestException(`Order is not in WAITING_PAYMENT status (current: ${order.status})`);
+    }
+
+    if (!order.netTotal || order.netTotal >= 0) {
+      throw new BadRequestException('Order does not require payment');
+    }
+
+    const amount = Math.abs(order.netTotal);
+
+    if (data.method === PaymentMethod.WALLET) {
+      await this.walletService.processOrderPayment(
+        userId,
+        orderId,
+        amount,
+        `Pembayaran pesanan #${orderId.slice(0, 8)}`,
+      );
+
+      return this.prisma.$transaction(async (tx) => {
+        // Create Payment record
+        await tx.payment.create({
+          data: {
+            orderId,
+            userId,
+            amount,
+            method: 'WALLET',
+            status: PaymentStatus.PAID,
+            externalId: `PAY-WL-${Date.now()}-${orderId.slice(0, 4)}`,
+            paidAt: new Date(),
+          },
+        });
+
+        // Update Order
+        const updatedOrder = await tx.order.update({
+          where: { id: orderId },
+          data: {
+            status: OrderStatus.PICKED_UP,
+            statusHistory: {
+              create: {
+                status: OrderStatus.PICKED_UP,
+                note: `Pembayaran via Wallet berhasil seharga Rp ${amount.toLocaleString()}`,
+              },
+            },
+          },
+        });
+
+        return updatedOrder;
+      });
+    }
+
+    // --- XENDIT PAYMENT (QRIS, E-WALLET, etc) ---
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const externalId = `INV-${orderId.slice(0, 8)}-${Date.now()}`;
+    const description = `Pembayaran Angkutin Order #${orderId.slice(0, 8)}`;
+
+    const xenditInvoice = await this.xenditService.createInvoice({
+      externalId,
+      amount,
+      payerEmail: user?.email,
+      description,
+    });
+
+    return this.prisma.payment.create({
+      data: {
+        orderId,
+        userId,
+        amount,
+        method: data.method,
+        status: PaymentStatus.PENDING,
+        externalId,
+        gatewayId: xenditInvoice.id,
+        invoiceUrl: xenditInvoice.invoiceUrl,
+        expiredAt: new Date(xenditInvoice.expiryDate),
+      },
+    });
+  }
+
+  async handlePaymentSuccess(externalId: string) {
+    const payment = await this.prisma.payment.findUnique({
+      where: { externalId },
+      include: { order: true },
+    });
+
+    if (!payment) return;
+    if (payment.status === PaymentStatus.PAID) return; // Idempotent
+
+    return this.prisma.$transaction(async (tx) => {
+      // 1. Update Payment
+      await tx.payment.update({
+        where: { id: payment.id },
+        data: {
+          status: PaymentStatus.PAID,
+          paidAt: new Date(),
+        },
+      });
+
+      // 2. Update Order
+      await tx.order.update({
+        where: { id: payment.orderId },
+        data: {
+          status: OrderStatus.PICKED_UP,
+          statusHistory: {
+            create: {
+              status: OrderStatus.PICKED_UP,
+              note: `Pembayaran via Xendit (${payment.method}) berhasil.`,
+            },
+          },
+        },
+      });
+    });
+  }
+
+  async handlePaymentExpired(externalId: string) {
+    await this.prisma.payment.update({
+      where: { externalId },
+      data: { status: PaymentStatus.EXPIRED },
+    });
+  }
+
+  async getPaymentStatus(orderId: string) {
+    const payment = await this.prisma.payment.findFirst({
+      where: { orderId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!payment) {
+      throw new NotFoundException('Payment record not found for this order');
+    }
+
+    return payment;
   }
 }

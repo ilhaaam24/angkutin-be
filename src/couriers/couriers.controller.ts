@@ -131,14 +131,46 @@ export class CouriersController {
 
   @Post('orders/:id/weigh')
   @Roles(Role.COURIER)
-  @ApiOperation({ summary: 'Submit waste weights (mutu & residual)' })
+  @UseInterceptors(FileInterceptor('photo'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Submit waste weights (mutu & residual) with photo' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        mutuItems: { 
+          type: 'string', 
+          description: 'JSON string of mutu items array. Example: [{"wasteTypeId": "...", "weight": 5}]' 
+        },
+        residualWeight: { type: 'number', example: 2.5 },
+        photo: { type: 'string', format: 'binary', description: 'Bukti foto sampah residu' },
+      },
+    },
+  })
   async weighOrder(
     @Request() req,
     @Param('id') id: string,
-    @Body() data: SubmitWeighingDto,
+    @Body() body: any,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
     const courier = await this.couriersService.getProfile(req.user.userId);
-    return this.ordersService.submitWeighing(id, courier!.id, data);
+    
+    // Parse mutuItems if it comes as a string (from form-data)
+    let data: SubmitWeighingDto = body;
+    if (typeof body.mutuItems === 'string') {
+      data = {
+        ...body,
+        mutuItems: JSON.parse(body.mutuItems),
+        residualWeight: body.residualWeight ? Number(body.residualWeight) : undefined
+      };
+    }
+
+    let photoUrl: string | undefined;
+    if (file) {
+      photoUrl = await this.uploadService.uploadImage(file.buffer, 'residuals', 'angkutin_bucket');
+    }
+
+    return this.ordersService.submitWeighing(id, courier!.id, data, photoUrl);
   }
 
   @Post('orders/:id/pickup')

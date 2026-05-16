@@ -181,4 +181,39 @@ export class XenditService {
       return false;
     }
   }
+
+  /**
+   * Create a Xendit Invoice for payments (QRIS, E-Wallet, VA).
+   */
+  async createInvoice(params: {
+    externalId: string;
+    amount: number;
+    payerEmail?: string;
+    description: string;
+    expiryDuration?: number;
+  }) {
+    try {
+      console.log(`[XENDIT] Creating invoice for ${params.externalId}, amount: ${params.amount}`);
+      
+      const response = await this.xenditClient.Invoice.createInvoice({
+        data: {
+          externalId: params.externalId,
+          amount: Math.floor(params.amount),
+          payerEmail: params.payerEmail,
+          description: params.description,
+          invoiceDuration: params.expiryDuration || 86400, // 24 hours
+          currency: 'IDR',
+        },
+      });
+
+      console.log(`[XENDIT] Invoice created: ${response.id}, URL: ${response.invoiceUrl}`);
+      return response;
+    } catch (error: any) {
+      const errorDetails = error.response?.data || error.fullError || error;
+      console.error('[XENDIT] Invoice creation failed:', JSON.stringify(errorDetails, null, 2));
+      throw new InternalServerErrorException(
+        `Gagal membuat invoice pembayaran: ${error?.message || 'Xendit error'}`,
+      );
+    }
+  }
 }
