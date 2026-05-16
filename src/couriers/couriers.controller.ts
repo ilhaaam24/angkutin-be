@@ -87,11 +87,21 @@ export class CouriersController {
 
   @Post('orders/:id/accept')
   @Roles(Role.COURIER)
-  @ApiOperation({ summary: 'Accept order and start heading to pickup location' })
+  @ApiOperation({ summary: 'Accept order and wait for departure' })
   async acceptOrder(@Request() req, @Param('id') id: string) {
     const courier = await this.couriersService.getProfile(req.user.userId);
     return this.ordersService.transitionOrderStatus(
-      id, courier!.id, OrderStatus.ON_GOING, 'Kurir menuju lokasi penjemputan',
+      id, courier!.id, OrderStatus.MATCHED, 'Kurir menyetujui pesanan',
+    );
+  }
+
+  @Post('orders/:id/depart')
+  @Roles(Role.COURIER)
+  @ApiOperation({ summary: 'Courier departs heading to pickup location' })
+  async departOrder(@Request() req, @Param('id') id: string) {
+    const courier = await this.couriersService.getProfile(req.user.userId);
+    return this.ordersService.transitionOrderStatus(
+      id, courier!.id, OrderStatus.ON_GOING, 'Kurir berangkat menuju lokasi',
     );
   }
 
@@ -221,8 +231,8 @@ export class CouriersController {
 
     const courier = await this.couriersService.getProfile(req.user.userId);
     
-    // 1. Upload ke bucket 'waste' folder 'orders'
-    const photoUrl = await this.uploadService.uploadImage(file.buffer, 'orders', 'waste');
+    // 1. Upload ke bucket 'angkutin_bucket' folder 'orders'
+    const photoUrl = await this.uploadService.uploadImage(file.buffer, 'orders', 'angkutin_bucket');
 
     // 2. Transisi status
     return this.ordersService.transitionOrderStatus(

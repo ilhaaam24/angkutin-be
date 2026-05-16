@@ -3356,6 +3356,7 @@ export namespace Prisma {
     resetToken: string | null
     resetTokenExpiresAt: Date | null
     photoUrl: string | null
+    fcmToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3375,6 +3376,7 @@ export namespace Prisma {
     resetToken: string | null
     resetTokenExpiresAt: Date | null
     photoUrl: string | null
+    fcmToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3394,6 +3396,7 @@ export namespace Prisma {
     resetToken: number
     resetTokenExpiresAt: number
     photoUrl: number
+    fcmToken: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3415,6 +3418,7 @@ export namespace Prisma {
     resetToken?: true
     resetTokenExpiresAt?: true
     photoUrl?: true
+    fcmToken?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3434,6 +3438,7 @@ export namespace Prisma {
     resetToken?: true
     resetTokenExpiresAt?: true
     photoUrl?: true
+    fcmToken?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3453,6 +3458,7 @@ export namespace Prisma {
     resetToken?: true
     resetTokenExpiresAt?: true
     photoUrl?: true
+    fcmToken?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3545,6 +3551,7 @@ export namespace Prisma {
     resetToken: string | null
     resetTokenExpiresAt: Date | null
     photoUrl: string | null
+    fcmToken: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -3581,6 +3588,7 @@ export namespace Prisma {
     resetToken?: boolean
     resetTokenExpiresAt?: boolean
     photoUrl?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     addresses?: boolean | User$addressesArgs<ExtArgs>
@@ -3610,6 +3618,7 @@ export namespace Prisma {
     resetToken?: boolean
     resetTokenExpiresAt?: boolean
     photoUrl?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -3629,6 +3638,7 @@ export namespace Prisma {
     resetToken?: boolean
     resetTokenExpiresAt?: boolean
     photoUrl?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -3648,11 +3658,12 @@ export namespace Prisma {
     resetToken?: boolean
     resetTokenExpiresAt?: boolean
     photoUrl?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "status" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "resetToken" | "resetTokenExpiresAt" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "status" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "resetToken" | "resetTokenExpiresAt" | "photoUrl" | "fcmToken" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     addresses?: boolean | User$addressesArgs<ExtArgs>
     couriers?: boolean | User$couriersArgs<ExtArgs>
@@ -3696,6 +3707,7 @@ export namespace Prisma {
       resetToken: string | null
       resetTokenExpiresAt: Date | null
       photoUrl: string | null
+      fcmToken: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -4144,6 +4156,7 @@ export namespace Prisma {
     readonly resetToken: FieldRef<"User", 'String'>
     readonly resetTokenExpiresAt: FieldRef<"User", 'DateTime'>
     readonly photoUrl: FieldRef<"User", 'String'>
+    readonly fcmToken: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -28753,6 +28766,7 @@ export namespace Prisma {
     resetToken: 'resetToken',
     resetTokenExpiresAt: 'resetTokenExpiresAt',
     photoUrl: 'photoUrl',
+    fcmToken: 'fcmToken',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -29359,6 +29373,7 @@ export namespace Prisma {
     resetToken?: StringNullableFilter<"User"> | string | null
     resetTokenExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
     photoUrl?: StringNullableFilter<"User"> | string | null
+    fcmToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     addresses?: AddressListRelationFilter
@@ -29387,6 +29402,7 @@ export namespace Prisma {
     resetToken?: SortOrderInput | SortOrder
     resetTokenExpiresAt?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     addresses?: AddressOrderByRelationAggregateInput
@@ -29418,6 +29434,7 @@ export namespace Prisma {
     resetToken?: StringNullableFilter<"User"> | string | null
     resetTokenExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
     photoUrl?: StringNullableFilter<"User"> | string | null
+    fcmToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     addresses?: AddressListRelationFilter
@@ -29446,6 +29463,7 @@ export namespace Prisma {
     resetToken?: SortOrderInput | SortOrder
     resetTokenExpiresAt?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -29471,6 +29489,7 @@ export namespace Prisma {
     resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     resetTokenExpiresAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     photoUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
+    fcmToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -30955,6 +30974,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -30983,6 +31003,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -31011,6 +31032,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -31039,6 +31061,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -31067,6 +31090,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -31086,6 +31110,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31105,6 +31130,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32812,6 +32838,7 @@ export namespace Prisma {
     resetToken?: SortOrder
     resetTokenExpiresAt?: SortOrder
     photoUrl?: SortOrder
+    fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -32831,6 +32858,7 @@ export namespace Prisma {
     resetToken?: SortOrder
     resetTokenExpiresAt?: SortOrder
     photoUrl?: SortOrder
+    fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -32850,6 +32878,7 @@ export namespace Prisma {
     resetToken?: SortOrder
     resetTokenExpiresAt?: SortOrder
     photoUrl?: SortOrder
+    fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -36965,6 +36994,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     couriers?: CourierCreateNestedManyWithoutUserInput
@@ -36992,6 +37022,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
@@ -37093,6 +37124,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     couriers?: CourierUpdateManyWithoutUserNestedInput
@@ -37120,6 +37152,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
@@ -37163,6 +37196,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -37190,6 +37224,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -37369,6 +37404,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -37396,6 +37432,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -37511,6 +37548,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -37538,6 +37576,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -37889,6 +37928,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -37916,6 +37956,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -38992,6 +39033,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -39019,6 +39061,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -39094,6 +39137,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -39121,6 +39165,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -39227,6 +39272,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -39254,6 +39300,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -39297,6 +39344,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -39324,6 +39372,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -39404,6 +39453,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -39431,6 +39481,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -39557,6 +39608,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -39584,6 +39636,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -40187,6 +40240,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -40214,6 +40268,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -40316,6 +40371,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -40343,6 +40399,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -40370,6 +40427,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -40397,6 +40455,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -40440,6 +40499,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -40467,6 +40527,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -40494,6 +40555,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -40521,6 +40583,7 @@ export namespace Prisma {
     resetToken?: string | null
     resetTokenExpiresAt?: Date | string | null
     photoUrl?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -40564,6 +40627,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -40591,6 +40655,7 @@ export namespace Prisma {
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput

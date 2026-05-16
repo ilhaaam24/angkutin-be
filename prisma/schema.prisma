@@ -100,6 +100,7 @@ model User {
   resetToken          String?    @map("reset_token")
   resetTokenExpiresAt DateTime?  @map("reset_token_expires_at")
   photoUrl     String?    @map("photo_url")
+  fcmToken     String?    @map("fcm_token")
   createdAt    DateTime   @default(now()) @map("created_at")
   updatedAt    DateTime   @updatedAt @map("updated_at")
 

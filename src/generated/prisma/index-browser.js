@@ -135,6 +135,7 @@ exports.Prisma.UserScalarFieldEnum = {
   resetToken: 'resetToken',
   resetTokenExpiresAt: 'resetTokenExpiresAt',
   photoUrl: 'photoUrl',
+  fcmToken: 'fcmToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

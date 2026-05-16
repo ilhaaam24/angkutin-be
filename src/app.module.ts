@@ -9,6 +9,7 @@ import { AddressesModule } from './addresses/addresses.module';
 import { CouriersModule } from './couriers/couriers.module';
 import { WasteTypesModule } from './waste-types/waste-types.module';
 import { OrdersModule } from './orders/orders.module';
+import { NotificationModule } from './notifications/notification.module';
 import { WalletModule } from './wallet/wallet.module';
 import { UploadModule } from './upload/upload.module';
 import { AdminModule } from './admin/admin.module';
@@ -26,6 +27,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     CouriersModule,
     WasteTypesModule,
     OrdersModule,
+    NotificationModule,
     WalletModule,
     UploadModule,
     AdminModule,

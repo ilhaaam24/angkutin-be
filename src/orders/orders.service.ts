@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { WalletService } from '../wallet/wallet.service';
 import { XenditService } from '../xendit/xendit.service';
+import { NotificationService } from '../notifications/notification.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AiAnalyzeDto } from './dto/ai-analyze.dto';
 import { SubmitWeighingDto } from './dto/submit-weighing.dto';
@@ -11,9 +12,10 @@ import { Order, OrderStatus, OrderAiResult, Role, VehicleType, WalletTransaction
 @Injectable()
 export class OrdersService {
   constructor(
-    private prisma: PrismaService,
-    private walletService: WalletService,
-    private xenditService: XenditService,
+    private readonly prisma: PrismaService,
+    private readonly walletService: WalletService,
+    private readonly xenditService: XenditService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async create(userId: string, createOrderDto: CreateOrderDto): Promise<Order> {
@@ -183,8 +185,10 @@ export class OrdersService {
       include: {
         address: true,
         wasteItems: { include: { wasteType: true } },
-        aiResults: true,
-        statusHistory: { orderBy: { createdAt: 'asc' } },
+        residuals: true,
+        payments: { orderBy: { createdAt: 'desc' } },
+        aiResults: { orderBy: { createdAt: 'desc' }, take: 1 },
+        statusHistory: { orderBy: { createdAt: 'desc' } },
         courier: { include: { user: { select: { id: true, name: true, phone: true } } } },
         user: { select: { id: true, name: true, phone: true } },
       },
@@ -280,7 +284,21 @@ export class OrdersService {
         },
       });
 
-      return { message: 'Order successfully cancelled' };
+      // 3. Refund Logic: Jika sudah ada pembayaran PAID, kembalikan ke wallet user
+      const payment = await tx.payment.findFirst({
+        where: { orderId, status: PaymentStatus.PAID },
+      });
+
+      if (payment) {
+        await this.walletService.creditCourierOrder(
+          order.userId,
+          orderId,
+          payment.amount,
+          `Pengembalian dana (refund) pembatalan order #${orderId.slice(0, 8)}`,
+        );
+      }
+
+      return { message: 'Order successfully cancelled and refunded if applicable' };
     });
   }
 
@@ -403,6 +421,28 @@ export class OrdersService {
             },
           });
         });
+
+        // --- TASK N.5: Push Notification to Courier ---
+        try {
+          const weightInfo = order.aiResults[0]?.volumeEstimation 
+            ? `~${order.aiResults[0].volumeEstimation.toFixed(1)}L` 
+            : 'sejumlah';
+            
+          await this.notificationService.sendPushNotification({
+            userId: courier.user_id,
+            title: '🚛 Orderan Baru!',
+            body: `Pickup sampah ${weightInfo} di ${order.address.district || 'lokasi Anda'} (${(courier.distance / 1000).toFixed(1)}km)`,
+            type: 'NEW_ORDER',
+            data: {
+              orderId: orderId,
+              action: 'OPEN_ORDER_DETAIL',
+            },
+          });
+        } catch (error) {
+          // Log error tapi jangan gagalkan proses assignment
+          console.error('Failed to send notification to courier:', error);
+        }
+
         return; 
       }
 
@@ -435,7 +475,7 @@ export class OrdersService {
   /** Valid status transitions */
   private readonly validTransitions: Record<OrderStatus, OrderStatus[]> = {
     [OrderStatus.CREATED]: [OrderStatus.MATCHED, OrderStatus.CANCELLED],
-    [OrderStatus.MATCHED]: [OrderStatus.ON_GOING, OrderStatus.REASSIGNING, OrderStatus.CANCELLED],
+    [OrderStatus.MATCHED]: [OrderStatus.MATCHED, OrderStatus.ON_GOING, OrderStatus.REASSIGNING, OrderStatus.CANCELLED],
     [OrderStatus.ON_GOING]: [OrderStatus.ARRIVED, OrderStatus.CANCELLED],
     [OrderStatus.ARRIVED]: [OrderStatus.WEIGHING, OrderStatus.CANCELLED],
     [OrderStatus.WEIGHING]: [OrderStatus.WAITING_PAYMENT, OrderStatus.PICKED_UP],
@@ -456,6 +496,7 @@ export class OrdersService {
   ) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
+      include: { wasteItems: true },
     });
 
     if (!order) {
@@ -473,7 +514,7 @@ export class OrdersService {
       );
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    const updatedOrder = await this.prisma.$transaction(async (tx) => {
       // 1. Buat history record dulu
       await tx.orderStatusHistory.create({
         data: {
@@ -487,41 +528,40 @@ export class OrdersService {
       // 2. Jika status COMPLETED, proses dompet (wallet)
       if (newStatus === OrderStatus.COMPLETED && order.netTotal !== null) {
         const amount = Math.abs(order.netTotal);
-        const type = order.netTotal >= 0 ? WalletTransactionType.CREDIT : WalletTransactionType.DEBIT;
         const description = order.netTotal >= 0 
           ? `Hasil penjualan sampah - Order #${order.id.slice(0, 8)}` 
           : `Biaya pengangkutan residu - Order #${order.id.slice(0, 8)}`;
 
-        // Cari atau buat wallet
-        let wallet = await tx.wallet.findUnique({ where: { userId: order.userId } });
-        if (!wallet) {
-          wallet = await tx.wallet.create({
-            data: { userId: order.userId, balance: 0 }
-          });
+        if (order.netTotal >= 0) {
+          // User dapat uang
+          await this.walletService.creditCourierOrder(order.userId, order.id, amount, description);
+        } else {
+          // User bayar (biasanya sudah dipotong saat WAITING_PAYMENT)
         }
 
-        // Update saldo wallet
-        const newBalance = type === WalletTransactionType.CREDIT 
-          ? wallet.balance + amount 
-          : wallet.balance - amount;
+        // --- TASK 4.2: Courier Earning (Dynamic) ---
+        if (order.courierId) {
+          const courier = await tx.courier.findUnique({
+            where: { id: order.courierId },
+            include: { user: true }
+          });
+          
+          if (courier) {
+            // 1. Base Fee berdasarkan kendaraan
+            let baseFee = 5000; // Default MOTOR
+            if (courier.vehicleType === VehicleType.PICKUP) baseFee = 15000;
+            if (courier.vehicleType === VehicleType.TRUCK) baseFee = 30000;
 
-        await tx.wallet.update({
-          where: { id: wallet.id },
-          data: { balance: newBalance }
-        });
-
-        // Catat transaksi wallet
-        await tx.walletTransaction.create({
-          data: {
-            walletId: wallet.id,
-            amount: amount,
-            type: type,
-            referenceType: WalletReferenceType.ORDER,
-            referenceId: order.id,
-            status: TransactionStatus.SUCCESS,
-            description: description,
+            // 2. Weight Bonus (Rp 500 / kg sampah MUTU)
+            const totalMutuWeight = order.wasteItems.reduce((acc, item) => acc + item.weight, 0);
+            const weightBonus = Math.round(totalMutuWeight * 500);
+            
+            const totalEarning = baseFee + weightBonus;
+            
+            const courierDescription = `Komisi order #${order.id.slice(0, 8)} (Base ${courier.vehicleType}: ${baseFee.toLocaleString()} + Bonus Berat: ${weightBonus.toLocaleString()})`;
+            await this.walletService.creditCourierOrder(courier.userId, order.id, totalEarning, courierDescription);
           }
-        });
+        }
       }
 
       // 3. Update status order dan ambil data lengkapnya
@@ -544,10 +584,50 @@ export class OrdersService {
               },
             },
           },
-          statusHistory: { orderBy: { createdAt: 'asc' } },
+          statusHistory: { orderBy: { createdAt: 'desc' } },
         },
       });
     });
+
+    // --- TASK N.7: Push Notification to User on Status Update ---
+    try {
+      const userNotificationMap: Partial<Record<OrderStatus, { title: string; body: string }>> = {
+        [OrderStatus.MATCHED]: {
+          title: '✅ Kurir Ditemukan',
+          body: `Kurir telah menyetujui pesanan Anda dan akan segera berangkat.`,
+        },
+        [OrderStatus.ON_GOING]: {
+          title: '🚛 Kurir Berangkat',
+          body: `Kurir sedang menuju lokasi Anda.`,
+        },
+        [OrderStatus.ARRIVED]: {
+          title: '📍 Kurir Tiba',
+          body: `Kurir sudah sampai di lokasi Anda. Silakan siapkan sampah Anda.`,
+        },
+        [OrderStatus.COMPLETED]: {
+          title: '🎉 Pesanan Selesai',
+          body: `Terima kasih! Sampah Anda telah berhasil diproses. Saldo wallet Anda telah terupdate.`,
+        },
+      };
+
+      const notifContent = userNotificationMap[newStatus];
+      if (notifContent) {
+        await this.notificationService.sendPushNotification({
+          userId: order.userId,
+          title: notifContent.title,
+          body: notifContent.body,
+          type: 'ORDER_UPDATE',
+          data: {
+            orderId: orderId,
+            status: newStatus,
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Failed to send status update notification to user:', error);
+    }
+
+    return updatedOrder;
   }
 
   /** List orders assigned to a specific courier */
@@ -868,12 +948,12 @@ export class OrdersService {
     const netTotal = totalCredit - totalDebit;
     const nextStatus = netTotal < 0 ? OrderStatus.WAITING_PAYMENT : OrderStatus.PICKED_UP;
 
-    return this.prisma.$transaction(async (tx) => {
+    const updatedOrder = await this.prisma.$transaction(async (tx) => {
       // Cleanup
       await tx.orderWasteItem.deleteMany({ where: { orderId } });
       await tx.orderResidual.deleteMany({ where: { orderId } });
 
-      const updatedOrder = await tx.order.update({
+      const result = await tx.order.update({
         where: { id: orderId },
         data: {
           totalCredit,
@@ -901,8 +981,33 @@ export class OrdersService {
         },
       });
 
-      return updatedOrder;
+      return result;
     });
+
+    // --- TASK N.7: Notify User after Weighing is Complete ---
+    try {
+      if (nextStatus === OrderStatus.WAITING_PAYMENT) {
+        await this.notificationService.sendPushNotification({
+          userId: order.userId,
+          title: '💰 Pembayaran Diperlukan',
+          body: `Timbangan selesai. Silakan bayar Rp ${Math.abs(netTotal).toLocaleString()} untuk biaya residu agar sampah bisa diangkut.`,
+          type: 'PAYMENT_REQUIRED',
+          data: { orderId: orderId },
+        });
+      } else if (nextStatus === OrderStatus.PICKED_UP) {
+        await this.notificationService.sendPushNotification({
+          userId: order.userId,
+          title: '🚛 Sampah Diangkut',
+          body: `Timbangan selesai. Kurir telah mengangkut sampah Anda.`,
+          type: 'ORDER_UPDATE',
+          data: { orderId: orderId },
+        });
+      }
+    } catch (error) {
+      console.error('Failed to notify user after weighing:', error);
+    }
+
+    return updatedOrder;
   }
 
   async payOrder(orderId: string, userId: string, data: PayOrderDto) {
@@ -930,7 +1035,7 @@ export class OrdersService {
         `Pembayaran pesanan #${orderId.slice(0, 8)}`,
       );
 
-      return this.prisma.$transaction(async (tx) => {
+      const updatedOrder = await this.prisma.$transaction(async (tx) => {
         // Create Payment record
         await tx.payment.create({
           data: {
@@ -960,6 +1065,28 @@ export class OrdersService {
 
         return updatedOrder;
       });
+
+      // --- TASK N.7: Notify Courier about Payment ---
+      if (order.courierId) {
+        try {
+          const courier = await this.prisma.courier.findUnique({
+            where: { id: order.courierId },
+          });
+          if (courier) {
+            await this.notificationService.sendPushNotification({
+              userId: courier.userId,
+              title: '💰 Pembayaran Diterima',
+              body: `User telah membayar Rp ${amount.toLocaleString()}. Silakan lanjutkan pengangkutan.`,
+              type: 'PAYMENT_SUCCESS',
+              data: { orderId: orderId },
+            });
+          }
+        } catch (error) {
+          console.error('Failed to notify courier about payment:', error);
+        }
+      }
+
+      return updatedOrder;
     }
 
     // --- XENDIT PAYMENT (QRIS, E-WALLET, etc) ---
