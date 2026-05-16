@@ -1,0 +1,220 @@
+# Analisis Ulang: Endpoint BE vs Flow Plan (Lengkap)
+
+> Sumber data: **Semua service files di project** + **Endpoint Order & Courier dari screenshot BE**
+
+---
+
+## Semua Endpoint yang Tersedia
+
+### Dari `user.service.ts` (sudah di-fetch)
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `GET` | `/api/users/profile` | Get current user profile |
+| `PATCH` | `/api/users/profile` | Update profile (name, phone) |
+| `POST` | `/api/users/profile-pic` | Upload profile picture |
+| `GET` | `/api/users/sessions` | Get login sessions |
+| `GET` | `/api/users/addresses` | ✅ **Get alamat user** |
+| `POST` | `/api/users/addresses` | ✅ **Tambah alamat baru** |
+| `PATCH` | `/api/users/addresses/{id}` | ✅ **Update alamat** |
+| `DELETE` | `/api/users/addresses/{id}` | ✅ **Hapus alamat** |
+
+### Dari `wallet.service.ts` (sudah di-fetch)
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `GET` | `/api/wallet/balance` | Get saldo wallet |
+| `GET` | `/api/wallet/accounts` | Get bank accounts |
+| `POST` | `/api/wallet/accounts` | Create bank account |
+| `PATCH` | `/api/wallet/accounts/{id}` | Update/set default bank account |
+| `DELETE` | `/api/wallet/accounts/{id}` | Delete bank account |
+| `POST` | `/api/wallet/withdraw` | Withdraw funds |
+| `GET` | `/api/wallet/transactions` | Get transaction history |
+
+### Dari `courier.service.ts` (sudah di-fetch)
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `GET` | `/api/couriers/profile` | Get courier profile |
+| `PATCH` | `/api/couriers/status` | Toggle online/offline |
+
+### Dari Screenshot BE — Orders
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `POST` | `/api/orders` | Create order |
+| `GET` | `/api/orders` | Get all orders (filtered by role) |
+| `POST` | `/api/orders/ai-analyze` | AI scan simulasi (Mock) |
+| `GET` | `/api/orders/{id}` | Get order detail |
+| `GET` | `/api/orders/{id}/timeline` | Get order status timeline |
+| `POST` | `/api/orders/{id}/cancel` | Cancel order (before weighing) |
+| `GET` | `/api/orders/{id}/tracking` | Get courier location (HTTP fallback) |
+| `GET` | `/api/orders/{id}/tracking/history` | Get full tracking history |
+
+### Dari Screenshot BE — Courier Order Actions
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `GET` | `/api/couriers/orders` | Get orders assigned to courier |
+| `GET` | `/api/couriers/available-orders` | Get unassigned orders |
+| `GET` | `/api/couriers/orders/{id}` | Get order detail (courier view) |
+| `POST` | `/api/couriers/orders/{id}/accept` | Accept order |
+| `POST` | `/api/couriers/orders/{id}/reject` | Reject order (triggers reassignment) |
+| `POST` | `/api/couriers/orders/{id}/arrive` | Courier arrived at location |
+| `POST` | `/api/couriers/orders/{id}/start-weighing` | Start weighing |
+| `POST` | `/api/couriers/orders/{id}/pickup` | Waste picked up & loaded |
+| `POST` | `/api/couriers/orders/{id}/deliver` | Start delivery to drop point |
+| `POST` | `/api/couriers/orders/{id}/complete` | Complete order (photo evidence) |
+| `POST` | `/api/couriers/orders/{id}/location` | Update courier GPS (per-order) |
+
+**Total: 38 endpoint tersedia**
+
+---
+
+## Cek Per Tahap Flow
+
+### ✅ Tahap 1: AI Scanner (Simulasi)
+| Kebutuhan | Endpoint | Status |
+|-----------|----------|--------|
+| Foto sampah → AI analisis → volume & rekomendasi kendaraan | `POST /api/orders/ai-analyze` | ✅ | note : objectDetected hapus saja
+
+
+**Verdict: CUKUP ✅**
+
+---
+
+### ✅ Tahap 2: Order Form
+| Kebutuhan | Endpoint | Status |
+|-----------|----------|--------|
+| Load alamat default user | `GET /api/users/addresses` | ✅ |
+| Tambah alamat baru | `POST /api/users/addresses` | ✅ |
+| Edit alamat | `PATCH /api/users/addresses/{id}` | ✅ |
+| Hapus alamat | `DELETE /api/users/addresses/{id}` | ✅ |
+| Submit order | `POST /api/orders` | ✅ |
+
+**Verdict: CUKUP ✅**
+
+---
+
+### ⚠️ Tahap 3: Cari Kurir (PostGIS Matching)
+| Kebutuhan | Endpoint | Status |
+|-----------|----------|--------|
+| Kurir toggle online/offline | `PATCH /api/couriers/status` | ✅ |
+| Kurir lihat available orders | `GET /api/couriers/available-orders` | ✅ |
+| Kurir accept | `POST /api/couriers/orders/{id}/accept` | ✅ |
+| Kurir reject | `POST /api/couriers/orders/{id}/reject` | ✅ |
+| Kurir update GPS global (untuk matching) | — | ⚠️ Lihat catatan |
+
+> [!NOTE]
+> **GPS untuk matching:** Endpoint lokasi yang ada (`/couriers/orders/{id}/location`) butuh orderId. Untuk PostGIS matching, BE perlu tahu lokasi kurir **sebelum** ada order. Kemungkinan BE sudah handle ini melalui:
+> - Lokasi dikirim saat `PATCH /couriers/status` (toggle online + kirim lat/lng)
+> - Atau lewat Socket.IO / Supabase Realtime
+> 
+> **Tanyakan ke BE:** Saat kurir toggle online, apakah body request bisa terima `{ isOnline: true, lat: -7.xx, lng: 112.xx }` untuk set posisi awal? saat ini masih merubah status saja, bukan mengirim lokasi terbaru. jika best practicenya seperti itu maka buat seperti itu saja
+
+**Verdict: CUKUP untuk flow utama, klarifikasi GPS ✅**
+
+---
+
+### ✅ Tahap 4: Pickup & Cancel
+| Kebutuhan | Endpoint | Status |
+|-----------|----------|--------|
+| Kurir menuju lokasi (GPS tracking) | `POST /api/couriers/orders/{id}/location` | ✅ |
+| User tracking real-time (HTTP fallback) | `GET /api/orders/{id}/tracking` | ✅ |
+| Full tracking history | `GET /api/orders/{id}/tracking/history` | ✅ |
+| Cancel order | `POST /api/orders/{id}/cancel` | ✅ |
+| Kurir tiba di lokasi | `POST /api/couriers/orders/{id}/arrive` | ✅ |
+
+**Verdict: CUKUP ✅**
+
+---
+
+### ⚠️ Tahap 5: Timbang (Simulasi)
+| Kebutuhan | Endpoint | Status |
+|-----------|----------|--------|
+| Kurir mulai timbang (trigger simulasi) | `POST /api/couriers/orders/{id}/start-weighing` | ✅ |
+| Kurir submit form triage (jenis mutu, berat residu, foto) | — | ❌ **Tidak ada** |
+| BE hitung net balance (mutu − residu) | — | ❌ Tergantung triage |
+
+> [!WARNING]
+> **Satu-satunya gap di flow timbang.** Setelah `start-weighing` men-trigger simulasi berat, kurir perlu submit:
+> - Jenis sampah mutu (dropdown: Plastik PET, Kardus, Logam, dll) ya ini wajib
+> - Berat residu + foto bukti
+> 
+> Lalu BE hitung: **mutu − residu = net balance** (user untung atau bayar).
+> 
+> **Kemungkinan BE sudah handle:** Bisa jadi `start-weighing` langsung generate semua data (data dummy simulasi) (termasuk klasifikasi) dan tidak butuh input dari kurir. Atau data triage dikirim via body `pickup` endpoint.
+> 
+> **Tanyakan ke BE:** Apa response dari `start-weighing`? Apakah kurir perlu submit data tambahan setelahnya?
+
+**Verdict: KURANG 1 endpoint ❌**
+
+---
+
+### ❌ Tahap 6: Payment (Xendit)
+| Kebutuhan | Endpoint | Status |
+|-----------|----------|--------|
+| Bayar via saldo wallet | — | ❌ |
+| Generate QRIS (Xendit) | — | ❌ |
+| Cek status pembayaran | — | ❌ |
+| Cek saldo wallet (untuk validasi) | `GET /api/wallet/balance` | ✅ |
+
+> [!CAUTION]
+> **Payment endpoint belum ada sama sekali.** Yang dibutuhkan:
+> ```
+> POST /api/orders/{id}/pay          → { method: "WALLET" | "QRIS" }
+> GET  /api/orders/{id}/payment      → Get payment status + QR URL
+> ```
+> Atau terpisah:
+> ```
+> POST /api/payments/wallet          → Bayar via saldo
+> POST /api/payments/qris            → Generate QR Xendit
+> GET  /api/payments/{id}/status     → Polling status
+karena di sini menggunakan maka mungkin bisa ditambah tf dari e wallet(dana, shopeepay, dll ) dan BANK 
+> ```
+
+**Verdict: KURANG — blokir total ❌**
+
+---
+
+### ✅ Tahap 7: Summary & Deliver
+| Kebutuhan | Endpoint | Status |
+|-----------|----------|--------|
+| Kurir pickup (loaded ke kendaraan) | `POST /api/couriers/orders/{id}/pickup` | ✅ |
+| Kurir deliver ke recycling point | `POST /api/couriers/orders/{id}/deliver` | ✅ |
+| Kurir complete (foto evidence) | `POST /api/couriers/orders/{id}/complete` | ✅ |
+| User lihat order detail / summary | `GET /api/orders/{id}` | ✅ |
+| User lihat timeline status | `GET /api/orders/{id}/timeline` | ✅ |
+| User lihat riwayat order | `GET /api/orders` | ✅ |
+| Kurir lihat list order | `GET /api/couriers/orders` | ✅ |
+| Kurir lihat detail order | `GET /api/couriers/orders/{id}` | ✅ |
+
+**Verdict: CUKUP ✅**
+
+---
+
+## Kesimpulan Final
+
+### Yang KURANG (hanya 2 area):
+
+| # | Gap | Endpoint yang Dibutuhkan | Blokir Tahap |
+|---|-----|--------------------------|:---:|
+| 1 | **Triage submission** | `POST /api/orders/{id}/triage` atau kirim via `start-weighing`/`pickup` | Tahap 5 |
+| 2 | **Payment** | `POST /api/orders/{id}/pay` + `GET /api/orders/{id}/payment` | Tahap 6 |
+
+### Yang Perlu Diklarifikasi (bukan blokir):
+
+| # | Pertanyaan | Impact |
+|---|------------|--------|
+| 1 | Saat kurir toggle online, bisa kirim lat/lng untuk PostGIS matching? | Tahap 3 |
+| 2 | Apa response body dari `start-weighing`? Apakah kurir perlu submit data lagi? | Tahap 5 |
+
+### Readiness per Tahap:
+
+```
+✅ Tahap 1: AI Scanner          → SIAP
+✅ Tahap 2: Order Form           → SIAP (alamat sudah ada!)
+✅ Tahap 3: Cari Kurir           → SIAP (klarifikasi GPS minor)
+✅ Tahap 4: Pickup & Cancel      → SIAP
+⚠️ Tahap 5: Timbang             → UI DULU (tanya BE soal triage)
+❌ Tahap 6: Payment              → BLOKIR (butuh endpoint)
+✅ Tahap 7: Summary & Deliver    → SIAP
+```
+
+> [!IMPORTANT]
+> **5 dari 7 tahap sudah SIAP dikerjakan FE sekarang.** Hanya payment yang benar-benar terblokir. Triage mungkin sudah di-handle BE lewat mekanisme lain — perlu konfirmasi.
