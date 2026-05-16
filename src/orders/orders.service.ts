@@ -948,6 +948,68 @@ export class OrdersService {
     });
   }
 
+  // ==========================================
+  // Step 1: Start Weighing — Auto-generate random weights
+  // ==========================================
+  async startWeighing(orderId: string, courierId: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!order) throw new NotFoundException('Order not found');
+    if (order.courierId !== courierId) throw new BadRequestException('Order is not assigned to you');
+
+    if (order.status !== OrderStatus.ARRIVED && order.status !== OrderStatus.WEIGHING) {
+      throw new BadRequestException(`Cannot start weighing in ${order.status} status`);
+    }
+
+    // Generate random weights (simulasi timbangan digital)
+    const mutuWeight = Number((3 + Math.random() * 7).toFixed(2));     // 3-10 kg
+    const residualWeight = Number((1 + Math.random() * 3).toFixed(2)); // 1-4 kg
+
+    // Simpan weights di StatusHistory note sebagai JSON (untuk dibaca di step 2)
+    const weighingData = JSON.stringify({ mutuWeight, residualWeight });
+
+    const updatedOrder = await this.prisma.$transaction(async (tx) => {
+      // Cleanup data timbangan sebelumnya (jika ada re-weigh)
+      await tx.orderWasteItem.deleteMany({ where: { orderId } });
+      await tx.orderResidual.deleteMany({ where: { orderId } });
+
+      await tx.orderStatusHistory.create({
+        data: {
+          orderId,
+          status: OrderStatus.WEIGHING,
+          note: weighingData,
+        },
+      });
+
+      return tx.order.update({
+        where: { id: orderId },
+        data: {
+          status: OrderStatus.WEIGHING,
+          // Reset totals karena belum final
+          totalCredit: null,
+          totalDebit: null,
+          netTotal: null,
+        },
+      });
+    });
+
+    return {
+      orderId: updatedOrder.id,
+      status: updatedOrder.status,
+      weighing: {
+        mutuWeight,
+        residualWeight,
+        totalWeight: Number((mutuWeight + residualWeight).toFixed(2)),
+        message: 'Berat berhasil diukur. Silakan pilih jenis sampah mutu dan upload foto, lalu tekan Submit.',
+      },
+    };
+  }
+
+  // ==========================================
+  // Step 2: Submit Weighing — Kurir pilih jenis mutu + upload foto
+  // ==========================================
   async submitWeighing(
     orderId: string, 
     courierId: string, 
@@ -962,78 +1024,76 @@ export class OrdersService {
     if (!order) throw new NotFoundException('Order not found');
     if (order.courierId !== courierId) throw new BadRequestException('Order is not assigned to you');
 
-    if (order.status !== OrderStatus.ARRIVED && order.status !== OrderStatus.WEIGHING) {
-      throw new BadRequestException(`Cannot submit weighing in ${order.status} status`);
+    if (order.status !== OrderStatus.WEIGHING) {
+      throw new BadRequestException(`Cannot submit weighing in ${order.status} status. Harus start-weighing dulu.`);
     }
 
-    let mutuItem = data.mutuItem;
-    let residualWeight = data.residualWeight || 0;
+    // 1. Baca random weights dari StatusHistory (dari step 1)
+    const weighingHistory = await this.prisma.orderStatusHistory.findFirst({
+      where: { orderId, status: OrderStatus.WEIGHING },
+      orderBy: { createdAt: 'desc' },
+    });
 
-    // AUTO-MOCK/HARDCODE LOGIC
-    if (!mutuItem && residualWeight === 0 && !photoUrl) {
-      const allMutuTypes = await this.prisma.wasteType.findMany({ where: { category: 'MUTU' } });
-      if (allMutuTypes.length > 0) {
-        const randomType = allMutuTypes[Math.floor(Math.random() * allMutuTypes.length)];
-        mutuItem = {
-          wasteTypeId: randomType.id,
-          weight: Number((3 + Math.random() * 7).toFixed(2)),
-        };
-      }
-      residualWeight = Number((1 + Math.random() * 2).toFixed(2));
+    if (!weighingHistory || !weighingHistory.note) {
+      throw new BadRequestException('Data timbangan tidak ditemukan. Silakan lakukan start-weighing terlebih dahulu.');
     }
 
-    const processedMutuItems: any[] = [];
-    let totalCredit = 0;
+    let mutuWeight: number;
+    let residualWeight: number;
+    try {
+      const parsed = JSON.parse(weighingHistory.note);
+      mutuWeight = parsed.mutuWeight;
+      residualWeight = parsed.residualWeight;
+    } catch {
+      throw new BadRequestException('Data timbangan rusak. Silakan lakukan start-weighing ulang.');
+    }
+
+    // 2. Lookup jenis sampah mutu yang dipilih kurir
+    const wasteType = await this.prisma.wasteType.findUnique({
+      where: { id: data.wasteTypeId },
+    });
+
+    if (!wasteType) {
+      throw new BadRequestException(`Jenis sampah mutu dengan ID ${data.wasteTypeId} tidak ditemukan`);
+    }
+
+    if (wasteType.category !== 'MUTU') {
+      throw new BadRequestException(`Jenis sampah "${wasteType.name}" bukan kategori MUTU`);
+    }
+
+    // 3. Kalkulasi mutu
+    const mutuSubtotal = mutuWeight * wasteType.unitPrice;
+    const totalCredit = mutuSubtotal;
+
+    // 4. Kalkulasi residu
     let totalDebit = 0;
-
-    // 1. Process Mutu Item
-    if (mutuItem) {
-      const type = await this.prisma.wasteType.findUnique({
-        where: { id: mutuItem.wasteTypeId }
-      });
-
-      if (!type) throw new BadRequestException(`Jenis sampah mutu dengan ID ${mutuItem.wasteTypeId} tidak ditemukan`);
-      
-      const subtotal = mutuItem.weight * type.unitPrice;
-      totalCredit = subtotal;
-      processedMutuItems.push({
-        wasteTypeId: mutuItem.wasteTypeId,
-        weight: mutuItem.weight,
-        price: type.unitPrice,
-        subtotal,
-      });
-    }
-
-    // 2. Process Residual (Save to OrderResidual)
     let residualData: any = null;
+
     if (residualWeight > 0) {
       const residuType = await this.prisma.wasteType.findFirst({
         where: { category: 'RESIDU' },
-        orderBy: { createdAt: 'asc' }
+        orderBy: { createdAt: 'asc' },
       });
 
       if (!residuType) {
         throw new BadRequestException('Kategori sampah RESIDU belum dikonfigurasi di database.');
       }
 
-      const subtotal = residualWeight * residuType.unitPrice;
-      totalDebit += subtotal;
+      const residuSubtotal = residualWeight * residuType.unitPrice;
+      totalDebit = residuSubtotal;
       residualData = {
         weight: residualWeight,
         pricePerKg: residuType.unitPrice,
-        subtotal,
+        subtotal: residuSubtotal,
         photoUrl: photoUrl || null,
       };
     }
 
-    if (processedMutuItems.length === 0 && !residualData) {
-      throw new BadRequestException('Harap masukkan setidaknya satu data timbangan (Mutu atau Residu)');
-    }
-
     const netTotal = totalCredit - totalDebit;
 
+    // 5. Simpan ke database
     const updatedOrder = await this.prisma.$transaction(async (tx) => {
-      // Cleanup
+      // Cleanup (in case re-submit)
       await tx.orderWasteItem.deleteMany({ where: { orderId } });
       await tx.orderResidual.deleteMany({ where: { orderId } });
 
@@ -1045,7 +1105,12 @@ export class OrdersService {
           netTotal,
           status: OrderStatus.WEIGHING,
           wasteItems: {
-            create: processedMutuItems,
+            create: {
+              wasteTypeId: wasteType.id,
+              weight: mutuWeight,
+              price: wasteType.unitPrice,
+              subtotal: mutuSubtotal,
+            },
           },
           residuals: residualData ? {
             create: residualData,
@@ -1053,7 +1118,7 @@ export class OrdersService {
           statusHistory: {
             create: {
               status: OrderStatus.WEIGHING,
-              note: `Timbangan selesai. Mutu: Rp ${totalCredit.toLocaleString()}, Residu: Rp ${totalDebit.toLocaleString()}, Net: Rp ${netTotal.toLocaleString()}. Menunggu konfirmasi user.`,
+              note: `Kurir submit timbangan. ${wasteType.name}: ${mutuWeight}kg (Rp ${mutuSubtotal.toLocaleString()}), Residu: ${residualWeight}kg (Rp ${totalDebit.toLocaleString()}), Net: Rp ${netTotal.toLocaleString()}. Menunggu konfirmasi user.`,
               photoUrl: photoUrl,
             },
           },
@@ -1068,7 +1133,7 @@ export class OrdersService {
       return result;
     });
 
-    // Notify User: Timbangan selesai, silakan review & submit
+    // 6. Notify User: Timbangan selesai, silakan review & submit
     try {
       const formattedNet = `Rp ${Math.abs(netTotal).toLocaleString()}`;
       const summaryMsg = netTotal >= 0

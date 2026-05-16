@@ -129,30 +129,30 @@ export class CouriersController {
 
   @Post('orders/:id/start-weighing')
   @Roles(Role.COURIER)
-  @ApiOperation({ summary: 'Start weighing waste' })
+  @ApiOperation({ summary: 'Start weighing waste (auto-generates random weights)' })
+  @ApiResponse({ status: 200, description: 'Random weights generated. Returns mutuWeight and residualWeight.' })
   async startWeighing(@Request() req, @Param('id') id: string) {
     const courier = await this.couriersService.getProfile(req.user.userId);
-    return this.ordersService.transitionOrderStatus(
-      id, courier!.id, OrderStatus.WEIGHING, 'Proses penimbangan sampah dimulai',
-    );
+    return this.ordersService.startWeighing(id, courier!.id);
   }
 
   @Post('orders/:id/weigh')
   @Roles(Role.COURIER)
   @UseInterceptors(FileInterceptor('photo'))
   @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Submit waste weights (mutu & residual) with photo' })
+  @ApiOperation({ summary: 'Submit waste type selection and photo (weights auto-generated from start-weighing)' })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        mutuItem: { 
+        wasteTypeId: { 
           type: 'string', 
-          description: 'JSON string of mutu item object. Example: {"wasteTypeId": "...", "weight": 5}' 
+          description: 'UUID jenis sampah MUTU yang dipilih kurir. Dapatkan daftar dari GET /waste-types',
+          example: 'uuid-waste-type-id',
         },
-        residualWeight: { type: 'number', example: 2.5 },
-        photo: { type: 'string', format: 'binary', description: 'Bukti foto sampah residu' },
+        photo: { type: 'string', format: 'binary', description: 'Bukti foto sampah' },
       },
+      required: ['wasteTypeId'],
     },
   })
   async weighOrder(
@@ -163,15 +163,9 @@ export class CouriersController {
   ) {
     const courier = await this.couriersService.getProfile(req.user.userId);
     
-    // Parse mutuItem if it comes as a string (from form-data)
-    let data: SubmitWeighingDto = body;
-    if (typeof body.mutuItem === 'string') {
-      data = {
-        ...body,
-        mutuItem: JSON.parse(body.mutuItem),
-        residualWeight: body.residualWeight ? Number(body.residualWeight) : undefined
-      };
-    }
+    const data: SubmitWeighingDto = {
+      wasteTypeId: body.wasteTypeId,
+    };
 
     let photoUrl: string | undefined;
     if (file) {
