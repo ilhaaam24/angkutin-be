@@ -78,16 +78,6 @@ export class OrdersController {
     return this.ordersService.getWeighingSummary(id, req.user.userId, req.user.role);
   }
 
-  @Post(':id/confirm-weighing')
-  @Roles(Role.USER)
-  @ApiOperation({ summary: 'User confirms weighing result to proceed (submit)' })
-  @ApiResponse({ status: 200, description: 'Weighing confirmed. Order proceeds to PICKED_UP or WAITING_PAYMENT.' })
-  @ApiResponse({ status: 400, description: 'Order not in WEIGHING status or no weighing data.' })
-  @ApiResponse({ status: 404, description: 'Order not found.' })
-  confirmWeighing(@Request() req, @Param('id') id: string) {
-    return this.ordersService.confirmWeighing(id, req.user.userId);
-  }
-
   @Get(':id/timeline')
   @ApiOperation({ summary: 'Get order status timeline' })
   @ApiResponse({ status: 200, description: 'Return order status history with labels.' })

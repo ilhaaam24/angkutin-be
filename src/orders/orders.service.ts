@@ -995,6 +995,19 @@ export class OrdersService {
       });
     });
 
+    // Ambil daftar jenis mutu + harga residu untuk FE kalkulasi
+    const mutuTypes = await this.prisma.wasteType.findMany({
+      where: { category: 'MUTU' },
+      select: { id: true, name: true, unitPrice: true },
+      orderBy: { name: 'asc' },
+    });
+
+    const residuType = await this.prisma.wasteType.findFirst({
+      where: { category: 'RESIDU' },
+      select: { id: true, name: true, unitPrice: true },
+      orderBy: { createdAt: 'asc' },
+    });
+
     return {
       orderId: updatedOrder.id,
       status: updatedOrder.status,
@@ -1002,8 +1015,21 @@ export class OrdersService {
         mutuWeight,
         residualWeight,
         totalWeight: Number((mutuWeight + residualWeight).toFixed(2)),
-        message: 'Berat berhasil diukur. Silakan pilih jenis sampah mutu dan upload foto, lalu tekan Submit.',
       },
+      wasteTypes: mutuTypes.map(t => ({
+        id: t.id,
+        name: t.name,
+        pricePerKg: t.unitPrice,
+        // FE bisa kalkulasi: mutuWeight * pricePerKg
+        estimatedCredit: Number((mutuWeight * t.unitPrice).toFixed(2)),
+        formattedCredit: `Rp ${(mutuWeight * t.unitPrice).toLocaleString()}`,
+      })),
+      residuPricing: residuType ? {
+        pricePerKg: residuType.unitPrice,
+        estimatedDebit: Number((residualWeight * residuType.unitPrice).toFixed(2)),
+        formattedDebit: `Rp ${(residualWeight * residuType.unitPrice).toLocaleString()}`,
+      } : null,
+      message: 'Berat berhasil diukur. Pilih jenis sampah mutu dan upload foto, lalu tekan Submit.',
     };
   }
 
@@ -1090,8 +1116,9 @@ export class OrdersService {
     }
 
     const netTotal = totalCredit - totalDebit;
+    const nextStatus = netTotal < 0 ? OrderStatus.WAITING_PAYMENT : OrderStatus.PICKED_UP;
 
-    // 5. Simpan ke database
+    // 5. Simpan ke database + auto-transition
     const updatedOrder = await this.prisma.$transaction(async (tx) => {
       // Cleanup (in case re-submit)
       await tx.orderWasteItem.deleteMany({ where: { orderId } });
@@ -1103,7 +1130,7 @@ export class OrdersService {
           totalCredit,
           totalDebit,
           netTotal,
-          status: OrderStatus.WEIGHING,
+          status: nextStatus,
           wasteItems: {
             create: {
               wasteTypeId: wasteType.id,
@@ -1117,8 +1144,8 @@ export class OrdersService {
           } : undefined,
           statusHistory: {
             create: {
-              status: OrderStatus.WEIGHING,
-              note: `Kurir submit timbangan. ${wasteType.name}: ${mutuWeight}kg (Rp ${mutuSubtotal.toLocaleString()}), Residu: ${residualWeight}kg (Rp ${totalDebit.toLocaleString()}), Net: Rp ${netTotal.toLocaleString()}. Menunggu konfirmasi user.`,
+              status: nextStatus,
+              note: `Timbangan selesai. ${wasteType.name}: ${mutuWeight}kg (Rp ${mutuSubtotal.toLocaleString()}), Residu: ${residualWeight}kg (Rp ${totalDebit.toLocaleString()}), Net: Rp ${netTotal.toLocaleString()}.`,
               photoUrl: photoUrl,
             },
           },
@@ -1133,20 +1160,25 @@ export class OrdersService {
       return result;
     });
 
-    // 6. Notify User: Timbangan selesai, silakan review & submit
+    // 6. Notify User berdasarkan hasil
     try {
-      const formattedNet = `Rp ${Math.abs(netTotal).toLocaleString()}`;
-      const summaryMsg = netTotal >= 0
-        ? `Anda akan menerima ${formattedNet}. Silakan cek dan submit untuk melanjutkan.`
-        : `Biaya residu ${formattedNet}. Silakan cek dan submit untuk melanjutkan.`;
-
-      await this.notificationService.sendPushNotification({
-        userId: order.userId,
-        title: '⚖️ Timbangan Selesai',
-        body: summaryMsg,
-        type: 'WEIGHING_COMPLETE',
-        data: { orderId: orderId },
-      });
+      if (nextStatus === OrderStatus.WAITING_PAYMENT) {
+        await this.notificationService.sendPushNotification({
+          userId: order.userId,
+          title: '💰 Pembayaran Diperlukan',
+          body: `Biaya residu Rp ${Math.abs(netTotal).toLocaleString()}. Silakan lakukan pembayaran untuk melanjutkan pengangkutan.`,
+          type: 'PAYMENT_REQUIRED',
+          data: { orderId, netTotal: String(netTotal), status: nextStatus },
+        });
+      } else {
+        await this.notificationService.sendPushNotification({
+          userId: order.userId,
+          title: '🚛 Sampah Diangkut',
+          body: `Timbangan selesai! Anda menerima Rp ${netTotal.toLocaleString()}. Sampah sedang diangkut kurir.`,
+          type: 'ORDER_UPDATE',
+          data: { orderId, netTotal: String(netTotal), status: nextStatus },
+        });
+      }
     } catch (error) {
       console.error('Failed to notify user after weighing:', error);
     }
@@ -1287,82 +1319,6 @@ export class OrdersService {
     };
   }
 
-  async confirmWeighing(orderId: string, userId: string) {
-    const order = await this.prisma.order.findFirst({
-      where: { id: orderId, userId },
-      include: { wasteItems: true, residuals: true },
-    });
-
-    if (!order) {
-      throw new NotFoundException(`Order with ID ${orderId} not found`);
-    }
-
-    if (order.status !== OrderStatus.WEIGHING) {
-      throw new BadRequestException(
-        `Tidak bisa konfirmasi timbangan pada status ${order.status}. Status harus WEIGHING.`,
-      );
-    }
-
-    if (order.wasteItems.length === 0 && order.residuals.length === 0) {
-      throw new BadRequestException(
-        'Data timbangan belum tersedia. Kurir belum menyelesaikan proses penimbangan.',
-      );
-    }
-
-    const netTotal = order.netTotal ?? 0;
-    const nextStatus = netTotal < 0 ? OrderStatus.WAITING_PAYMENT : OrderStatus.PICKED_UP;
-
-    const updatedOrder = await this.prisma.$transaction(async (tx) => {
-      const result = await tx.order.update({
-        where: { id: orderId },
-        data: {
-          status: nextStatus,
-          statusHistory: {
-            create: {
-              status: nextStatus,
-              note: nextStatus === OrderStatus.WAITING_PAYMENT
-                ? `User mengkonfirmasi timbangan. Menunggu pembayaran Rp ${Math.abs(netTotal).toLocaleString()}.`
-                : `User mengkonfirmasi timbangan. Sampah siap diangkut.`,
-            },
-          },
-        },
-        include: {
-          wasteItems: { include: { wasteType: true } },
-          residuals: true,
-          statusHistory: { orderBy: { createdAt: 'desc' }, take: 5 },
-        },
-      });
-
-      return result;
-    });
-
-    // Notify courier bahwa user sudah konfirmasi
-    try {
-      if (order.courierId) {
-        const courier = await this.prisma.courier.findUnique({
-          where: { id: order.courierId },
-        });
-
-        if (courier) {
-          const notifBody = nextStatus === OrderStatus.WAITING_PAYMENT
-            ? 'User telah mengkonfirmasi timbangan. Menunggu pembayaran.'
-            : 'User telah mengkonfirmasi timbangan. Silakan angkut sampah.';
-
-          await this.notificationService.sendPushNotification({
-            userId: courier.userId,
-            title: '✅ Timbangan Dikonfirmasi',
-            body: notifBody,
-            type: 'WEIGHING_CONFIRMED',
-            data: { orderId: orderId, status: nextStatus },
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Failed to notify courier after weighing confirmation:', error);
-    }
-
-    return updatedOrder;
-  }
 
   async payOrder(orderId: string, userId: string, data: PayOrderDto) {
     const order = await this.prisma.order.findUnique({
