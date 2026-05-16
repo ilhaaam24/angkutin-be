@@ -169,7 +169,7 @@ export class CouriersController {
 
     let photoUrl: string | undefined;
     if (file) {
-      photoUrl = await this.uploadService.uploadImage(file.buffer, 'waste', 'angkutin_bucket');
+      photoUrl = await this.uploadService.uploadImage(file.buffer, 'residuals','waste');
     }
 
     return this.ordersService.submitWeighing(id, courier!.id, data, photoUrl);
