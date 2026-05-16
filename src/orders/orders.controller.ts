@@ -69,6 +69,15 @@ export class OrdersController {
     return this.ordersService.findOneByRole(id, req.user.userId, req.user.role);
   }
 
+  @Get(':id/weighing-summary')
+  @ApiOperation({ summary: 'Get weighing summary with financial calculation' })
+  @ApiResponse({ status: 200, description: 'Return weighing breakdown: mutu items, residuals, and net total calculation.' })
+  @ApiResponse({ status: 400, description: 'Weighing data not yet available.' })
+  @ApiResponse({ status: 404, description: 'Order not found.' })
+  getWeighingSummary(@Request() req, @Param('id') id: string) {
+    return this.ordersService.getWeighingSummary(id, req.user.userId, req.user.role);
+  }
+
   @Get(':id/timeline')
   @ApiOperation({ summary: 'Get order status timeline' })
   @ApiResponse({ status: 200, description: 'Return order status history with labels.' })

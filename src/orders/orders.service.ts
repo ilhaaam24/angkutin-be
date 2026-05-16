@@ -1099,6 +1099,139 @@ export class OrdersService {
     return updatedOrder;
   }
 
+  async getWeighingSummary(orderId: string, userId: string, role: string) {
+    const where: any = { id: orderId };
+
+    if (role === Role.COURIER) {
+      const courier = await this.prisma.courier.findFirst({ where: { userId } });
+      if (courier) {
+        where.courierId = courier.id;
+      } else {
+        where.userId = userId;
+      }
+    } else if (role !== Role.ADMIN) {
+      where.userId = userId;
+    }
+
+    const order = await this.prisma.order.findFirst({
+      where,
+      include: {
+        wasteItems: {
+          include: { wasteType: true },
+        },
+        residuals: true,
+        payments: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+        },
+        courier: {
+          include: {
+            user: { select: { id: true, name: true, phone: true } },
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+
+    // Validasi: belum ditimbang
+    const preWeighingStatuses: OrderStatus[] = [
+      OrderStatus.CREATED,
+      OrderStatus.MATCHED,
+      OrderStatus.ON_GOING,
+      OrderStatus.ARRIVED,
+    ];
+
+    if (preWeighingStatuses.includes(order.status)) {
+      throw new BadRequestException(
+        'Data timbangan belum tersedia. Kurir belum menyelesaikan proses penimbangan.',
+      );
+    }
+
+    // --- Kalkulasi Mutu Items ---
+    const mutuItems = order.wasteItems.map((item) => ({
+      id: item.id,
+      wasteTypeName: item.wasteType.name,
+      category: item.wasteType.category,
+      weight: item.weight,
+      pricePerKg: item.price,
+      subtotal: item.subtotal,
+    }));
+
+    const totalMutuWeight = mutuItems.reduce((acc, i) => acc + i.weight, 0);
+    const totalCredit = mutuItems.reduce((acc, i) => acc + i.subtotal, 0);
+
+    // --- Kalkulasi Residuals ---
+    const residuals = order.residuals.map((r) => ({
+      id: r.id,
+      weight: r.weight,
+      pricePerKg: r.pricePerKg,
+      subtotal: r.subtotal,
+      photoUrl: r.photoUrl,
+    }));
+
+    const totalResidualWeight = residuals.reduce((acc, r) => acc + r.weight, 0);
+    const totalDebit = residuals.reduce((acc, r) => acc + r.subtotal, 0);
+
+    // --- Net Total ---
+    const netTotal = totalCredit - totalDebit;
+    const userReceives = netTotal >= 0 ? netTotal : 0;
+    const userPays = netTotal < 0 ? Math.abs(netTotal) : 0;
+    const paymentRequired = netTotal < 0;
+
+    // --- Payment Info ---
+    const latestPayment = order.payments.length > 0 ? order.payments[0] : null;
+    const paymentInfo = latestPayment
+      ? {
+          id: latestPayment.id,
+          method: latestPayment.method,
+          amount: latestPayment.amount,
+          status: latestPayment.status,
+          invoiceUrl: latestPayment.invoiceUrl,
+          paidAt: latestPayment.paidAt,
+        }
+      : null;
+
+    // --- Formatter helper ---
+    const formatRupiah = (amount: number) =>
+      `Rp ${Math.abs(amount).toLocaleString('id-ID')}`;
+
+    return {
+      orderId: order.id,
+      status: order.status,
+      courier: order.courier
+        ? {
+            id: order.courier.id,
+            name: order.courier.user.name,
+            phone: order.courier.user.phone,
+            vehicleType: order.courier.vehicleType,
+          }
+        : null,
+      mutuItems,
+      residuals,
+      summary: {
+        totalMutuWeight: Number(totalMutuWeight.toFixed(2)),
+        totalResidualWeight: Number(totalResidualWeight.toFixed(2)),
+        totalWeight: Number((totalMutuWeight + totalResidualWeight).toFixed(2)),
+        totalCredit,
+        totalDebit,
+        netTotal,
+        userReceives,
+        userPays,
+        formattedCredit: formatRupiah(totalCredit),
+        formattedDebit: formatRupiah(totalDebit),
+        formattedNetTotal: `${netTotal >= 0 ? '+' : '-'} ${formatRupiah(netTotal)}`,
+        formattedUserReceives: formatRupiah(userReceives),
+        formattedUserPays: formatRupiah(userPays),
+        paymentRequired,
+        paymentStatus: latestPayment?.status || null,
+      },
+      payment: paymentInfo,
+    };
+  }
+
   async payOrder(orderId: string, userId: string, data: PayOrderDto) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
