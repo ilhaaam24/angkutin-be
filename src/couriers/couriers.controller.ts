@@ -146,9 +146,9 @@ export class CouriersController {
     schema: {
       type: 'object',
       properties: {
-        mutuItems: { 
+        mutuItem: { 
           type: 'string', 
-          description: 'JSON string of mutu items array. Example: [{"wasteTypeId": "...", "weight": 5}]' 
+          description: 'JSON string of mutu item object. Example: {"wasteTypeId": "...", "weight": 5}' 
         },
         residualWeight: { type: 'number', example: 2.5 },
         photo: { type: 'string', format: 'binary', description: 'Bukti foto sampah residu' },
@@ -163,12 +163,12 @@ export class CouriersController {
   ) {
     const courier = await this.couriersService.getProfile(req.user.userId);
     
-    // Parse mutuItems if it comes as a string (from form-data)
+    // Parse mutuItem if it comes as a string (from form-data)
     let data: SubmitWeighingDto = body;
-    if (typeof body.mutuItems === 'string') {
+    if (typeof body.mutuItem === 'string') {
       data = {
         ...body,
-        mutuItems: JSON.parse(body.mutuItems),
+        mutuItem: JSON.parse(body.mutuItem),
         residualWeight: body.residualWeight ? Number(body.residualWeight) : undefined
       };
     }

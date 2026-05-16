@@ -966,18 +966,18 @@ export class OrdersService {
       throw new BadRequestException(`Cannot submit weighing in ${order.status} status`);
     }
 
-    let mutuItems = data.mutuItems || [];
+    let mutuItem = data.mutuItem;
     let residualWeight = data.residualWeight || 0;
 
     // AUTO-MOCK/HARDCODE LOGIC
-    if (mutuItems.length === 0 && residualWeight === 0 && !photoUrl) {
+    if (!mutuItem && residualWeight === 0 && !photoUrl) {
       const allMutuTypes = await this.prisma.wasteType.findMany({ where: { category: 'MUTU' } });
       if (allMutuTypes.length > 0) {
         const randomType = allMutuTypes[Math.floor(Math.random() * allMutuTypes.length)];
-        mutuItems = [{
+        mutuItem = {
           wasteTypeId: randomType.id,
           weight: Number((3 + Math.random() * 7).toFixed(2)),
-        }];
+        };
       }
       residualWeight = Number((1 + Math.random() * 2).toFixed(2));
     }
@@ -986,26 +986,22 @@ export class OrdersService {
     let totalCredit = 0;
     let totalDebit = 0;
 
-    // 1. Process Mutu Items
-    if (mutuItems.length > 0) {
-      const mutuTypeIds = mutuItems.map(i => i.wasteTypeId);
-      const mutuTypes = await this.prisma.wasteType.findMany({
-        where: { id: { in: mutuTypeIds } }
+    // 1. Process Mutu Item
+    if (mutuItem) {
+      const type = await this.prisma.wasteType.findUnique({
+        where: { id: mutuItem.wasteTypeId }
       });
 
-      for (const item of mutuItems) {
-        const type = mutuTypes.find(t => t.id === item.wasteTypeId);
-        if (!type) throw new BadRequestException(`Jenis sampah mutu dengan ID ${item.wasteTypeId} tidak ditemukan`);
-        
-        const subtotal = item.weight * type.unitPrice;
-        totalCredit += subtotal;
-        processedMutuItems.push({
-          wasteTypeId: item.wasteTypeId,
-          weight: item.weight,
-          price: type.unitPrice,
-          subtotal,
-        });
-      }
+      if (!type) throw new BadRequestException(`Jenis sampah mutu dengan ID ${mutuItem.wasteTypeId} tidak ditemukan`);
+      
+      const subtotal = mutuItem.weight * type.unitPrice;
+      totalCredit = subtotal;
+      processedMutuItems.push({
+        wasteTypeId: mutuItem.wasteTypeId,
+        weight: mutuItem.weight,
+        price: type.unitPrice,
+        subtotal,
+      });
     }
 
     // 2. Process Residual (Save to OrderResidual)

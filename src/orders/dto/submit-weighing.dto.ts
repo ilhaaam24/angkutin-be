@@ -17,15 +17,14 @@ class WeighingItemDto {
 
 export class SubmitWeighingDto {
   @ApiProperty({ 
-    type: [WeighingItemDto], 
-    description: 'Daftar sampah kategori MUTU (Pilih jenis)', 
+    type: WeighingItemDto, 
+    description: 'Data sampah kategori MUTU (Pilih satu jenis)', 
     required: false 
   })
-  @IsArray()
   @IsOptional()
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => WeighingItemDto)
-  mutuItems?: WeighingItemDto[];
+  mutuItem?: WeighingItemDto;
 
   @ApiProperty({ 
     example: 2.5, 
