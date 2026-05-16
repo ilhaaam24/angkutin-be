@@ -90,9 +90,7 @@ export class CouriersController {
   @ApiOperation({ summary: 'Accept order and wait for departure' })
   async acceptOrder(@Request() req, @Param('id') id: string) {
     const courier = await this.couriersService.getProfile(req.user.userId);
-    return this.ordersService.transitionOrderStatus(
-      id, courier!.id, OrderStatus.MATCHED, 'Kurir menyetujui pesanan',
-    );
+    return this.ordersService.acceptOrder(id, courier!.id);
   }
 
   @Post('orders/:id/depart')

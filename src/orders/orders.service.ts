@@ -87,9 +87,10 @@ export class OrdersService {
       return newOrder;
     });
 
-    // 5. Trigger Auto-Assign (Story 3)
-    // We'll implement this method next
-    await this.autoAssignCourier(order.id);
+    // 5. Broadcast to eligible couriers (Gojek-style)
+    this.broadcastToCouriers(order.id).catch(err => 
+      console.error('Broadcast to couriers failed:', err),
+    );
 
     return this.findOne(order.id, userId);
   }
@@ -366,92 +367,82 @@ export class OrdersService {
     });
   }
 
-  async autoAssignCourier(orderId: string) {
+  async broadcastToCouriers(orderId: string) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
       include: { 
         address: true,
-        aiResults: { orderBy: { createdAt: 'desc' }, take: 1 }
+        aiResults: { orderBy: { createdAt: 'desc' }, take: 1 },
+        user: { select: { name: true } },
       },
     });
 
     if (!order || !order.address.latitude || !order.address.longitude) return;
 
     const { latitude, longitude } = order.address;
-    const radii = [2000, 5000]; // 2km dan 5km
+    const radii = [3000, 5000]; // 3km lalu 5km
+
+    // Tentukan filter kendaraan dari rekomendasi AI
+    const recommendedVehicle = order.aiResults[0]?.recommendedVehicle || null;
+    const vehicleFilter = recommendedVehicle 
+      ? `AND c.vehicle_type = '${recommendedVehicle}'` 
+      : '';
 
     for (let i = 0; i < radii.length; i++) {
       const radius = radii[i];
-      
-      // Pencarian kurir terdekat yang Online via PostGIS
-      const couriers: any[] = await this.prisma.$queryRaw`
-        SELECT c.id, c.user_id,
+
+      // Cari SEMUA kurir eligible (online + dalam radius + kendaraan cocok)
+      const couriers: any[] = await this.prisma.$queryRawUnsafe(`
+        SELECT c.id, c.user_id, c.vehicle_type,
           ST_Distance(
             ST_SetSRID(ST_MakePoint(CAST(c.current_lng AS float8), CAST(c.current_lat AS float8)), 4326)::geography,
-            ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography
+            ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
           ) as distance
         FROM couriers c
         WHERE c.is_online = true
         AND ST_DWithin(
           ST_SetSRID(ST_MakePoint(CAST(c.current_lng AS float8), CAST(c.current_lat AS float8)), 4326)::geography,
-          ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography,
-          ${radius}
+          ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
+          $3
         )
+        ${vehicleFilter}
         ORDER BY distance ASC
-        LIMIT 1
-      `;
+      `, Number(longitude), Number(latitude), radius);
 
       if (couriers.length > 0) {
-        const courier = couriers[0];
-        
-        await this.prisma.$transaction(async (tx) => {
-          await tx.order.update({
-            where: { id: orderId },
-            data: {
-              courierId: courier.id,
-              status: OrderStatus.MATCHED,
-            },
-          });
+        // Kirim notifikasi ke SEMUA kurir (broadcast)
+        const weightInfo = order.aiResults[0]?.volumeEstimation 
+          ? `~${order.aiResults[0].volumeEstimation.toFixed(1)}L` 
+          : 'sejumlah';
 
-          await tx.orderStatusHistory.create({
-            data: {
-              orderId,
-              status: OrderStatus.MATCHED,
-              note: `Kurir ditemukan dalam radius ${radius/1000}km`,
-            },
-          });
-        });
-
-        // --- TASK N.5: Push Notification to Courier ---
-        try {
-          const weightInfo = order.aiResults[0]?.volumeEstimation 
-            ? `~${order.aiResults[0].volumeEstimation.toFixed(1)}L` 
-            : 'sejumlah';
-            
-          await this.notificationService.sendPushNotification({
-            userId: courier.user_id,
-            title: '🚛 Orderan Baru!',
-            body: `Pickup sampah ${weightInfo} di ${order.address.district || 'lokasi Anda'} (${(courier.distance / 1000).toFixed(1)}km)`,
-            type: 'NEW_ORDER',
-            data: {
-              orderId: orderId,
-              action: 'OPEN_ORDER_DETAIL',
-            },
-          });
-        } catch (error) {
-          // Log error tapi jangan gagalkan proses assignment
-          console.error('Failed to send notification to courier:', error);
+        for (const courier of couriers) {
+          try {
+            await this.notificationService.sendPushNotification({
+              userId: courier.user_id,
+              title: '🚛 Orderan Baru!',
+              body: `Pickup sampah ${weightInfo} di ${order.address.district || 'lokasi user'} (${(courier.distance / 1000).toFixed(1)}km)`,
+              type: 'NEW_ORDER',
+              data: {
+                orderId: orderId,
+                action: 'OPEN_ORDER_DETAIL',
+              },
+            });
+          } catch (error) {
+            console.error(`Failed to notify courier ${courier.id}:`, error);
+          }
         }
 
-        return; 
+        console.log(`Broadcasted order ${orderId} to ${couriers.length} courir(s) within ${radius/1000}km`);
+        return; // Selesai, tidak perlu coba radius berikutnya
       }
 
+      // Tunggu sebelum coba radius berikutnya
       if (i < radii.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 10000)); 
+        await new Promise(resolve => setTimeout(resolve, 10000));
       }
     }
 
-    // Auto-cancel if no courier found
+    // Tidak ada kurir ditemukan di semua radius → Auto-cancel
     await this.prisma.$transaction(async (tx) => {
       await tx.order.update({
         where: { id: orderId },
@@ -466,7 +457,21 @@ export class OrdersService {
         },
       });
     });
+
+    // Notify user bahwa order dibatalkan
+    try {
+      await this.notificationService.sendPushNotification({
+        userId: order.userId,
+        title: '❌ Pesanan Dibatalkan',
+        body: 'Maaf, tidak ada kurir yang tersedia di sekitar lokasi Anda saat ini.',
+        type: 'ORDER_CANCELLED',
+        data: { orderId },
+      });
+    } catch (error) {
+      console.error('Failed to notify user about cancellation:', error);
+    }
   }
+
 
   // ==========================================
   // Story 4: Courier Order Actions
@@ -486,6 +491,88 @@ export class OrdersService {
     [OrderStatus.CANCELLED]: [],
     [OrderStatus.REASSIGNING]: [OrderStatus.MATCHED, OrderStatus.CANCELLED],
   };
+
+  async acceptOrder(orderId: string, courierId: string) {
+    // 1. Ambil order untuk cek status awal
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!order) throw new NotFoundException('Order not found');
+
+    // Jika sudah ada kurir lain (Race Condition protection)
+    if (order.courierId && order.courierId !== courierId) {
+      throw new BadRequestException('Pesanan ini sudah diambil oleh kurir lain');
+    }
+
+    // --- LOGIC INSTANT -> ON_GOING ---
+    const isInstant = order.scheduleType === 'INSTANT';
+    const targetStatus = isInstant ? OrderStatus.ON_GOING : OrderStatus.MATCHED;
+    const historyNote = isInstant 
+      ? 'Kurir menyetujui pesanan (Instant) - Langsung berangkat' 
+      : 'Kurir menyetujui pesanan';
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      // 2. Atomic update: Hanya update jika courierId masih null atau memang milik kurir ini
+      // Menggunakan updateMany untuk bisa memfilter berdasarkan courierId di level DB
+      const updated = await tx.order.updateMany({
+        where: {
+          id: orderId,
+          OR: [
+            { courierId: null },
+            { courierId: courierId }
+          ],
+          status: { in: [OrderStatus.CREATED, OrderStatus.MATCHED] }
+        },
+        data: {
+          courierId: courierId,
+          status: targetStatus,
+        },
+      });
+
+      if (updated.count === 0) {
+        throw new BadRequestException('Gagal mengambil pesanan. Mungkin sudah diambil kurir lain atau status berubah.');
+      }
+
+      // 3. Catat history
+      await tx.orderStatusHistory.create({
+        data: {
+          orderId,
+          status: targetStatus,
+          note: historyNote,
+        },
+      });
+
+      // Ambil data lengkap untuk dikembalikan
+      return tx.order.findUnique({
+        where: { id: orderId },
+        include: {
+          address: true,
+          user: { select: { id: true, name: true, phone: true } },
+          courier: { include: { user: { select: { id: true, name: true, phone: true } } } },
+        },
+      });
+    });
+
+    // Notify user bahwa kurir sudah ditemukan
+    try {
+      const notifBody = isInstant 
+        ? 'Kurir telah menerima pesanan Anda dan sedang menuju lokasi Anda.' 
+        : 'Kurir telah menerima pesanan Anda. Silakan tunggu kurir berangkat.';
+        
+      await this.notificationService.sendPushNotification({
+        userId: order.userId,
+        title: isInstant ? '🚛 Kurir Menuju Lokasi!' : '✅ Kurir Ditemukan!',
+        body: notifBody,
+        type: 'ORDER_UPDATE',
+        data: { orderId, status: targetStatus },
+      });
+    } catch (error) {
+      console.error('Failed to notify user about courier acceptance:', error);
+    }
+
+    return result;
+  }
 
   async transitionOrderStatus(
     orderId: string,
@@ -724,10 +811,12 @@ export class OrdersService {
       });
     });
 
-    // Try to find another courier
-    await this.autoAssignCourier(orderId);
+    // Re-broadcast to eligible couriers
+    this.broadcastToCouriers(orderId).catch(err =>
+      console.error('Re-broadcast to couriers failed:', err),
+    );
 
-    return { message: 'Order rejected, reassigning to another courier' };
+    return { message: 'Order rejected, broadcasting to other couriers' };
   }
 
   // ==========================================
