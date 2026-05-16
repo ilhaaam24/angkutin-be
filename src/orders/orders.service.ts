@@ -997,19 +997,6 @@ export class OrdersService {
       });
     });
 
-    // Ambil daftar jenis mutu + harga residu untuk FE kalkulasi
-    const mutuTypes = await this.prisma.wasteType.findMany({
-      where: { category: 'MUTU' },
-      select: { id: true, name: true, unitPrice: true },
-      orderBy: { name: 'asc' },
-    });
-
-    const residuType = await this.prisma.wasteType.findFirst({
-      where: { category: 'RESIDU' },
-      select: { id: true, name: true, unitPrice: true },
-      orderBy: { createdAt: 'asc' },
-    });
-
     return {
       orderId: updatedOrder.id,
       status: updatedOrder.status,
@@ -1018,19 +1005,7 @@ export class OrdersService {
         residualWeight,
         totalWeight: Number((mutuWeight + residualWeight).toFixed(2)),
       },
-      wasteTypes: mutuTypes.map(t => ({
-        id: t.id,
-        name: t.name,
-        pricePerKg: t.unitPrice,
-        // FE bisa kalkulasi: mutuWeight * pricePerKg
-        estimatedCredit: Number((mutuWeight * t.unitPrice).toFixed(2)),
-        formattedCredit: `Rp ${(mutuWeight * t.unitPrice).toLocaleString()}`,
-      })),
-      residuPricing: residuType ? {
-        pricePerKg: residuType.unitPrice,
-        estimatedDebit: Number((residualWeight * residuType.unitPrice).toFixed(2)),
-        formattedDebit: `Rp ${(residualWeight * residuType.unitPrice).toLocaleString()}`,
-      } : null,
+     
       message: 'Berat berhasil diukur. Pilih jenis sampah mutu dan upload foto, lalu tekan Submit.',
     };
   }
