@@ -24,6 +24,14 @@ export class OrdersController {
     return this.ordersService.create(req.user.userId, createOrderDto);
   }
 
+  @Post(':id/confirm')
+  @Roles(Role.USER)
+  @ApiOperation({ summary: 'User confirms weighing result' })
+  @ApiResponse({ status: 200, description: 'Weighing confirmed.' })
+  async confirmWeighing(@Request() req, @Param('id') id: string) {
+    return this.ordersService.confirmWeighing(id, req.user.userId);
+  }
+
   @Post(':id/pay')
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Pay for order (when netTotal < 0)' })
