@@ -190,8 +190,8 @@ export class OrdersService {
         payments: { orderBy: { createdAt: 'desc' } },
         aiResults: { orderBy: { createdAt: 'desc' }, take: 1 },
         statusHistory: { orderBy: { createdAt: 'desc' } },
-        courier: { include: { user: { select: { id: true, name: true, phone: true } } } },
-        user: { select: { id: true, name: true, phone: true } },
+        courier: { include: { user: { select: { id: true, name: true, phone: true ,photoUrl: true} } } },
+        user: { select: { id: true, name: true, phone: true ,photoUrl: true} },
       },
     });
 
