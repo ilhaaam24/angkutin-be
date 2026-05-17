@@ -137,7 +137,8 @@ exports.Prisma.UserScalarFieldEnum = {
   photoUrl: 'photoUrl',
   fcmToken: 'fcmToken',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  totalPoints: 'totalPoints'
 };
 
 exports.Prisma.AddressScalarFieldEnum = {
@@ -350,6 +351,16 @@ exports.Prisma.UserPaymentAccountScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PointTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  orderId: 'orderId',
+  points: 'points',
+  mutuWeight: 'mutuWeight',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -475,7 +486,8 @@ exports.Prisma.ModelName = {
   PricingResidual: 'PricingResidual',
   TerminalValidation: 'TerminalValidation',
   Notification: 'Notification',
-  UserPaymentAccount: 'UserPaymentAccount'
+  UserPaymentAccount: 'UserPaymentAccount',
+  PointTransaction: 'PointTransaction'
 };
 
 /**

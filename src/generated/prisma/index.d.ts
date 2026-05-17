@@ -123,6 +123,11 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  * 
  */
 export type UserPaymentAccount = $Result.DefaultSelection<Prisma.$UserPaymentAccountPayload>
+/**
+ * Model PointTransaction
+ * 
+ */
+export type PointTransaction = $Result.DefaultSelection<Prisma.$PointTransactionPayload>
 
 /**
  * Enums
@@ -631,6 +636,16 @@ export class PrismaClient<
     * ```
     */
   get userPaymentAccount(): Prisma.UserPaymentAccountDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pointTransaction`: Exposes CRUD operations for the **PointTransaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PointTransactions
+    * const pointTransactions = await prisma.pointTransaction.findMany()
+    * ```
+    */
+  get pointTransaction(): Prisma.PointTransactionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1086,7 +1101,8 @@ export namespace Prisma {
     PricingResidual: 'PricingResidual',
     TerminalValidation: 'TerminalValidation',
     Notification: 'Notification',
-    UserPaymentAccount: 'UserPaymentAccount'
+    UserPaymentAccount: 'UserPaymentAccount',
+    PointTransaction: 'PointTransaction'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1102,7 +1118,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "address" | "courier" | "order" | "orderStatusHistory" | "orderAiResult" | "orderTrackingLog" | "wasteType" | "orderWasteItem" | "orderResidual" | "wallet" | "walletTransaction" | "withdrawal" | "payment" | "paymentLog" | "orderReassignment" | "orderCancellation" | "pricingWaste" | "pricingResidual" | "terminalValidation" | "notification" | "userPaymentAccount"
+      modelProps: "user" | "address" | "courier" | "order" | "orderStatusHistory" | "orderAiResult" | "orderTrackingLog" | "wasteType" | "orderWasteItem" | "orderResidual" | "wallet" | "walletTransaction" | "withdrawal" | "payment" | "paymentLog" | "orderReassignment" | "orderCancellation" | "pricingWaste" | "pricingResidual" | "terminalValidation" | "notification" | "userPaymentAccount" | "pointTransaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2734,6 +2750,80 @@ export namespace Prisma {
           }
         }
       }
+      PointTransaction: {
+        payload: Prisma.$PointTransactionPayload<ExtArgs>
+        fields: Prisma.PointTransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PointTransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PointTransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.PointTransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PointTransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>
+          }
+          findMany: {
+            args: Prisma.PointTransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>[]
+          }
+          create: {
+            args: Prisma.PointTransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>
+          }
+          createMany: {
+            args: Prisma.PointTransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PointTransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.PointTransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>
+          }
+          update: {
+            args: Prisma.PointTransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PointTransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PointTransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PointTransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.PointTransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointTransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.PointTransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePointTransaction>
+          }
+          groupBy: {
+            args: Prisma.PointTransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PointTransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PointTransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<PointTransactionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2864,6 +2954,7 @@ export namespace Prisma {
     terminalValidation?: TerminalValidationOmit
     notification?: NotificationOmit
     userPaymentAccount?: UserPaymentAccountOmit
+    pointTransaction?: PointTransactionOmit
   }
 
   /* Types for Logging */
@@ -2952,6 +3043,7 @@ export namespace Prisma {
     notifications: number
     scannedValidations: number
     paymentAccounts: number
+    pointTransactions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2963,6 +3055,7 @@ export namespace Prisma {
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     scannedValidations?: boolean | UserCountOutputTypeCountScannedValidationsArgs
     paymentAccounts?: boolean | UserCountOutputTypeCountPaymentAccountsArgs
+    pointTransactions?: boolean | UserCountOutputTypeCountPointTransactionsArgs
   }
 
   // Custom InputTypes
@@ -3030,6 +3123,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPaymentAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserPaymentAccountWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPointTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PointTransactionWhereInput
   }
 
 
@@ -3136,6 +3236,7 @@ export namespace Prisma {
     reassignments: number
     cancellations: number
     validations: number
+    pointTransactions: number
   }
 
   export type OrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3148,6 +3249,7 @@ export namespace Prisma {
     reassignments?: boolean | OrderCountOutputTypeCountReassignmentsArgs
     cancellations?: boolean | OrderCountOutputTypeCountCancellationsArgs
     validations?: boolean | OrderCountOutputTypeCountValidationsArgs
+    pointTransactions?: boolean | OrderCountOutputTypeCountPointTransactionsArgs
   }
 
   // Custom InputTypes
@@ -3222,6 +3324,13 @@ export namespace Prisma {
    */
   export type OrderCountOutputTypeCountValidationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TerminalValidationWhereInput
+  }
+
+  /**
+   * OrderCountOutputType without action
+   */
+  export type OrderCountOutputTypeCountPointTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PointTransactionWhereInput
   }
 
 
@@ -3337,8 +3446,18 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    totalPoints: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    totalPoints: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -3359,6 +3478,7 @@ export namespace Prisma {
     fcmToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    totalPoints: number | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -3379,6 +3499,7 @@ export namespace Prisma {
     fcmToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    totalPoints: number | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -3399,9 +3520,18 @@ export namespace Prisma {
     fcmToken: number
     createdAt: number
     updatedAt: number
+    totalPoints: number
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    totalPoints?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    totalPoints?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -3421,6 +3551,7 @@ export namespace Prisma {
     fcmToken?: true
     createdAt?: true
     updatedAt?: true
+    totalPoints?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -3441,6 +3572,7 @@ export namespace Prisma {
     fcmToken?: true
     createdAt?: true
     updatedAt?: true
+    totalPoints?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -3461,6 +3593,7 @@ export namespace Prisma {
     fcmToken?: true
     createdAt?: true
     updatedAt?: true
+    totalPoints?: true
     _all?: true
   }
 
@@ -3502,6 +3635,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -3532,6 +3677,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -3554,7 +3701,10 @@ export namespace Prisma {
     fcmToken: string | null
     createdAt: Date
     updatedAt: Date
+    totalPoints: number
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -3591,6 +3741,7 @@ export namespace Prisma {
     fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalPoints?: boolean
     addresses?: boolean | User$addressesArgs<ExtArgs>
     couriers?: boolean | User$couriersArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
@@ -3600,6 +3751,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     scannedValidations?: boolean | User$scannedValidationsArgs<ExtArgs>
     paymentAccounts?: boolean | User$paymentAccountsArgs<ExtArgs>
+    pointTransactions?: boolean | User$pointTransactionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3621,6 +3773,7 @@ export namespace Prisma {
     fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalPoints?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3641,6 +3794,7 @@ export namespace Prisma {
     fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalPoints?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -3661,9 +3815,10 @@ export namespace Prisma {
     fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalPoints?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "status" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "resetToken" | "resetTokenExpiresAt" | "photoUrl" | "fcmToken" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "status" | "phone" | "isVerified" | "refreshToken" | "otpCode" | "otpExpiresAt" | "resetToken" | "resetTokenExpiresAt" | "photoUrl" | "fcmToken" | "createdAt" | "updatedAt" | "totalPoints", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     addresses?: boolean | User$addressesArgs<ExtArgs>
     couriers?: boolean | User$couriersArgs<ExtArgs>
@@ -3674,6 +3829,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     scannedValidations?: boolean | User$scannedValidationsArgs<ExtArgs>
     paymentAccounts?: boolean | User$paymentAccountsArgs<ExtArgs>
+    pointTransactions?: boolean | User$pointTransactionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3691,6 +3847,7 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       scannedValidations: Prisma.$TerminalValidationPayload<ExtArgs>[]
       paymentAccounts: Prisma.$UserPaymentAccountPayload<ExtArgs>[]
+      pointTransactions: Prisma.$PointTransactionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3710,6 +3867,7 @@ export namespace Prisma {
       fcmToken: string | null
       createdAt: Date
       updatedAt: Date
+      totalPoints: number
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -4113,6 +4271,7 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     scannedValidations<T extends User$scannedValidationsArgs<ExtArgs> = {}>(args?: Subset<T, User$scannedValidationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TerminalValidationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paymentAccounts<T extends User$paymentAccountsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPaymentAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pointTransactions<T extends User$pointTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$pointTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4159,6 +4318,7 @@ export namespace Prisma {
     readonly fcmToken: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly totalPoints: FieldRef<"User", 'Int'>
   }
     
 
@@ -4760,6 +4920,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserPaymentAccountScalarFieldEnum | UserPaymentAccountScalarFieldEnum[]
+  }
+
+  /**
+   * User.pointTransactions
+   */
+  export type User$pointTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    where?: PointTransactionWhereInput
+    orderBy?: PointTransactionOrderByWithRelationInput | PointTransactionOrderByWithRelationInput[]
+    cursor?: PointTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PointTransactionScalarFieldEnum | PointTransactionScalarFieldEnum[]
   }
 
   /**
@@ -7487,6 +7671,7 @@ export namespace Prisma {
     reassignments?: boolean | Order$reassignmentsArgs<ExtArgs>
     cancellations?: boolean | Order$cancellationsArgs<ExtArgs>
     validations?: boolean | Order$validationsArgs<ExtArgs>
+    pointTransactions?: boolean | Order$pointTransactionsArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -7558,6 +7743,7 @@ export namespace Prisma {
     reassignments?: boolean | Order$reassignmentsArgs<ExtArgs>
     cancellations?: boolean | Order$cancellationsArgs<ExtArgs>
     validations?: boolean | Order$validationsArgs<ExtArgs>
+    pointTransactions?: boolean | Order$pointTransactionsArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7586,6 +7772,7 @@ export namespace Prisma {
       reassignments: Prisma.$OrderReassignmentPayload<ExtArgs>[]
       cancellations: Prisma.$OrderCancellationPayload<ExtArgs>[]
       validations: Prisma.$TerminalValidationPayload<ExtArgs>[]
+      pointTransactions: Prisma.$PointTransactionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8007,6 +8194,7 @@ export namespace Prisma {
     reassignments<T extends Order$reassignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Order$reassignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderReassignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cancellations<T extends Order$cancellationsArgs<ExtArgs> = {}>(args?: Subset<T, Order$cancellationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderCancellationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     validations<T extends Order$validationsArgs<ExtArgs> = {}>(args?: Subset<T, Order$validationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TerminalValidationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pointTransactions<T extends Order$pointTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Order$pointTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8682,6 +8870,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TerminalValidationScalarFieldEnum | TerminalValidationScalarFieldEnum[]
+  }
+
+  /**
+   * Order.pointTransactions
+   */
+  export type Order$pointTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    where?: PointTransactionWhereInput
+    orderBy?: PointTransactionOrderByWithRelationInput | PointTransactionOrderByWithRelationInput[]
+    cursor?: PointTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PointTransactionScalarFieldEnum | PointTransactionScalarFieldEnum[]
   }
 
   /**
@@ -28738,6 +28950,1141 @@ export namespace Prisma {
 
 
   /**
+   * Model PointTransaction
+   */
+
+  export type AggregatePointTransaction = {
+    _count: PointTransactionCountAggregateOutputType | null
+    _avg: PointTransactionAvgAggregateOutputType | null
+    _sum: PointTransactionSumAggregateOutputType | null
+    _min: PointTransactionMinAggregateOutputType | null
+    _max: PointTransactionMaxAggregateOutputType | null
+  }
+
+  export type PointTransactionAvgAggregateOutputType = {
+    points: number | null
+    mutuWeight: number | null
+  }
+
+  export type PointTransactionSumAggregateOutputType = {
+    points: number | null
+    mutuWeight: number | null
+  }
+
+  export type PointTransactionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    orderId: string | null
+    points: number | null
+    mutuWeight: number | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type PointTransactionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    orderId: string | null
+    points: number | null
+    mutuWeight: number | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type PointTransactionCountAggregateOutputType = {
+    id: number
+    userId: number
+    orderId: number
+    points: number
+    mutuWeight: number
+    description: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PointTransactionAvgAggregateInputType = {
+    points?: true
+    mutuWeight?: true
+  }
+
+  export type PointTransactionSumAggregateInputType = {
+    points?: true
+    mutuWeight?: true
+  }
+
+  export type PointTransactionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    orderId?: true
+    points?: true
+    mutuWeight?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type PointTransactionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    orderId?: true
+    points?: true
+    mutuWeight?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type PointTransactionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    orderId?: true
+    points?: true
+    mutuWeight?: true
+    description?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PointTransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PointTransaction to aggregate.
+     */
+    where?: PointTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointTransactions to fetch.
+     */
+    orderBy?: PointTransactionOrderByWithRelationInput | PointTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PointTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PointTransactions
+    **/
+    _count?: true | PointTransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PointTransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PointTransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PointTransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PointTransactionMaxAggregateInputType
+  }
+
+  export type GetPointTransactionAggregateType<T extends PointTransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePointTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePointTransaction[P]>
+      : GetScalarType<T[P], AggregatePointTransaction[P]>
+  }
+
+
+
+
+  export type PointTransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PointTransactionWhereInput
+    orderBy?: PointTransactionOrderByWithAggregationInput | PointTransactionOrderByWithAggregationInput[]
+    by: PointTransactionScalarFieldEnum[] | PointTransactionScalarFieldEnum
+    having?: PointTransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PointTransactionCountAggregateInputType | true
+    _avg?: PointTransactionAvgAggregateInputType
+    _sum?: PointTransactionSumAggregateInputType
+    _min?: PointTransactionMinAggregateInputType
+    _max?: PointTransactionMaxAggregateInputType
+  }
+
+  export type PointTransactionGroupByOutputType = {
+    id: string
+    userId: string
+    orderId: string
+    points: number
+    mutuWeight: number
+    description: string | null
+    createdAt: Date
+    _count: PointTransactionCountAggregateOutputType | null
+    _avg: PointTransactionAvgAggregateOutputType | null
+    _sum: PointTransactionSumAggregateOutputType | null
+    _min: PointTransactionMinAggregateOutputType | null
+    _max: PointTransactionMaxAggregateOutputType | null
+  }
+
+  type GetPointTransactionGroupByPayload<T extends PointTransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PointTransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PointTransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PointTransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], PointTransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PointTransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    orderId?: boolean
+    points?: boolean
+    mutuWeight?: boolean
+    description?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pointTransaction"]>
+
+  export type PointTransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    orderId?: boolean
+    points?: boolean
+    mutuWeight?: boolean
+    description?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pointTransaction"]>
+
+  export type PointTransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    orderId?: boolean
+    points?: boolean
+    mutuWeight?: boolean
+    description?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pointTransaction"]>
+
+  export type PointTransactionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    orderId?: boolean
+    points?: boolean
+    mutuWeight?: boolean
+    description?: boolean
+    createdAt?: boolean
+  }
+
+  export type PointTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "orderId" | "points" | "mutuWeight" | "description" | "createdAt", ExtArgs["result"]["pointTransaction"]>
+  export type PointTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+  }
+  export type PointTransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+  }
+  export type PointTransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+  }
+
+  export type $PointTransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PointTransaction"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      order: Prisma.$OrderPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      orderId: string
+      points: number
+      mutuWeight: number
+      description: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["pointTransaction"]>
+    composites: {}
+  }
+
+  type PointTransactionGetPayload<S extends boolean | null | undefined | PointTransactionDefaultArgs> = $Result.GetResult<Prisma.$PointTransactionPayload, S>
+
+  type PointTransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PointTransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PointTransactionCountAggregateInputType | true
+    }
+
+  export interface PointTransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PointTransaction'], meta: { name: 'PointTransaction' } }
+    /**
+     * Find zero or one PointTransaction that matches the filter.
+     * @param {PointTransactionFindUniqueArgs} args - Arguments to find a PointTransaction
+     * @example
+     * // Get one PointTransaction
+     * const pointTransaction = await prisma.pointTransaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PointTransactionFindUniqueArgs>(args: SelectSubset<T, PointTransactionFindUniqueArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PointTransaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PointTransactionFindUniqueOrThrowArgs} args - Arguments to find a PointTransaction
+     * @example
+     * // Get one PointTransaction
+     * const pointTransaction = await prisma.pointTransaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PointTransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, PointTransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PointTransaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointTransactionFindFirstArgs} args - Arguments to find a PointTransaction
+     * @example
+     * // Get one PointTransaction
+     * const pointTransaction = await prisma.pointTransaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PointTransactionFindFirstArgs>(args?: SelectSubset<T, PointTransactionFindFirstArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PointTransaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointTransactionFindFirstOrThrowArgs} args - Arguments to find a PointTransaction
+     * @example
+     * // Get one PointTransaction
+     * const pointTransaction = await prisma.pointTransaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PointTransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, PointTransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PointTransactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointTransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PointTransactions
+     * const pointTransactions = await prisma.pointTransaction.findMany()
+     * 
+     * // Get first 10 PointTransactions
+     * const pointTransactions = await prisma.pointTransaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pointTransactionWithIdOnly = await prisma.pointTransaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PointTransactionFindManyArgs>(args?: SelectSubset<T, PointTransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PointTransaction.
+     * @param {PointTransactionCreateArgs} args - Arguments to create a PointTransaction.
+     * @example
+     * // Create one PointTransaction
+     * const PointTransaction = await prisma.pointTransaction.create({
+     *   data: {
+     *     // ... data to create a PointTransaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends PointTransactionCreateArgs>(args: SelectSubset<T, PointTransactionCreateArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PointTransactions.
+     * @param {PointTransactionCreateManyArgs} args - Arguments to create many PointTransactions.
+     * @example
+     * // Create many PointTransactions
+     * const pointTransaction = await prisma.pointTransaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PointTransactionCreateManyArgs>(args?: SelectSubset<T, PointTransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PointTransactions and returns the data saved in the database.
+     * @param {PointTransactionCreateManyAndReturnArgs} args - Arguments to create many PointTransactions.
+     * @example
+     * // Create many PointTransactions
+     * const pointTransaction = await prisma.pointTransaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PointTransactions and only return the `id`
+     * const pointTransactionWithIdOnly = await prisma.pointTransaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PointTransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, PointTransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PointTransaction.
+     * @param {PointTransactionDeleteArgs} args - Arguments to delete one PointTransaction.
+     * @example
+     * // Delete one PointTransaction
+     * const PointTransaction = await prisma.pointTransaction.delete({
+     *   where: {
+     *     // ... filter to delete one PointTransaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PointTransactionDeleteArgs>(args: SelectSubset<T, PointTransactionDeleteArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PointTransaction.
+     * @param {PointTransactionUpdateArgs} args - Arguments to update one PointTransaction.
+     * @example
+     * // Update one PointTransaction
+     * const pointTransaction = await prisma.pointTransaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PointTransactionUpdateArgs>(args: SelectSubset<T, PointTransactionUpdateArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PointTransactions.
+     * @param {PointTransactionDeleteManyArgs} args - Arguments to filter PointTransactions to delete.
+     * @example
+     * // Delete a few PointTransactions
+     * const { count } = await prisma.pointTransaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PointTransactionDeleteManyArgs>(args?: SelectSubset<T, PointTransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PointTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointTransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PointTransactions
+     * const pointTransaction = await prisma.pointTransaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PointTransactionUpdateManyArgs>(args: SelectSubset<T, PointTransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PointTransactions and returns the data updated in the database.
+     * @param {PointTransactionUpdateManyAndReturnArgs} args - Arguments to update many PointTransactions.
+     * @example
+     * // Update many PointTransactions
+     * const pointTransaction = await prisma.pointTransaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PointTransactions and only return the `id`
+     * const pointTransactionWithIdOnly = await prisma.pointTransaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PointTransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, PointTransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PointTransaction.
+     * @param {PointTransactionUpsertArgs} args - Arguments to update or create a PointTransaction.
+     * @example
+     * // Update or create a PointTransaction
+     * const pointTransaction = await prisma.pointTransaction.upsert({
+     *   create: {
+     *     // ... data to create a PointTransaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PointTransaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PointTransactionUpsertArgs>(args: SelectSubset<T, PointTransactionUpsertArgs<ExtArgs>>): Prisma__PointTransactionClient<$Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PointTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointTransactionCountArgs} args - Arguments to filter PointTransactions to count.
+     * @example
+     * // Count the number of PointTransactions
+     * const count = await prisma.pointTransaction.count({
+     *   where: {
+     *     // ... the filter for the PointTransactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends PointTransactionCountArgs>(
+      args?: Subset<T, PointTransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PointTransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PointTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointTransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PointTransactionAggregateArgs>(args: Subset<T, PointTransactionAggregateArgs>): Prisma.PrismaPromise<GetPointTransactionAggregateType<T>>
+
+    /**
+     * Group by PointTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointTransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PointTransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PointTransactionGroupByArgs['orderBy'] }
+        : { orderBy?: PointTransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PointTransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPointTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PointTransaction model
+   */
+  readonly fields: PointTransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PointTransaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PointTransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PointTransaction model
+   */
+  interface PointTransactionFieldRefs {
+    readonly id: FieldRef<"PointTransaction", 'String'>
+    readonly userId: FieldRef<"PointTransaction", 'String'>
+    readonly orderId: FieldRef<"PointTransaction", 'String'>
+    readonly points: FieldRef<"PointTransaction", 'Int'>
+    readonly mutuWeight: FieldRef<"PointTransaction", 'Float'>
+    readonly description: FieldRef<"PointTransaction", 'String'>
+    readonly createdAt: FieldRef<"PointTransaction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PointTransaction findUnique
+   */
+  export type PointTransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which PointTransaction to fetch.
+     */
+    where: PointTransactionWhereUniqueInput
+  }
+
+  /**
+   * PointTransaction findUniqueOrThrow
+   */
+  export type PointTransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which PointTransaction to fetch.
+     */
+    where: PointTransactionWhereUniqueInput
+  }
+
+  /**
+   * PointTransaction findFirst
+   */
+  export type PointTransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which PointTransaction to fetch.
+     */
+    where?: PointTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointTransactions to fetch.
+     */
+    orderBy?: PointTransactionOrderByWithRelationInput | PointTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PointTransactions.
+     */
+    cursor?: PointTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PointTransactions.
+     */
+    distinct?: PointTransactionScalarFieldEnum | PointTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * PointTransaction findFirstOrThrow
+   */
+  export type PointTransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which PointTransaction to fetch.
+     */
+    where?: PointTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointTransactions to fetch.
+     */
+    orderBy?: PointTransactionOrderByWithRelationInput | PointTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PointTransactions.
+     */
+    cursor?: PointTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PointTransactions.
+     */
+    distinct?: PointTransactionScalarFieldEnum | PointTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * PointTransaction findMany
+   */
+  export type PointTransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which PointTransactions to fetch.
+     */
+    where?: PointTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointTransactions to fetch.
+     */
+    orderBy?: PointTransactionOrderByWithRelationInput | PointTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PointTransactions.
+     */
+    cursor?: PointTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PointTransactions.
+     */
+    distinct?: PointTransactionScalarFieldEnum | PointTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * PointTransaction create
+   */
+  export type PointTransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PointTransaction.
+     */
+    data: XOR<PointTransactionCreateInput, PointTransactionUncheckedCreateInput>
+  }
+
+  /**
+   * PointTransaction createMany
+   */
+  export type PointTransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PointTransactions.
+     */
+    data: PointTransactionCreateManyInput | PointTransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PointTransaction createManyAndReturn
+   */
+  export type PointTransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many PointTransactions.
+     */
+    data: PointTransactionCreateManyInput | PointTransactionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PointTransaction update
+   */
+  export type PointTransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PointTransaction.
+     */
+    data: XOR<PointTransactionUpdateInput, PointTransactionUncheckedUpdateInput>
+    /**
+     * Choose, which PointTransaction to update.
+     */
+    where: PointTransactionWhereUniqueInput
+  }
+
+  /**
+   * PointTransaction updateMany
+   */
+  export type PointTransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PointTransactions.
+     */
+    data: XOR<PointTransactionUpdateManyMutationInput, PointTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which PointTransactions to update
+     */
+    where?: PointTransactionWhereInput
+    /**
+     * Limit how many PointTransactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PointTransaction updateManyAndReturn
+   */
+  export type PointTransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update PointTransactions.
+     */
+    data: XOR<PointTransactionUpdateManyMutationInput, PointTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which PointTransactions to update
+     */
+    where?: PointTransactionWhereInput
+    /**
+     * Limit how many PointTransactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PointTransaction upsert
+   */
+  export type PointTransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PointTransaction to update in case it exists.
+     */
+    where: PointTransactionWhereUniqueInput
+    /**
+     * In case the PointTransaction found by the `where` argument doesn't exist, create a new PointTransaction with this data.
+     */
+    create: XOR<PointTransactionCreateInput, PointTransactionUncheckedCreateInput>
+    /**
+     * In case the PointTransaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PointTransactionUpdateInput, PointTransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * PointTransaction delete
+   */
+  export type PointTransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+    /**
+     * Filter which PointTransaction to delete.
+     */
+    where: PointTransactionWhereUniqueInput
+  }
+
+  /**
+   * PointTransaction deleteMany
+   */
+  export type PointTransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PointTransactions to delete
+     */
+    where?: PointTransactionWhereInput
+    /**
+     * Limit how many PointTransactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PointTransaction without action
+   */
+  export type PointTransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointTransaction
+     */
+    select?: PointTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointTransaction
+     */
+    omit?: PointTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointTransactionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -28768,7 +30115,8 @@ export namespace Prisma {
     photoUrl: 'photoUrl',
     fcmToken: 'fcmToken',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    totalPoints: 'totalPoints'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -29047,6 +30395,19 @@ export namespace Prisma {
   export type UserPaymentAccountScalarFieldEnum = (typeof UserPaymentAccountScalarFieldEnum)[keyof typeof UserPaymentAccountScalarFieldEnum]
 
 
+  export const PointTransactionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    orderId: 'orderId',
+    points: 'points',
+    mutuWeight: 'mutuWeight',
+    description: 'description',
+    createdAt: 'createdAt'
+  };
+
+  export type PointTransactionScalarFieldEnum = (typeof PointTransactionScalarFieldEnum)[keyof typeof PointTransactionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -29153,6 +30514,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -29336,20 +30711,6 @@ export namespace Prisma {
    */
   export type ListEnumCancelledByFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CancelledBy[]'>
     
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
   /**
    * Deep Input Types
    */
@@ -29376,6 +30737,7 @@ export namespace Prisma {
     fcmToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    totalPoints?: IntFilter<"User"> | number
     addresses?: AddressListRelationFilter
     couriers?: CourierListRelationFilter
     orders?: OrderListRelationFilter
@@ -29385,6 +30747,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     scannedValidations?: TerminalValidationListRelationFilter
     paymentAccounts?: UserPaymentAccountListRelationFilter
+    pointTransactions?: PointTransactionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -29405,6 +30768,7 @@ export namespace Prisma {
     fcmToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalPoints?: SortOrder
     addresses?: AddressOrderByRelationAggregateInput
     couriers?: CourierOrderByRelationAggregateInput
     orders?: OrderOrderByRelationAggregateInput
@@ -29414,6 +30778,7 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     scannedValidations?: TerminalValidationOrderByRelationAggregateInput
     paymentAccounts?: UserPaymentAccountOrderByRelationAggregateInput
+    pointTransactions?: PointTransactionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -29437,6 +30802,7 @@ export namespace Prisma {
     fcmToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    totalPoints?: IntFilter<"User"> | number
     addresses?: AddressListRelationFilter
     couriers?: CourierListRelationFilter
     orders?: OrderListRelationFilter
@@ -29446,6 +30812,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     scannedValidations?: TerminalValidationListRelationFilter
     paymentAccounts?: UserPaymentAccountListRelationFilter
+    pointTransactions?: PointTransactionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -29466,9 +30833,12 @@ export namespace Prisma {
     fcmToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalPoints?: SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -29492,6 +30862,7 @@ export namespace Prisma {
     fcmToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    totalPoints?: IntWithAggregatesFilter<"User"> | number
   }
 
   export type AddressWhereInput = {
@@ -29682,6 +31053,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentListRelationFilter
     cancellations?: OrderCancellationListRelationFilter
     validations?: TerminalValidationListRelationFilter
+    pointTransactions?: PointTransactionListRelationFilter
   }
 
   export type OrderOrderByWithRelationInput = {
@@ -29710,6 +31082,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentOrderByRelationAggregateInput
     cancellations?: OrderCancellationOrderByRelationAggregateInput
     validations?: TerminalValidationOrderByRelationAggregateInput
+    pointTransactions?: PointTransactionOrderByRelationAggregateInput
   }
 
   export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -29741,6 +31114,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentListRelationFilter
     cancellations?: OrderCancellationListRelationFilter
     validations?: TerminalValidationListRelationFilter
+    pointTransactions?: PointTransactionListRelationFilter
   }, "id">
 
   export type OrderOrderByWithAggregationInput = {
@@ -30959,6 +32333,76 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"UserPaymentAccount"> | Date | string
   }
 
+  export type PointTransactionWhereInput = {
+    AND?: PointTransactionWhereInput | PointTransactionWhereInput[]
+    OR?: PointTransactionWhereInput[]
+    NOT?: PointTransactionWhereInput | PointTransactionWhereInput[]
+    id?: UuidFilter<"PointTransaction"> | string
+    userId?: UuidFilter<"PointTransaction"> | string
+    orderId?: UuidFilter<"PointTransaction"> | string
+    points?: IntFilter<"PointTransaction"> | number
+    mutuWeight?: FloatFilter<"PointTransaction"> | number
+    description?: StringNullableFilter<"PointTransaction"> | string | null
+    createdAt?: DateTimeFilter<"PointTransaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+  }
+
+  export type PointTransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    orderId?: SortOrder
+    points?: SortOrder
+    mutuWeight?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    order?: OrderOrderByWithRelationInput
+  }
+
+  export type PointTransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PointTransactionWhereInput | PointTransactionWhereInput[]
+    OR?: PointTransactionWhereInput[]
+    NOT?: PointTransactionWhereInput | PointTransactionWhereInput[]
+    userId?: UuidFilter<"PointTransaction"> | string
+    orderId?: UuidFilter<"PointTransaction"> | string
+    points?: IntFilter<"PointTransaction"> | number
+    mutuWeight?: FloatFilter<"PointTransaction"> | number
+    description?: StringNullableFilter<"PointTransaction"> | string | null
+    createdAt?: DateTimeFilter<"PointTransaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+  }, "id">
+
+  export type PointTransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    orderId?: SortOrder
+    points?: SortOrder
+    mutuWeight?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: PointTransactionCountOrderByAggregateInput
+    _avg?: PointTransactionAvgOrderByAggregateInput
+    _max?: PointTransactionMaxOrderByAggregateInput
+    _min?: PointTransactionMinOrderByAggregateInput
+    _sum?: PointTransactionSumOrderByAggregateInput
+  }
+
+  export type PointTransactionScalarWhereWithAggregatesInput = {
+    AND?: PointTransactionScalarWhereWithAggregatesInput | PointTransactionScalarWhereWithAggregatesInput[]
+    OR?: PointTransactionScalarWhereWithAggregatesInput[]
+    NOT?: PointTransactionScalarWhereWithAggregatesInput | PointTransactionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PointTransaction"> | string
+    userId?: UuidWithAggregatesFilter<"PointTransaction"> | string
+    orderId?: UuidWithAggregatesFilter<"PointTransaction"> | string
+    points?: IntWithAggregatesFilter<"PointTransaction"> | number
+    mutuWeight?: FloatWithAggregatesFilter<"PointTransaction"> | number
+    description?: StringNullableWithAggregatesFilter<"PointTransaction"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PointTransaction"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -30977,6 +32421,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
@@ -30986,6 +32431,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -31006,6 +32452,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -31015,6 +32462,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -31035,6 +32483,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
@@ -31044,6 +32493,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -31064,6 +32514,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -31073,6 +32524,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -31093,6 +32545,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
   }
 
   export type UserUpdateManyMutationInput = {
@@ -31113,6 +32566,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -31133,6 +32587,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
   }
 
   export type AddressCreateInput = {
@@ -31330,6 +32785,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateInput = {
@@ -31355,6 +32811,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUpdateInput = {
@@ -31380,6 +32837,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateInput = {
@@ -31405,6 +32863,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderCreateManyInput = {
@@ -32650,6 +34109,74 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PointTransactionCreateInput = {
+    id?: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutPointTransactionsInput
+    order: OrderCreateNestedOneWithoutPointTransactionsInput
+  }
+
+  export type PointTransactionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    orderId: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PointTransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPointTransactionsNestedInput
+    order?: OrderUpdateOneRequiredWithoutPointTransactionsNestedInput
+  }
+
+  export type PointTransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointTransactionCreateManyInput = {
+    id?: string
+    userId: string
+    orderId: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PointTransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointTransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -32733,6 +34260,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type AddressListRelationFilter = {
     every?: AddressWhereInput
     some?: AddressWhereInput
@@ -32786,6 +34324,12 @@ export namespace Prisma {
     none?: UserPaymentAccountWhereInput
   }
 
+  export type PointTransactionListRelationFilter = {
+    every?: PointTransactionWhereInput
+    some?: PointTransactionWhereInput
+    none?: PointTransactionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -32823,6 +34367,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type PointTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -32841,6 +34389,11 @@ export namespace Prisma {
     fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalPoints?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
+    totalPoints?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -32861,6 +34414,7 @@ export namespace Prisma {
     fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalPoints?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -32881,6 +34435,11 @@ export namespace Prisma {
     fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalPoints?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    totalPoints?: SortOrder
   }
 
   export type UuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -32988,6 +34547,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -34249,6 +35824,46 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type PointTransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    orderId?: SortOrder
+    points?: SortOrder
+    mutuWeight?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PointTransactionAvgOrderByAggregateInput = {
+    points?: SortOrder
+    mutuWeight?: SortOrder
+  }
+
+  export type PointTransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    orderId?: SortOrder
+    points?: SortOrder
+    mutuWeight?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PointTransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    orderId?: SortOrder
+    points?: SortOrder
+    mutuWeight?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PointTransactionSumOrderByAggregateInput = {
+    points?: SortOrder
+    mutuWeight?: SortOrder
+  }
+
   export type AddressCreateNestedManyWithoutUserInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -34309,6 +35924,13 @@ export namespace Prisma {
     connectOrCreate?: UserPaymentAccountCreateOrConnectWithoutUserInput | UserPaymentAccountCreateOrConnectWithoutUserInput[]
     createMany?: UserPaymentAccountCreateManyUserInputEnvelope
     connect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
+  }
+
+  export type PointTransactionCreateNestedManyWithoutUserInput = {
+    create?: XOR<PointTransactionCreateWithoutUserInput, PointTransactionUncheckedCreateWithoutUserInput> | PointTransactionCreateWithoutUserInput[] | PointTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutUserInput | PointTransactionCreateOrConnectWithoutUserInput[]
+    createMany?: PointTransactionCreateManyUserInputEnvelope
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
   }
 
   export type AddressUncheckedCreateNestedManyWithoutUserInput = {
@@ -34373,6 +35995,13 @@ export namespace Prisma {
     connect?: UserPaymentAccountWhereUniqueInput | UserPaymentAccountWhereUniqueInput[]
   }
 
+  export type PointTransactionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PointTransactionCreateWithoutUserInput, PointTransactionUncheckedCreateWithoutUserInput> | PointTransactionCreateWithoutUserInput[] | PointTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutUserInput | PointTransactionCreateOrConnectWithoutUserInput[]
+    createMany?: PointTransactionCreateManyUserInputEnvelope
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -34399,6 +36028,14 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type AddressUpdateManyWithoutUserNestedInput = {
@@ -34523,6 +36160,20 @@ export namespace Prisma {
     deleteMany?: UserPaymentAccountScalarWhereInput | UserPaymentAccountScalarWhereInput[]
   }
 
+  export type PointTransactionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PointTransactionCreateWithoutUserInput, PointTransactionUncheckedCreateWithoutUserInput> | PointTransactionCreateWithoutUserInput[] | PointTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutUserInput | PointTransactionCreateOrConnectWithoutUserInput[]
+    upsert?: PointTransactionUpsertWithWhereUniqueWithoutUserInput | PointTransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PointTransactionCreateManyUserInputEnvelope
+    set?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    disconnect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    delete?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    update?: PointTransactionUpdateWithWhereUniqueWithoutUserInput | PointTransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PointTransactionUpdateManyWithWhereWithoutUserInput | PointTransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PointTransactionScalarWhereInput | PointTransactionScalarWhereInput[]
+  }
+
   export type AddressUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -34643,6 +36294,20 @@ export namespace Prisma {
     update?: UserPaymentAccountUpdateWithWhereUniqueWithoutUserInput | UserPaymentAccountUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserPaymentAccountUpdateManyWithWhereWithoutUserInput | UserPaymentAccountUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserPaymentAccountScalarWhereInput | UserPaymentAccountScalarWhereInput[]
+  }
+
+  export type PointTransactionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PointTransactionCreateWithoutUserInput, PointTransactionUncheckedCreateWithoutUserInput> | PointTransactionCreateWithoutUserInput[] | PointTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutUserInput | PointTransactionCreateOrConnectWithoutUserInput[]
+    upsert?: PointTransactionUpsertWithWhereUniqueWithoutUserInput | PointTransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PointTransactionCreateManyUserInputEnvelope
+    set?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    disconnect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    delete?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    update?: PointTransactionUpdateWithWhereUniqueWithoutUserInput | PointTransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PointTransactionUpdateManyWithWhereWithoutUserInput | PointTransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PointTransactionScalarWhereInput | PointTransactionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAddressesInput = {
@@ -34984,6 +36649,13 @@ export namespace Prisma {
     connect?: TerminalValidationWhereUniqueInput | TerminalValidationWhereUniqueInput[]
   }
 
+  export type PointTransactionCreateNestedManyWithoutOrderInput = {
+    create?: XOR<PointTransactionCreateWithoutOrderInput, PointTransactionUncheckedCreateWithoutOrderInput> | PointTransactionCreateWithoutOrderInput[] | PointTransactionUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutOrderInput | PointTransactionCreateOrConnectWithoutOrderInput[]
+    createMany?: PointTransactionCreateManyOrderInputEnvelope
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+  }
+
   export type OrderAiResultUncheckedCreateNestedManyWithoutOrderInput = {
     create?: XOR<OrderAiResultCreateWithoutOrderInput, OrderAiResultUncheckedCreateWithoutOrderInput> | OrderAiResultCreateWithoutOrderInput[] | OrderAiResultUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: OrderAiResultCreateOrConnectWithoutOrderInput | OrderAiResultCreateOrConnectWithoutOrderInput[]
@@ -35045,6 +36717,13 @@ export namespace Prisma {
     connectOrCreate?: TerminalValidationCreateOrConnectWithoutOrderInput | TerminalValidationCreateOrConnectWithoutOrderInput[]
     createMany?: TerminalValidationCreateManyOrderInputEnvelope
     connect?: TerminalValidationWhereUniqueInput | TerminalValidationWhereUniqueInput[]
+  }
+
+  export type PointTransactionUncheckedCreateNestedManyWithoutOrderInput = {
+    create?: XOR<PointTransactionCreateWithoutOrderInput, PointTransactionUncheckedCreateWithoutOrderInput> | PointTransactionCreateWithoutOrderInput[] | PointTransactionUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutOrderInput | PointTransactionCreateOrConnectWithoutOrderInput[]
+    createMany?: PointTransactionCreateManyOrderInputEnvelope
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
   }
 
   export type EnumOrderStatusFieldUpdateOperationsInput = {
@@ -35215,6 +36894,20 @@ export namespace Prisma {
     deleteMany?: TerminalValidationScalarWhereInput | TerminalValidationScalarWhereInput[]
   }
 
+  export type PointTransactionUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<PointTransactionCreateWithoutOrderInput, PointTransactionUncheckedCreateWithoutOrderInput> | PointTransactionCreateWithoutOrderInput[] | PointTransactionUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutOrderInput | PointTransactionCreateOrConnectWithoutOrderInput[]
+    upsert?: PointTransactionUpsertWithWhereUniqueWithoutOrderInput | PointTransactionUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: PointTransactionCreateManyOrderInputEnvelope
+    set?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    disconnect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    delete?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    update?: PointTransactionUpdateWithWhereUniqueWithoutOrderInput | PointTransactionUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: PointTransactionUpdateManyWithWhereWithoutOrderInput | PointTransactionUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: PointTransactionScalarWhereInput | PointTransactionScalarWhereInput[]
+  }
+
   export type OrderAiResultUncheckedUpdateManyWithoutOrderNestedInput = {
     create?: XOR<OrderAiResultCreateWithoutOrderInput, OrderAiResultUncheckedCreateWithoutOrderInput> | OrderAiResultCreateWithoutOrderInput[] | OrderAiResultUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: OrderAiResultCreateOrConnectWithoutOrderInput | OrderAiResultCreateOrConnectWithoutOrderInput[]
@@ -35339,6 +37032,20 @@ export namespace Prisma {
     update?: TerminalValidationUpdateWithWhereUniqueWithoutOrderInput | TerminalValidationUpdateWithWhereUniqueWithoutOrderInput[]
     updateMany?: TerminalValidationUpdateManyWithWhereWithoutOrderInput | TerminalValidationUpdateManyWithWhereWithoutOrderInput[]
     deleteMany?: TerminalValidationScalarWhereInput | TerminalValidationScalarWhereInput[]
+  }
+
+  export type PointTransactionUncheckedUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<PointTransactionCreateWithoutOrderInput, PointTransactionUncheckedCreateWithoutOrderInput> | PointTransactionCreateWithoutOrderInput[] | PointTransactionUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: PointTransactionCreateOrConnectWithoutOrderInput | PointTransactionCreateOrConnectWithoutOrderInput[]
+    upsert?: PointTransactionUpsertWithWhereUniqueWithoutOrderInput | PointTransactionUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: PointTransactionCreateManyOrderInputEnvelope
+    set?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    disconnect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    delete?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    connect?: PointTransactionWhereUniqueInput | PointTransactionWhereUniqueInput[]
+    update?: PointTransactionUpdateWithWhereUniqueWithoutOrderInput | PointTransactionUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: PointTransactionUpdateManyWithWhereWithoutOrderInput | PointTransactionUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: PointTransactionScalarWhereInput | PointTransactionScalarWhereInput[]
   }
 
   export type OrderCreateNestedOneWithoutStatusHistoryInput = {
@@ -35859,6 +37566,34 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPaymentAccountsInput, UserUpdateWithoutPaymentAccountsInput>, UserUncheckedUpdateWithoutPaymentAccountsInput>
   }
 
+  export type UserCreateNestedOneWithoutPointTransactionsInput = {
+    create?: XOR<UserCreateWithoutPointTransactionsInput, UserUncheckedCreateWithoutPointTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPointTransactionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrderCreateNestedOneWithoutPointTransactionsInput = {
+    create?: XOR<OrderCreateWithoutPointTransactionsInput, OrderUncheckedCreateWithoutPointTransactionsInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutPointTransactionsInput
+    connect?: OrderWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPointTransactionsNestedInput = {
+    create?: XOR<UserCreateWithoutPointTransactionsInput, UserUncheckedCreateWithoutPointTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPointTransactionsInput
+    upsert?: UserUpsertWithoutPointTransactionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPointTransactionsInput, UserUpdateWithoutPointTransactionsInput>, UserUncheckedUpdateWithoutPointTransactionsInput>
+  }
+
+  export type OrderUpdateOneRequiredWithoutPointTransactionsNestedInput = {
+    create?: XOR<OrderCreateWithoutPointTransactionsInput, OrderUncheckedCreateWithoutPointTransactionsInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutPointTransactionsInput
+    upsert?: OrderUpsertWithoutPointTransactionsInput
+    connect?: OrderWhereUniqueInput
+    update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutPointTransactionsInput, OrderUpdateWithoutPointTransactionsInput>, OrderUncheckedUpdateWithoutPointTransactionsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -35939,6 +37674,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -35951,17 +37697,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -36063,6 +37798,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -36227,17 +37989,6 @@ export namespace Prisma {
     in?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
     notIn?: $Enums.WasteCategory[] | ListEnumWasteCategoryFieldRefInput<$PrismaModel>
     not?: NestedEnumWasteCategoryFilter<$PrismaModel> | $Enums.WasteCategory
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumWasteCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -36483,6 +38234,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutUserInput = {
@@ -36507,6 +38259,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutUserInput = {
@@ -36699,6 +38452,34 @@ export namespace Prisma {
 
   export type UserPaymentAccountCreateManyUserInputEnvelope = {
     data: UserPaymentAccountCreateManyUserInput | UserPaymentAccountCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PointTransactionCreateWithoutUserInput = {
+    id?: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
+    order: OrderCreateNestedOneWithoutPointTransactionsInput
+  }
+
+  export type PointTransactionUncheckedCreateWithoutUserInput = {
+    id?: string
+    orderId: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PointTransactionCreateOrConnectWithoutUserInput = {
+    where: PointTransactionWhereUniqueInput
+    create: XOR<PointTransactionCreateWithoutUserInput, PointTransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PointTransactionCreateManyUserInputEnvelope = {
+    data: PointTransactionCreateManyUserInput | PointTransactionCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -36979,6 +38760,35 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"UserPaymentAccount"> | Date | string
   }
 
+  export type PointTransactionUpsertWithWhereUniqueWithoutUserInput = {
+    where: PointTransactionWhereUniqueInput
+    update: XOR<PointTransactionUpdateWithoutUserInput, PointTransactionUncheckedUpdateWithoutUserInput>
+    create: XOR<PointTransactionCreateWithoutUserInput, PointTransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PointTransactionUpdateWithWhereUniqueWithoutUserInput = {
+    where: PointTransactionWhereUniqueInput
+    data: XOR<PointTransactionUpdateWithoutUserInput, PointTransactionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PointTransactionUpdateManyWithWhereWithoutUserInput = {
+    where: PointTransactionScalarWhereInput
+    data: XOR<PointTransactionUpdateManyMutationInput, PointTransactionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PointTransactionScalarWhereInput = {
+    AND?: PointTransactionScalarWhereInput | PointTransactionScalarWhereInput[]
+    OR?: PointTransactionScalarWhereInput[]
+    NOT?: PointTransactionScalarWhereInput | PointTransactionScalarWhereInput[]
+    id?: UuidFilter<"PointTransaction"> | string
+    userId?: UuidFilter<"PointTransaction"> | string
+    orderId?: UuidFilter<"PointTransaction"> | string
+    points?: IntFilter<"PointTransaction"> | number
+    mutuWeight?: FloatFilter<"PointTransaction"> | number
+    description?: StringNullableFilter<"PointTransaction"> | string | null
+    createdAt?: DateTimeFilter<"PointTransaction"> | Date | string
+  }
+
   export type UserCreateWithoutAddressesInput = {
     id?: string
     name?: string | null
@@ -36997,6 +38807,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
     wallets?: WalletCreateNestedOneWithoutUserInput
@@ -37005,6 +38816,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -37025,6 +38837,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     wallets?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -37033,6 +38846,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -37062,6 +38876,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutAddressInput = {
@@ -37086,6 +38901,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutAddressInput = {
@@ -37127,6 +38943,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
     wallets?: WalletUpdateOneWithoutUserNestedInput
@@ -37135,6 +38952,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -37155,6 +38973,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     wallets?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -37163,6 +38982,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderUpsertWithWhereUniqueWithoutAddressInput = {
@@ -37199,6 +39019,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
     wallets?: WalletCreateNestedOneWithoutUserInput
@@ -37207,6 +39028,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouriersInput = {
@@ -37227,6 +39049,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     wallets?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -37235,6 +39058,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouriersInput = {
@@ -37264,6 +39088,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutCourierInput = {
@@ -37288,6 +39113,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutCourierInput = {
@@ -37407,6 +39233,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
     wallets?: WalletUpdateOneWithoutUserNestedInput
@@ -37415,6 +39242,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouriersInput = {
@@ -37435,6 +39263,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     wallets?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -37443,6 +39272,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderUpsertWithWhereUniqueWithoutCourierInput = {
@@ -37551,6 +39381,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     wallets?: WalletCreateNestedOneWithoutUserInput
@@ -37559,6 +39390,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -37579,6 +39411,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     wallets?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -37587,6 +39420,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -37902,6 +39736,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PointTransactionCreateWithoutOrderInput = {
+    id?: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutPointTransactionsInput
+  }
+
+  export type PointTransactionUncheckedCreateWithoutOrderInput = {
+    id?: string
+    userId: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PointTransactionCreateOrConnectWithoutOrderInput = {
+    where: PointTransactionWhereUniqueInput
+    create: XOR<PointTransactionCreateWithoutOrderInput, PointTransactionUncheckedCreateWithoutOrderInput>
+  }
+
+  export type PointTransactionCreateManyOrderInputEnvelope = {
+    data: PointTransactionCreateManyOrderInput | PointTransactionCreateManyOrderInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutOrdersInput = {
     update: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
     create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
@@ -37931,6 +39793,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     wallets?: WalletUpdateOneWithoutUserNestedInput
@@ -37939,6 +39802,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -37959,6 +39823,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     wallets?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -37967,6 +39832,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourierUpsertWithoutOrdersInput = {
@@ -38244,6 +40110,22 @@ export namespace Prisma {
     data: XOR<TerminalValidationUpdateManyMutationInput, TerminalValidationUncheckedUpdateManyWithoutOrderInput>
   }
 
+  export type PointTransactionUpsertWithWhereUniqueWithoutOrderInput = {
+    where: PointTransactionWhereUniqueInput
+    update: XOR<PointTransactionUpdateWithoutOrderInput, PointTransactionUncheckedUpdateWithoutOrderInput>
+    create: XOR<PointTransactionCreateWithoutOrderInput, PointTransactionUncheckedCreateWithoutOrderInput>
+  }
+
+  export type PointTransactionUpdateWithWhereUniqueWithoutOrderInput = {
+    where: PointTransactionWhereUniqueInput
+    data: XOR<PointTransactionUpdateWithoutOrderInput, PointTransactionUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type PointTransactionUpdateManyWithWhereWithoutOrderInput = {
+    where: PointTransactionScalarWhereInput
+    data: XOR<PointTransactionUpdateManyMutationInput, PointTransactionUncheckedUpdateManyWithoutOrderInput>
+  }
+
   export type OrderCreateWithoutStatusHistoryInput = {
     id?: string
     status?: $Enums.OrderStatus
@@ -38266,6 +40148,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutStatusHistoryInput = {
@@ -38290,6 +40173,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutStatusHistoryInput = {
@@ -38330,6 +40214,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutStatusHistoryInput = {
@@ -38354,6 +40239,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderCreateWithoutAiResultsInput = {
@@ -38378,6 +40264,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutAiResultsInput = {
@@ -38402,6 +40289,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutAiResultsInput = {
@@ -38442,6 +40330,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutAiResultsInput = {
@@ -38466,6 +40355,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderCreateWithoutTrackingLogsInput = {
@@ -38490,6 +40380,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutTrackingLogsInput = {
@@ -38514,6 +40405,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutTrackingLogsInput = {
@@ -38585,6 +40477,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutTrackingLogsInput = {
@@ -38609,6 +40502,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type CourierUpsertWithoutTrackingLogsInput = {
@@ -38760,6 +40654,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutWasteItemsInput = {
@@ -38784,6 +40679,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutWasteItemsInput = {
@@ -38849,6 +40745,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutWasteItemsInput = {
@@ -38873,6 +40770,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type WasteTypeUpsertWithoutWasteItemsInput = {
@@ -38928,6 +40826,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutResidualsInput = {
@@ -38952,6 +40851,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutResidualsInput = {
@@ -38992,6 +40892,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutResidualsInput = {
@@ -39016,6 +40917,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type UserCreateWithoutWalletsInput = {
@@ -39036,6 +40938,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
@@ -39044,6 +40947,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWalletsInput = {
@@ -39064,6 +40968,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -39072,6 +40977,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWalletsInput = {
@@ -39140,6 +41046,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
@@ -39148,6 +41055,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWalletsInput = {
@@ -39168,6 +41076,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -39176,6 +41085,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletTransactionUpsertWithWhereUniqueWithoutWalletInput = {
@@ -39275,6 +41185,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
@@ -39283,6 +41194,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -39303,6 +41215,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -39311,6 +41224,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -39347,6 +41261,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
@@ -39355,6 +41270,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -39375,6 +41291,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -39383,6 +41300,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderCreateWithoutPaymentsInput = {
@@ -39407,6 +41325,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutPaymentsInput = {
@@ -39431,6 +41350,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutPaymentsInput = {
@@ -39456,6 +41376,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
@@ -39464,6 +41385,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -39484,6 +41406,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -39492,6 +41415,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -39556,6 +41480,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutPaymentsInput = {
@@ -39580,6 +41505,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type UserUpsertWithoutPaymentsInput = {
@@ -39611,6 +41537,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
@@ -39619,6 +41546,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -39639,6 +41567,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -39647,6 +41576,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PaymentLogUpsertWithWhereUniqueWithoutPaymentInput = {
@@ -39778,6 +41708,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutReassignmentsInput = {
@@ -39802,6 +41733,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutReassignmentsInput = {
@@ -39904,6 +41836,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutReassignmentsInput = {
@@ -39928,6 +41861,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type CourierUpsertWithoutOldReassignmentsInput = {
@@ -40026,6 +41960,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutCancellationsInput = {
@@ -40050,6 +41985,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutCancellationsInput = {
@@ -40090,6 +42026,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutCancellationsInput = {
@@ -40114,6 +42051,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type WasteTypeCreateWithoutPricingInput = {
@@ -40194,6 +42132,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutValidationsInput = {
@@ -40218,6 +42157,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
     cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutValidationsInput = {
@@ -40243,6 +42183,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
@@ -40251,6 +42192,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutScannedValidationsInput = {
@@ -40271,6 +42213,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -40279,6 +42222,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutScannedValidationsInput = {
@@ -40319,6 +42263,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutValidationsInput = {
@@ -40343,6 +42288,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type UserUpsertWithoutScannedValidationsInput = {
@@ -40374,6 +42320,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
@@ -40382,6 +42329,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutScannedValidationsInput = {
@@ -40402,6 +42350,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -40410,6 +42359,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -40430,6 +42380,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
@@ -40438,6 +42389,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -40458,6 +42410,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -40466,6 +42419,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
     paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -40502,6 +42456,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
@@ -40510,6 +42465,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -40530,6 +42486,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -40538,6 +42495,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
     paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPaymentAccountsInput = {
@@ -40558,6 +42516,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressCreateNestedManyWithoutUserInput
     couriers?: CourierCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
@@ -40566,6 +42525,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    pointTransactions?: PointTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPaymentAccountsInput = {
@@ -40586,6 +42546,7 @@ export namespace Prisma {
     fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalPoints?: number
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -40594,6 +42555,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    pointTransactions?: PointTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPaymentAccountsInput = {
@@ -40630,6 +42592,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUpdateManyWithoutUserNestedInput
     couriers?: CourierUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
@@ -40638,6 +42601,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentAccountsInput = {
@@ -40658,6 +42622,7 @@ export namespace Prisma {
     fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -40666,6 +42631,259 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutPointTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: $Enums.Role
+    status?: $Enums.UserStatus
+    phone?: string | null
+    isVerified?: boolean
+    refreshToken?: string | null
+    otpCode?: string | null
+    otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
+    photoUrl?: string | null
+    fcmToken?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPoints?: number
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    couriers?: CourierCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    wallets?: WalletCreateNestedOneWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    payments?: PaymentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    scannedValidations?: TerminalValidationCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPointTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: $Enums.Role
+    status?: $Enums.UserStatus
+    phone?: string | null
+    isVerified?: boolean
+    refreshToken?: string | null
+    otpCode?: string | null
+    otpExpiresAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiresAt?: Date | string | null
+    photoUrl?: string | null
+    fcmToken?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPoints?: number
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    couriers?: CourierUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    wallets?: WalletUncheckedCreateNestedOneWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    scannedValidations?: TerminalValidationUncheckedCreateNestedManyWithoutScannerInput
+    paymentAccounts?: UserPaymentAccountUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPointTransactionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPointTransactionsInput, UserUncheckedCreateWithoutPointTransactionsInput>
+  }
+
+  export type OrderCreateWithoutPointTransactionsInput = {
+    id?: string
+    status?: $Enums.OrderStatus
+    scheduleType: $Enums.ScheduleType
+    scheduledAt?: Date | string | null
+    note?: string | null
+    totalCredit?: number | null
+    totalDebit?: number | null
+    netTotal?: number | null
+    paymentStatus?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutOrdersInput
+    courier?: CourierCreateNestedOneWithoutOrdersInput
+    address: AddressCreateNestedOneWithoutOrdersInput
+    aiResults?: OrderAiResultCreateNestedManyWithoutOrderInput
+    trackingLogs?: OrderTrackingLogCreateNestedManyWithoutOrderInput
+    statusHistory?: OrderStatusHistoryCreateNestedManyWithoutOrderInput
+    wasteItems?: OrderWasteItemCreateNestedManyWithoutOrderInput
+    residuals?: OrderResidualCreateNestedManyWithoutOrderInput
+    payments?: PaymentCreateNestedManyWithoutOrderInput
+    reassignments?: OrderReassignmentCreateNestedManyWithoutOrderInput
+    cancellations?: OrderCancellationCreateNestedManyWithoutOrderInput
+    validations?: TerminalValidationCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderUncheckedCreateWithoutPointTransactionsInput = {
+    id?: string
+    userId: string
+    courierId?: string | null
+    addressId: string
+    status?: $Enums.OrderStatus
+    scheduleType: $Enums.ScheduleType
+    scheduledAt?: Date | string | null
+    note?: string | null
+    totalCredit?: number | null
+    totalDebit?: number | null
+    netTotal?: number | null
+    paymentStatus?: string | null
+    createdAt?: Date | string
+    aiResults?: OrderAiResultUncheckedCreateNestedManyWithoutOrderInput
+    trackingLogs?: OrderTrackingLogUncheckedCreateNestedManyWithoutOrderInput
+    statusHistory?: OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+    wasteItems?: OrderWasteItemUncheckedCreateNestedManyWithoutOrderInput
+    residuals?: OrderResidualUncheckedCreateNestedManyWithoutOrderInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
+    reassignments?: OrderReassignmentUncheckedCreateNestedManyWithoutOrderInput
+    cancellations?: OrderCancellationUncheckedCreateNestedManyWithoutOrderInput
+    validations?: TerminalValidationUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderCreateOrConnectWithoutPointTransactionsInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutPointTransactionsInput, OrderUncheckedCreateWithoutPointTransactionsInput>
+  }
+
+  export type UserUpsertWithoutPointTransactionsInput = {
+    update: XOR<UserUpdateWithoutPointTransactionsInput, UserUncheckedUpdateWithoutPointTransactionsInput>
+    create: XOR<UserCreateWithoutPointTransactionsInput, UserUncheckedCreateWithoutPointTransactionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPointTransactionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPointTransactionsInput, UserUncheckedUpdateWithoutPointTransactionsInput>
+  }
+
+  export type UserUpdateWithoutPointTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCode?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    couriers?: CourierUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    wallets?: WalletUpdateOneWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    payments?: PaymentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    scannedValidations?: TerminalValidationUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPointTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCode?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPoints?: IntFieldUpdateOperationsInput | number
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    couriers?: CourierUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    wallets?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    scannedValidations?: TerminalValidationUncheckedUpdateManyWithoutScannerNestedInput
+    paymentAccounts?: UserPaymentAccountUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OrderUpsertWithoutPointTransactionsInput = {
+    update: XOR<OrderUpdateWithoutPointTransactionsInput, OrderUncheckedUpdateWithoutPointTransactionsInput>
+    create: XOR<OrderCreateWithoutPointTransactionsInput, OrderUncheckedCreateWithoutPointTransactionsInput>
+    where?: OrderWhereInput
+  }
+
+  export type OrderUpdateToOneWithWhereWithoutPointTransactionsInput = {
+    where?: OrderWhereInput
+    data: XOR<OrderUpdateWithoutPointTransactionsInput, OrderUncheckedUpdateWithoutPointTransactionsInput>
+  }
+
+  export type OrderUpdateWithoutPointTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    scheduleType?: EnumScheduleTypeFieldUpdateOperationsInput | $Enums.ScheduleType
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCredit?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalDebit?: NullableFloatFieldUpdateOperationsInput | number | null
+    netTotal?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    courier?: CourierUpdateOneWithoutOrdersNestedInput
+    address?: AddressUpdateOneRequiredWithoutOrdersNestedInput
+    aiResults?: OrderAiResultUpdateManyWithoutOrderNestedInput
+    trackingLogs?: OrderTrackingLogUpdateManyWithoutOrderNestedInput
+    statusHistory?: OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+    wasteItems?: OrderWasteItemUpdateManyWithoutOrderNestedInput
+    residuals?: OrderResidualUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUpdateManyWithoutOrderNestedInput
+    reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
+    cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
+    validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutPointTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courierId?: NullableStringFieldUpdateOperationsInput | string | null
+    addressId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    scheduleType?: EnumScheduleTypeFieldUpdateOperationsInput | $Enums.ScheduleType
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCredit?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalDebit?: NullableFloatFieldUpdateOperationsInput | number | null
+    netTotal?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    aiResults?: OrderAiResultUncheckedUpdateManyWithoutOrderNestedInput
+    trackingLogs?: OrderTrackingLogUncheckedUpdateManyWithoutOrderNestedInput
+    statusHistory?: OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+    wasteItems?: OrderWasteItemUncheckedUpdateManyWithoutOrderNestedInput
+    residuals?: OrderResidualUncheckedUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
+    reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
+    cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
+    validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type AddressCreateManyUserInput = {
@@ -40755,6 +42973,15 @@ export namespace Prisma {
     accountNumber: string
     accountName: string
     isDefault?: boolean
+    createdAt?: Date | string
+  }
+
+  export type PointTransactionCreateManyUserInput = {
+    id?: string
+    orderId: string
+    points: number
+    mutuWeight: number
+    description?: string | null
     createdAt?: Date | string
   }
 
@@ -40850,6 +43077,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutUserInput = {
@@ -40874,6 +43102,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateManyWithoutUserInput = {
@@ -41058,6 +43287,33 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PointTransactionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: OrderUpdateOneRequiredWithoutPointTransactionsNestedInput
+  }
+
+  export type PointTransactionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointTransactionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrderCreateManyAddressInput = {
     id?: string
     userId: string
@@ -41095,6 +43351,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutAddressInput = {
@@ -41119,6 +43376,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateManyWithoutAddressInput = {
@@ -41197,6 +43455,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutCourierInput = {
@@ -41221,6 +43480,7 @@ export namespace Prisma {
     reassignments?: OrderReassignmentUncheckedUpdateManyWithoutOrderNestedInput
     cancellations?: OrderCancellationUncheckedUpdateManyWithoutOrderNestedInput
     validations?: TerminalValidationUncheckedUpdateManyWithoutOrderNestedInput
+    pointTransactions?: PointTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateManyWithoutCourierInput = {
@@ -41386,6 +43646,15 @@ export namespace Prisma {
     scannedBy: string
     scannedAt?: Date | string
     status?: string
+  }
+
+  export type PointTransactionCreateManyOrderInput = {
+    id?: string
+    userId: string
+    points: number
+    mutuWeight: number
+    description?: string | null
+    createdAt?: Date | string
   }
 
   export type OrderAiResultUpdateWithoutOrderInput = {
@@ -41622,6 +43891,33 @@ export namespace Prisma {
     scannedBy?: StringFieldUpdateOperationsInput | string
     scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PointTransactionUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPointTransactionsNestedInput
+  }
+
+  export type PointTransactionUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointTransactionUncheckedUpdateManyWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    mutuWeight?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderWasteItemCreateManyWasteTypeInput = {

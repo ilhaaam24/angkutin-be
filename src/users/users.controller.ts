@@ -32,6 +32,13 @@ export class UsersController {
     return null;
   }
 
+  @Get('points')
+  @ApiOperation({ summary: 'Get user point balance and history' })
+  @ApiResponse({ status: 200, description: 'Return user point summary and transaction history.' })
+  async getPoints(@Request() req) {
+    return this.usersService.getPointSummary(req.user.userId);
+  }
+
   @Patch('profile')
   @ApiOperation({ summary: 'Update current user profile' })
   @ApiResponse({ status: 200, description: 'Profile successfully updated.' })

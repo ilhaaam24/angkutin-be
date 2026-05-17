@@ -42,4 +42,26 @@ export class UsersService {
       data,
     });
   }
+
+  async getPointSummary(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { totalPoints: true },
+    });
+
+    const history = await this.prisma.pointTransaction.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        order: {
+          select: { id: true, createdAt: true },
+        },
+      },
+    });
+
+    return {
+      totalPoints: user?.totalPoints || 0,
+      history,
+    };
+  }
 }

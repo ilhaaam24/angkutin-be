@@ -649,6 +649,29 @@ export class OrdersService {
             await this.walletService.creditCourierOrder(courier.userId, order.id, totalEarning, courierDescription);
           }
         }
+
+        // --- POINT SYSTEM: Award points based on MUTU weight ---
+        const totalMutuWeight = order.wasteItems.reduce((acc, item) => acc + item.weight, 0);
+        const earnedPoints = Math.floor(totalMutuWeight); // 1 kg = 1 point, no float
+
+        if (earnedPoints > 0) {
+          await tx.pointTransaction.create({
+            data: {
+              userId: order.userId,
+              orderId: order.id,
+              points: earnedPoints,
+              mutuWeight: totalMutuWeight,
+              description: `Point dari order #${order.id.slice(0, 8)} (${totalMutuWeight.toFixed(2)} kg MUTU)`,
+            },
+          });
+
+          await tx.user.update({
+            where: { id: order.userId },
+            data: {
+              totalPoints: { increment: earnedPoints },
+            },
+          });
+        }
       }
 
       // 3. Update status order dan ambil data lengkapnya
@@ -699,10 +722,19 @@ export class OrdersService {
 
       const notifContent = userNotificationMap[newStatus];
       if (notifContent) {
+        let body = notifContent.body;
+        if (newStatus === OrderStatus.COMPLETED) {
+          const totalMutuWeight = updatedOrder.wasteItems.reduce((acc, item) => acc + item.weight, 0);
+          const earnedPoints = Math.floor(totalMutuWeight);
+          if (earnedPoints > 0) {
+            body = `Terima kasih! Sampah Anda telah berhasil diproses. Anda mendapatkan ${earnedPoints} poin. Saldo wallet Anda telah terupdate.`;
+          }
+        }
+
         await this.notificationService.sendPushNotification({
           userId: order.userId,
           title: notifContent.title,
-          body: notifContent.body,
+          body,
           type: 'ORDER_UPDATE',
           data: {
             orderId: orderId,
@@ -1282,6 +1314,7 @@ export class OrdersService {
         formattedUserPays: formatRupiah(userPays),
         paymentRequired,
         paymentStatus: latestPayment?.status || null,
+        estimatedPoints: Math.floor(totalMutuWeight),
       },
       payment: paymentInfo,
     };
