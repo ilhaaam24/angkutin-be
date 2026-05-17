@@ -157,6 +157,7 @@ export class OrdersService {
             },
           },
         },
+        pointTransactions: true,
       },
     });
 
@@ -192,6 +193,7 @@ export class OrdersService {
         statusHistory: { orderBy: { createdAt: 'desc' } },
         courier: { include: { user: { select: { id: true, name: true, phone: true ,photoUrl: true} } } },
         user: { select: { id: true, name: true, phone: true ,photoUrl: true} },
+        pointTransactions: true,
       },
     });
 
