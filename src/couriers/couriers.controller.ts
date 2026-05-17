@@ -224,7 +224,7 @@ export class CouriersController {
     const courier = await this.couriersService.getProfile(req.user.userId);
     
     // 1. Upload ke bucket 'angkutin_bucket' folder 'orders'
-    const photoUrl = await this.uploadService.uploadImage(file.buffer, 'orders', 'angkutin_bucket');
+    const photoUrl = await this.uploadService.uploadImage(file.buffer, 'completed', 'orders');
 
     // 2. Transisi status
     return this.ordersService.transitionOrderStatus(
